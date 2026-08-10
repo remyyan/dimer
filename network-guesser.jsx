@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useMemo } from "react";
 import { Check, X, Flame, RotateCcw, Trophy, Share2 } from "lucide-react";
 
