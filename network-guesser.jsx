@@ -1,12 +1,8 @@
 'use client';
 
-import { useState, useMemo } from "react";
-import { Check, X, Flame, RotateCcw, Trophy, Share2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Check, X, Flame, Trophy, Share2 } from "lucide-react";
 
-// Node positions approximate court roles, laid out like a play diagram.
-// Weight matrices are stylized to represent each team's well-known offensive
-// shape (hub-and-spoke vs egalitarian vs dual-hub) for gameplay purposes —
-// a production version would derive these from real play-by-play assist data.
 const LAYOUT = {
   PG: { x: 200, y: 60 },
   SG: { x: 340, y: 150 },
@@ -106,6 +102,57 @@ function NetworkDiagram({ weights }) {
   );
 }
 
+function PuzzleDiagram({ nodes, edges }) {
+  const positions = useMemo(() => {
+    const count = nodes.length;
+    const angleStep = count > 0 ? (Math.PI * 2) / count : 0;
+    const centerX = 200;
+    const centerY = 180;
+    const radius = 120;
+    return new Map(nodes.map((node, idx) => {
+      const angle = idx * angleStep - Math.PI / 2;
+      return [node.id, { x: centerX + Math.cos(angle) * radius, y: centerY + Math.sin(angle) * radius }];
+    }));
+  }, [nodes]);
+
+  const maxWeight = edges.length ? Math.max(...edges.map((edge) => edge.weight)) : 1;
+
+  return (
+    <svg viewBox="0 0 400 360" className="w-full h-auto">
+      {edges.map((edge, index) => {
+        const from = positions.get(edge.from);
+        const to = positions.get(edge.to);
+        if (!from || !to) return null;
+        const strokeW = 1 + (edge.weight / maxWeight) * 7;
+        const opacity = 0.25 + (edge.weight / maxWeight) * 0.65;
+        return (
+          <line
+            key={`${edge.from}-${edge.to}-${index}`}
+            x1={from.x} y1={from.y}
+            x2={to.x} y2={to.y}
+            stroke="#FFB627"
+            strokeWidth={strokeW}
+            strokeOpacity={opacity}
+            strokeLinecap="round"
+          />
+        );
+      })}
+      {nodes.map((node) => {
+        const pos = positions.get(node.id);
+        if (!pos) return null;
+        return (
+          <g key={node.id}>
+            <circle cx={pos.x} cy={pos.y} r={26} fill="#1B1F2A" stroke="#3A4050" strokeWidth={2} />
+            <text x={pos.x} y={pos.y + 5} textAnchor="middle" fontSize="12" fontWeight="700" fill="#EDEFF4" fontFamily="'IBM Plex Mono', monospace">
+              {node.label.split(" ").slice(0, 2).join(" ")}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -122,11 +169,35 @@ export default function PassingNetworkGuesser() {
   const [streak, setStreak] = useState(0);
   const [best, setBest] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-  const [results, setResults] = useState([]); // for share strip
+  const [results, setResults] = useState([]);
+  const [puzzle, setPuzzle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const round = deck[idx];
-  const finished = idx >= deck.length;
-  const shuffledOptions = useMemo(() => (round ? shuffle(round.options) : []), [round]);
+  useEffect(() => {
+    async function loadPuzzle() {
+      try {
+        const res = await fetch("/api/puzzle/today");
+        if (!res.ok) {
+          const body = await res.json().catch(() => null);
+          throw new Error(body?.error || `${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+        setPuzzle(data.puzzle);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPuzzle();
+  }, []);
+
+  const isDaily = Boolean(puzzle && puzzle.nodes?.length && puzzle.edges?.length);
+  const round = isDaily ? puzzle : deck[idx];
+  const options = useMemo(() => (round ? shuffle(round.options) : []), [round]);
+  const finished = !isDaily && idx >= deck.length;
 
   function handlePick(option) {
     if (picked) return;
@@ -145,7 +216,9 @@ export default function PassingNetworkGuesser() {
 
   function next() {
     setPicked(null);
-    setIdx((i) => i + 1);
+    if (!isDaily) {
+      setIdx((i) => i + 1);
+    }
   }
 
   const isCorrect = picked === round?.answer;
@@ -168,14 +241,16 @@ export default function PassingNetworkGuesser() {
           <div className="flex items-center justify-center gap-2 mb-1">
             <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
             <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B93A5] font-semibold">
-              Round {Math.min(idx + 1, deck.length)} of {deck.length}
+              {isDaily ? "Daily Puzzle" : `Round ${Math.min(idx + 1, deck.length)} of ${deck.length}`}
             </span>
             <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
           </div>
           <h1 className="scoreboard-title text-white leading-none" style={{ fontSize: "50px", letterSpacing: "0.02em" }}>
             THE <span style={{ color: "#EE6C2A" }}>NETWORK</span>
           </h1>
-          <p className="text-[#8B93A5] text-sm mt-1">Guess the team from its assist network alone.</p>
+          <p className="text-[#8B93A5] text-sm mt-1">
+            {loading ? "Loading today's puzzle..." : error ? error : isDaily ? round.gameContext : round.identity}
+          </p>
         </div>
 
         <div className="flex items-center justify-center gap-3 mb-6">
@@ -190,22 +265,31 @@ export default function PassingNetworkGuesser() {
           </div>
         </div>
 
-        {!finished ? (
+        {loading ? (
+          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
+            <p className="text-[#EDEFF4]">Checking for today's puzzle...</p>
+          </div>
+        ) : error && !isDaily ? (
+          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
+            <p className="text-[#EDEFF4]">{error}</p>
+            <p className="text-[#8B93A5] text-sm mt-2">Falling back to prototype rounds.</p>
+          </div>
+        ) : (
           <>
             <div className="rounded-xl border overflow-hidden" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
               <div className="text-center py-2 text-[11px] font-bold tracking-[0.3em] uppercase" style={{ backgroundColor: "#EE6C2A", color: "#0E1016" }}>
                 Mystery Offense
               </div>
               <div className="p-4">
-                <NetworkDiagram weights={round.weights} />
+                {isDaily ? <PuzzleDiagram nodes={round.nodes} edges={round.edges} /> : <NetworkDiagram weights={round.weights} />}
               </div>
               <div className="px-5 pb-4 text-center">
-                <p className="text-[#5A6072] text-xs">Line thickness = passing frequency between roles</p>
+                <p className="text-[#5A6072] text-xs">Line thickness = passing frequency between players / roles</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-2 mt-4">
-              {shuffledOptions.map((opt) => {
+              {options.map((opt) => {
                 const showState = picked !== null;
                 const isThisCorrect = opt === round.answer;
                 const isThisPicked = opt === picked;
@@ -238,35 +322,15 @@ export default function PassingNetworkGuesser() {
                     borderColor: isCorrect ? "#3CB878" : "#E0554A",
                   }}
                 >
-                  <p className="text-white font-bold mb-1">{round.answer} — {round.era}</p>
-                  <p className="text-[#8B93A5] text-sm">{round.identity}</p>
+                  <p className="text-white font-bold mb-1">{round.answer}</p>
+                  <p className="text-[#8B93A5] text-sm">{isDaily ? "Daily live game puzzle" : round.identity}</p>
                 </div>
                 <button onClick={next} className="w-full mt-3 rounded-lg py-3 font-semibold text-white" style={{ backgroundColor: "#EE6C2A" }}>
-                  Next Play →
+                  {isDaily ? "Try again" : "Next Play →"}
                 </button>
               </div>
             )}
           </>
-        ) : (
-          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
-            <Trophy size={32} className="mx-auto mb-2" style={{ color: "#FFB627" }} />
-            <h2 className="text-white font-bold text-2xl mb-1">Game Over</h2>
-            <p className="text-[#8B93A5] text-sm mb-4">
-              {correctCount} of {deck.length} correct · Best streak: {best}
-            </p>
-            <div className="flex items-center justify-center gap-1.5 mb-5 font-mono text-lg">
-              {results.map((r, i) => (
-                <span key={i}>{r ? "🟩" : "🟥"}</span>
-              ))}
-            </div>
-            <button
-              className="inline-flex items-center gap-2 rounded-lg px-5 py-3 font-semibold text-white"
-              style={{ backgroundColor: "#EE6C2A" }}
-            >
-              <Share2 size={16} strokeWidth={2.5} />
-              Share Result
-            </button>
-          </div>
         )}
       </div>
     </div>

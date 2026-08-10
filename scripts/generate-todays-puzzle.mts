@@ -29,8 +29,6 @@ async function main() {
   const game = await findLatestCompletedGame();
   if (!game) throw new Error("No completed games found in the last 48 hours.");
 
-  // API client returns untyped records; cast to `any` to satisfy the builder's
-  // TypeScript types at runtime. The builder performs defensive checks.
   const plays = await fetchGamePlays((game as any).id);
   const payload = buildPuzzleFromLiveGame(game as any, plays as any);
   saveTodayPuzzle(payload);
