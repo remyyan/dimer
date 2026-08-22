@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const statsNbaClient = require('../lib/puzzles/stats-nba-client.cjs');
 
 function loadEnvFile(envPath) {
   if (!fs.existsSync(envPath)) return;
@@ -20,6 +21,7 @@ loadEnvFile(path.join(process.cwd(), '.env'));
 const BASE = 'https://api.balldontlie.io/v1';
 const KEY = process.env.BALLDONTLIE_API_KEY;
 const useBearer = process.env.BALLDONTLIE_BEARER === '1' || process.env.BALLDONTLIE_BEARER === 'true';
+const ENABLE_BALLEDONTLIE_FALLBACK = ['1', 'true'].includes((process.env.ENABLE_BALLEDONTLIE_FALLBACK || '').toLowerCase());
 
 function authHeaders() {
   if (!KEY) return undefined;
@@ -72,6 +74,44 @@ function chooseRandom(arr) {
 }
 
 async function fetchRandomFinalGame() {
+  const statsGame = await statsNbaClient.fetchRandomFinalGameFromStats();
+  if (statsGame) {
+    statsGame._source = 'stats.nba.com';
+    console.log('Using stats.nba.com game:', statsGame.id);
+    return statsGame;
+  }
+
+  console.warn('stats.nba.com did not return a game; falling back to balldontlie/cached data');
+  if (!ENABLE_BALLEDONTLIE_FALLBACK) {
+    throw new Error('stats.nba.com did not return a game and balldontlie fallback is disabled');
+  }
+
+  // Prefer cached balldontlie games if available
+  try {
+    const cacheDir = path.join(process.cwd(), 'data', 'cache', 'games');
+    if (fs.existsSync(cacheDir)) {
+      const files = fs.readdirSync(cacheDir).filter((f) => f.endsWith('.json')).sort();
+      const all = [];
+      for (const f of files) {
+        try {
+          const p = JSON.parse(fs.readFileSync(path.join(cacheDir, f), 'utf8'));
+          if (Array.isArray(p.data)) all.push(...p.data);
+        } catch (e) {
+          // ignore parse errors per-file
+        }
+      }
+      const finals = all.filter((g) => g && g.status === 'Final');
+      if (finals.length) {
+        const chosen = chooseRandom(finals);
+        chosen._source = 'balldontlie-cache';
+        return chosen;
+      }
+    }
+  } catch (e) {
+    // proceed to API fallback
+  }
+
+  // Fallback to live API sampling
   const totalCount = await fetchTotalGameCount();
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
@@ -97,7 +137,28 @@ async function fetchRandomFinalGame() {
 }
 
 async function fetchGamePlays(gameId) {
-  const url = `${BASE}/plays?game_id=${gameId}&per_page=100`;
+  // Prefer stats.nba.com play-by-play when available
+  try {
+    const plays = await statsNbaClient.fetchPlayByPlay(gameId);
+    if (Array.isArray(plays) && plays.length) {
+      return plays;
+    }
+  } catch (e) {
+    console.warn('stats.nba.com plays fetch failed for', gameId, '; falling back.', e && e.message ? e.message : e);
+  }
+
+  // Try cached plays first
+  try {
+    const cached = path.join(process.cwd(), 'data', 'cache', 'plays', `${gameId}.json`);
+    if (fs.existsSync(cached)) {
+      const p = JSON.parse(fs.readFileSync(cached, 'utf8'));
+      return Array.isArray(p.data) ? p.data : (Array.isArray(p) ? p : []);
+    }
+  } catch (e) {
+    // ignore cache read errors and fallback to API
+  }
+
+  const url = `${BASE}/plays?game_ids[]=${gameId}&per_page=100`;
   const payload = await fetchJson(url);
   return payload.data || [];
 }
@@ -148,7 +209,7 @@ function buildPayload(game, plays) {
     nodes,
     edges,
     options: [answerTeam],
-    source: 'live',
+    source: game._source || 'live',
   };
 }
 
