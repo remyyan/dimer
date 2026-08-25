@@ -1,11 +1,115 @@
 {
-  "date": "2026-08-10",
-  "answer": "Golden State Warriors",
-  "gameContext": " Providence Steamrollers at Golden State Warriors, Dec 1946",
-  "nodes": [],
-  "edges": [],
+  "date": "2026-08-25",
+  "answer": "Charlotte Hornets",
+  "gameContext": "Mystery Game • 2025-26 Season",
+  "fullContext": "NY at Charlotte Hornets, Mar 2026",
+  "totalAssists": 28,
+  "topComboText": "#0 ➔ #7 generated 3 assists",
+  "locationClue": "Home Game in March",
+  "nodes": [
+    {
+      "id": "p1",
+      "label": "PG",
+      "playerName": "LaMelo Ball",
+      "shortName": "L. Ball",
+      "jersey": "#1",
+      "position": "G",
+      "gameAssists": 6
+    },
+    {
+      "id": "p2",
+      "label": "SG",
+      "playerName": "Kon Knueppel",
+      "shortName": "K. Knueppel",
+      "jersey": "#7",
+      "position": "G",
+      "gameAssists": 8
+    },
+    {
+      "id": "p3",
+      "label": "SF",
+      "playerName": "Miles Bridges",
+      "shortName": "M. Bridges",
+      "jersey": "#0",
+      "position": "F",
+      "gameAssists": 3
+    },
+    {
+      "id": "p4",
+      "label": "PF",
+      "playerName": "Moussa Diabate",
+      "shortName": "M. Diabate",
+      "jersey": "#14",
+      "position": "F",
+      "gameAssists": 3
+    },
+    {
+      "id": "p5",
+      "label": "C",
+      "playerName": "Brandon Miller",
+      "shortName": "B. Miller",
+      "jersey": "#24",
+      "position": "F",
+      "gameAssists": 3
+    }
+  ],
+  "edges": [
+    {
+      "from": "p5",
+      "to": "p1",
+      "weight": 1
+    },
+    {
+      "from": "p1",
+      "to": "p3",
+      "weight": 2
+    },
+    {
+      "from": "p1",
+      "to": "p5",
+      "weight": 1
+    },
+    {
+      "from": "p1",
+      "to": "p2",
+      "weight": 2
+    },
+    {
+      "from": "p2",
+      "to": "p1",
+      "weight": 2
+    },
+    {
+      "from": "p3",
+      "to": "p2",
+      "weight": 3
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "weight": 2
+    },
+    {
+      "from": "p2",
+      "to": "p5",
+      "weight": 2
+    },
+    {
+      "from": "p5",
+      "to": "p2",
+      "weight": 1
+    },
+    {
+      "from": "p4",
+      "to": "p5",
+      "weight": 2
+    }
+  ],
   "options": [
-    "Golden State Warriors"
+    "Charlotte Hornets",
+    "Miami Heat",
+    "Detroit Pistons",
+    "Chicago Bulls"
   ],
   "source": "live"
 }

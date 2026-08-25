@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "gen:today": "node scripts/generate-todays-puzzle.cjs",
-    "download:balldontlie": "node scripts/download-balldontlie-cache.cjs"
+    "gen:today": "node scripts/generate-todays-puzzle.cjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

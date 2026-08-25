@@ -3,12 +3,16 @@ import { loadTodayPuzzle } from "../../../../lib/puzzles/puzzle-store";
 
 export async function GET() {
   const puzzle = loadTodayPuzzle();
+
   if (!puzzle) {
     return NextResponse.json(
-      { error: "Daily puzzle not generated yet. Run npm run gen:today." },
+      { error: "Puzzle not available yet — check back later." },
       { status: 404 }
     );
   }
 
-  return NextResponse.json({ puzzle });
+  const today = new Date().toISOString().slice(0, 10);
+  const stale = puzzle.date !== today;
+
+  return NextResponse.json({ puzzle, stale });
 }

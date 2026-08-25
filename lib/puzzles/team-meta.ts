@@ -1,4 +1,4 @@
- export type TeamMeta = {
+export type TeamMeta = {
   id: number;
   city: string;
   name: string;

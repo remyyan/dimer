@@ -1,0 +1,714 @@
+'use client';
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Check, X, Flame, Trophy, ChevronRight, Eye, Lightbulb, Lock, Activity, Target, MapPin } from "lucide-react";
+
+// ─── Team data (client-side, for autocomplete + hints) ────────────────────────
+
+type TeamMeta = {
+  full_name: string;
+  city: string;
+  name: string;
+  abbreviation: string;
+  conference: "East" | "West";
+  division: string;
+};
+
+const NBA_TEAMS: TeamMeta[] = [
+  { full_name: "Atlanta Hawks",            city: "Atlanta",       name: "Hawks",          abbreviation: "ATL", conference: "East", division: "Southeast" },
+  { full_name: "Boston Celtics",           city: "Boston",        name: "Celtics",        abbreviation: "BOS", conference: "East", division: "Atlantic"  },
+  { full_name: "Brooklyn Nets",            city: "Brooklyn",      name: "Nets",           abbreviation: "BKN", conference: "East", division: "Atlantic"  },
+  { full_name: "Charlotte Hornets",        city: "Charlotte",     name: "Hornets",        abbreviation: "CHA", conference: "East", division: "Southeast" },
+  { full_name: "Chicago Bulls",            city: "Chicago",       name: "Bulls",          abbreviation: "CHI", conference: "East", division: "Central"   },
+  { full_name: "Cleveland Cavaliers",      city: "Cleveland",     name: "Cavaliers",      abbreviation: "CLE", conference: "East", division: "Central"   },
+  { full_name: "Dallas Mavericks",         city: "Dallas",        name: "Mavericks",      abbreviation: "DAL", conference: "West", division: "Southwest" },
+  { full_name: "Denver Nuggets",           city: "Denver",        name: "Nuggets",        abbreviation: "DEN", conference: "West", division: "Northwest" },
+  { full_name: "Detroit Pistons",          city: "Detroit",       name: "Pistons",        abbreviation: "DET", conference: "East", division: "Central"   },
+  { full_name: "Golden State Warriors",    city: "Golden State",  name: "Warriors",       abbreviation: "GSW", conference: "West", division: "Pacific"   },
+  { full_name: "Houston Rockets",          city: "Houston",       name: "Rockets",        abbreviation: "HOU", conference: "West", division: "Southwest" },
+  { full_name: "Indiana Pacers",           city: "Indiana",       name: "Pacers",         abbreviation: "IND", conference: "East", division: "Central"   },
+  { full_name: "LA Clippers",              city: "LA",            name: "Clippers",       abbreviation: "LAC", conference: "West", division: "Pacific"   },
+  { full_name: "Los Angeles Lakers",       city: "Los Angeles",   name: "Lakers",         abbreviation: "LAL", conference: "West", division: "Pacific"   },
+  { full_name: "Memphis Grizzlies",        city: "Memphis",       name: "Grizzlies",      abbreviation: "MEM", conference: "West", division: "Southwest" },
+  { full_name: "Miami Heat",               city: "Miami",         name: "Heat",           abbreviation: "MIA", conference: "East", division: "Southeast" },
+  { full_name: "Milwaukee Bucks",          city: "Milwaukee",     name: "Bucks",          abbreviation: "MIL", conference: "East", division: "Central"   },
+  { full_name: "Minnesota Timberwolves",   city: "Minnesota",     name: "Timberwolves",   abbreviation: "MIN", conference: "West", division: "Northwest" },
+  { full_name: "New Orleans Pelicans",     city: "New Orleans",   name: "Pelicans",       abbreviation: "NOP", conference: "West", division: "Southwest" },
+  { full_name: "New York Knicks",          city: "New York",      name: "Knicks",         abbreviation: "NYK", conference: "East", division: "Atlantic"  },
+  { full_name: "Oklahoma City Thunder",    city: "Oklahoma City", name: "Thunder",        abbreviation: "OKC", conference: "West", division: "Northwest" },
+  { full_name: "Orlando Magic",            city: "Orlando",       name: "Magic",          abbreviation: "ORL", conference: "East", division: "Southeast" },
+  { full_name: "Philadelphia 76ers",       city: "Philadelphia",  name: "76ers",          abbreviation: "PHI", conference: "East", division: "Atlantic"  },
+  { full_name: "Phoenix Suns",             city: "Phoenix",       name: "Suns",           abbreviation: "PHX", conference: "West", division: "Pacific"   },
+  { full_name: "Portland Trail Blazers",   city: "Portland",      name: "Trail Blazers",  abbreviation: "POR", conference: "West", division: "Northwest" },
+  { full_name: "Sacramento Kings",         city: "Sacramento",    name: "Kings",          abbreviation: "SAC", conference: "West", division: "Pacific"   },
+  { full_name: "San Antonio Spurs",        city: "San Antonio",   name: "Spurs",          abbreviation: "SAS", conference: "West", division: "Southwest" },
+  { full_name: "Toronto Raptors",          city: "Toronto",       name: "Raptors",        abbreviation: "TOR", conference: "East", division: "Atlantic"  },
+  { full_name: "Utah Jazz",                city: "Utah",          name: "Jazz",           abbreviation: "UTA", conference: "West", division: "Northwest" },
+  { full_name: "Washington Wizards",       city: "Washington",    name: "Wizards",        abbreviation: "WAS", conference: "East", division: "Southeast" },
+];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type PuzzleNode = {
+  id: string;
+  label: string;
+  playerName?: string;
+  shortName?: string;
+  jersey?: string;
+  position?: string;
+  gameAssists?: number;
+};
+
+type PuzzleEdge = { from: string; to: string; weight: number };
+
+type Puzzle = {
+  date: string;
+  answer: string;
+  gameContext: string;
+  fullContext?: string;
+  totalAssists?: number;
+  topComboText?: string;
+  locationClue?: string;
+  nodes: PuzzleNode[];
+  edges: PuzzleEdge[];
+  options: string[];
+  source: "live" | "legends";
+};
+
+type Guess = {
+  team: string;
+  correct: boolean;
+  sameConference: boolean;
+  sameDivision: boolean;
+  conference: string;
+  division: string;
+};
+
+const MAX_GUESSES = 4;
+
+// ─── 5-Node Court Formation Layout ────────────────────────────────────────────
+
+const COURT_LAYOUT_5: Record<string, { x: number; y: number }> = {
+  p1: { x: 200, y: 65 },  // Point Guard (Top)
+  p2: { x: 335, y: 155 }, // Shooting Guard (Right Wing)
+  p3: { x: 65,  y: 155 }, // Small Forward (Left Wing)
+  p4: { x: 125, y: 300 }, // Power Forward (Low Left)
+  p5: { x: 275, y: 300 }, // Center (Low Right)
+};
+
+// ─── Progressive Starting 5 Diagram ───────────────────────────────────────────
+
+function StartingFiveDiagram({
+  nodes,
+  edges,
+  guessCount,
+  gameOver,
+}: {
+  nodes: PuzzleNode[];
+  edges: PuzzleEdge[];
+  guessCount: number;
+  gameOver: boolean;
+}) {
+  const positions = useMemo(() => {
+    const map = new Map<string, { x: number; y: number }>();
+    nodes.forEach((node, idx) => {
+      const predefined = COURT_LAYOUT_5[node.id];
+      if (predefined) {
+        map.set(node.id, predefined);
+      } else {
+        const count = nodes.length;
+        const angle = (idx * (Math.PI * 2)) / count - Math.PI / 2;
+        map.set(node.id, { x: 200 + Math.cos(angle) * 125, y: 180 + Math.sin(angle) * 125 });
+      }
+    });
+    return map;
+  }, [nodes]);
+
+  const maxWeight = edges.length ? Math.max(...edges.map((e) => e.weight)) : 1;
+
+  // Progressive node display:
+  // Guess 1: Position role (PG, SG, SF, PF, C)
+  // Guess 2: Position role + game assist count
+  // Guess 3: Jersey Number (#5, #34, etc.) + game assist count
+  // Guess 4: Role + Jersey Number
+  // Game Over: Full player name!
+
+  function getPrimaryText(node: PuzzleNode) {
+    if (gameOver) {
+      return node.shortName || node.playerName?.split(" ").slice(-1)[0] || node.label;
+    }
+    if (guessCount === 2) {
+      return node.jersey || node.label; // Jersey number alone e.g. #5
+    }
+    if (guessCount >= 3) {
+      return `${node.label} ${node.jersey || ""}`.trim(); // Role + Jersey e.g. SF #5
+    }
+    return node.label; // Role e.g. PG, SG
+  }
+
+  function getSecondaryBadge(node: PuzzleNode) {
+    if (gameOver) {
+      return `${node.jersey || ""} • ${node.gameAssists ?? 0} AST`.trim();
+    }
+    if (guessCount >= 1 && guessCount <= 2) {
+      return `${node.gameAssists ?? 0} AST`;
+    }
+    if (guessCount >= 3) {
+      return `${node.gameAssists ?? 0} AST`;
+    }
+    return null;
+  }
+
+  return (
+    <svg viewBox="0 0 400 375" className="w-full h-auto">
+      {/* Court markings */}
+      <circle cx={200} cy={65} r={40} fill="none" stroke="#2A2F3B" strokeWidth={1} strokeDasharray="3 3" />
+      <path d="M 90 355 L 90 230 L 310 230 L 310 355" fill="none" stroke="#232733" strokeWidth={1} />
+      <path d="M 40 355 A 180 180 0 0 1 360 355" fill="none" stroke="#232733" strokeWidth={1} />
+
+      {/* Passing Edges */}
+      {edges.map((edge, i) => {
+        const from = positions.get(edge.from);
+        const to = positions.get(edge.to);
+        if (!from || !to) return null;
+        const strokeW = 1.5 + (edge.weight / maxWeight) * 7.5;
+        const opacity = 0.35 + (edge.weight / maxWeight) * 0.65;
+        return (
+          <line
+            key={`${edge.from}-${edge.to}-${i}`}
+            x1={from.x}
+            y1={from.y}
+            x2={to.x}
+            y2={to.y}
+            stroke="#FFB627"
+            strokeWidth={strokeW}
+            strokeOpacity={opacity}
+            strokeLinecap="round"
+          />
+        );
+      })}
+
+      {/* Nodes */}
+      {nodes.map((node) => {
+        const pos = positions.get(node.id);
+        if (!pos) return null;
+        const primary = getPrimaryText(node);
+        const secondary = getSecondaryBadge(node);
+        const isLong = primary.length > 7;
+
+        return (
+          <g key={node.id} className="transition-all duration-300">
+            {/* Main node circle */}
+            <circle
+              cx={pos.x}
+              cy={pos.y}
+              r={gameOver ? 30 : 26}
+              fill="#1B1F2A"
+              stroke={gameOver ? "#EE6C2A" : guessCount > 0 ? "#FFB627" : "#3A4050"}
+              strokeWidth={gameOver ? 2.5 : guessCount > 0 ? 2 : 1.5}
+            />
+
+            {/* Primary text */}
+            <text
+              x={pos.x}
+              y={pos.y + (secondary ? -2 : 4)}
+              textAnchor="middle"
+              fontSize={gameOver ? (isLong ? 10 : 11) : guessCount >= 3 ? 11 : 13}
+              fontWeight="700"
+              fill={gameOver ? "#EDEFF4" : "#FFFFFF"}
+              fontFamily="'IBM Plex Mono', monospace"
+            >
+              {primary}
+            </text>
+
+            {/* Secondary Badge */}
+            {secondary && (
+              <text
+                x={pos.x}
+                y={pos.y + 12}
+                textAnchor="middle"
+                fontSize="9"
+                fontWeight="600"
+                fill="#FFB627"
+                fontFamily="'IBM Plex Mono', monospace"
+              >
+                {secondary}
+              </text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+// ─── Guess Row ────────────────────────────────────────────────────────────────
+
+function GuessRow({ guess }: { guess: Guess }) {
+  const { team, correct, sameConference, sameDivision, conference, division } = guess;
+
+  const badge = (label: string, match: boolean) => (
+    <span
+      className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded"
+      style={{
+        backgroundColor: match ? "rgba(60,184,120,0.2)" : "rgba(255,255,255,0.06)",
+        color: match ? "#3CB878" : "#5A6072",
+        border: `1px solid ${match ? "#3CB878" : "#2A2F3B"}`,
+      }}
+    >
+      {label}
+    </span>
+  );
+
+  return (
+    <div
+      className="flex items-center gap-2 rounded-lg border px-3 py-2.5"
+      style={{
+        backgroundColor: correct ? "rgba(60,184,120,0.1)" : "rgba(255,255,255,0.03)",
+        borderColor: correct ? "#3CB878" : "#2A2F3B",
+      }}
+    >
+      {correct
+        ? <Check size={14} className="text-[#3CB878] shrink-0" strokeWidth={3} />
+        : <X size={14} className="text-[#E0554A] shrink-0" strokeWidth={3} />
+      }
+      <span className="text-sm font-semibold text-white flex-1 min-w-0 truncate">{team}</span>
+      <div className="flex gap-1.5 shrink-0">
+        {badge(conference, sameConference)}
+        {!correct && badge(division, sameDivision)}
+      </div>
+    </div>
+  );
+}
+
+// ─── Autocomplete Input ───────────────────────────────────────────────────────
+
+function TeamAutocomplete({
+  onSubmit,
+  disabled,
+  usedTeams,
+}: {
+  onSubmit: (team: string) => void;
+  disabled: boolean;
+  usedTeams: string[];
+}) {
+  const [value, setValue] = useState("");
+  const [open, setOpen] = useState(false);
+  const [highlighted, setHighlighted] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const suggestions = useMemo(() => {
+    if (!value.trim()) return [];
+    const q = value.toLowerCase();
+    return NBA_TEAMS.filter(
+      (t) =>
+        !usedTeams.includes(t.full_name) &&
+        (t.full_name.toLowerCase().includes(q) ||
+          t.name.toLowerCase().includes(q) ||
+          t.city.toLowerCase().includes(q) ||
+          t.abbreviation.toLowerCase() === q)
+    ).slice(0, 6);
+  }, [value, usedTeams]);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
+        !inputRef.current?.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  function select(team: TeamMeta) {
+    setValue(team.full_name);
+    setOpen(false);
+    inputRef.current?.focus();
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlighted((h) => Math.min(h + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlighted((h) => Math.max(h - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (open && suggestions[highlighted]) {
+        select(suggestions[highlighted]);
+      } else {
+        trySubmit();
+      }
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  }
+
+  function trySubmit() {
+    const match = NBA_TEAMS.find(
+      (t) => t.full_name.toLowerCase() === value.trim().toLowerCase()
+    );
+    if (match) {
+      onSubmit(match.full_name);
+      setValue("");
+      setOpen(false);
+    }
+  }
+
+  const isValid = NBA_TEAMS.some(
+    (t) => t.full_name.toLowerCase() === value.trim().toLowerCase()
+  );
+
+  return (
+    <div className="relative">
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            disabled={disabled}
+            placeholder="Type a team name…"
+            onChange={(e) => {
+              setValue(e.target.value);
+              setOpen(true);
+              setHighlighted(0);
+            }}
+            onFocus={() => { if (suggestions.length) setOpen(true); }}
+            onKeyDown={handleKeyDown}
+            className="w-full rounded-lg border px-4 py-3 text-sm font-semibold text-white outline-none transition-colors"
+            style={{
+              backgroundColor: "#1B1F2A",
+              borderColor: open && suggestions.length ? "#EE6C2A" : "#3A4050",
+              caretColor: "#FFB627",
+            }}
+          />
+          {open && suggestions.length > 0 && (
+            <div
+              ref={dropdownRef}
+              className="absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border overflow-hidden shadow-2xl"
+              style={{ backgroundColor: "#12141C", borderColor: "#3A4050" }}
+            >
+              {suggestions.map((team, i) => (
+                <button
+                  key={team.full_name}
+                  onMouseDown={(e) => { e.preventDefault(); select(team); }}
+                  className="w-full flex items-center justify-between px-4 py-2.5 text-left text-sm transition-colors cursor-pointer"
+                  style={{
+                    backgroundColor: i === highlighted ? "rgba(238,108,42,0.12)" : "transparent",
+                    color: i === highlighted ? "#EDEFF4" : "#8B93A5",
+                  }}
+                >
+                  <span className="font-semibold">{team.full_name}</span>
+                  <span className="text-[10px] uppercase tracking-wider" style={{ color: "#5A6072" }}>
+                    {team.conference} • {team.division}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <button
+          onClick={trySubmit}
+          disabled={disabled || !isValid}
+          className="flex items-center gap-1 rounded-lg px-4 py-3 text-sm font-bold transition-opacity cursor-pointer disabled:cursor-not-allowed"
+          style={{
+            backgroundColor: isValid && !disabled ? "#EE6C2A" : "#2A2F3B",
+            color: isValid && !disabled ? "#fff" : "#5A6072",
+          }}
+        >
+          Guess <ChevronRight size={14} strokeWidth={3} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+export default function PassingNetworkGuesser() {
+  const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
+  const [stale, setStale] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [gameOver, setGameOver] = useState(false);
+  const [won, setWon] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [best, setBest] = useState(0);
+
+  useEffect(() => {
+    async function loadPuzzle() {
+      try {
+        const res = await fetch("/api/puzzle/today");
+        const body = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
+        setPuzzle(body.puzzle);
+        setStale(!!body.stale);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPuzzle();
+  }, []);
+
+  const answerMeta = useMemo(
+    () => (puzzle ? NBA_TEAMS.find((t) => t.full_name === puzzle.answer) : undefined),
+    [puzzle]
+  );
+
+  function handleGuess(teamName: string) {
+    if (!puzzle || gameOver) return;
+
+    const guessMeta = NBA_TEAMS.find((t) => t.full_name === teamName);
+    const correct = teamName === puzzle.answer;
+    const sameConf = !!(answerMeta && guessMeta && answerMeta.conference === guessMeta.conference);
+    const sameDivision = !!(answerMeta && guessMeta && answerMeta.division === guessMeta.division);
+
+    const newGuess: Guess = {
+      team: teamName,
+      correct,
+      sameConference: sameConf,
+      sameDivision,
+      conference: guessMeta?.conference ?? "?",
+      division: guessMeta?.division ?? "?",
+    };
+
+    const newGuesses = [...guesses, newGuess];
+    setGuesses(newGuesses);
+
+    if (correct) {
+      setWon(true);
+      setGameOver(true);
+      const ns = streak + 1;
+      setStreak(ns);
+      setBest((b) => Math.max(b, ns));
+    } else if (newGuesses.length >= MAX_GUESSES) {
+      setGameOver(true);
+      setStreak(0);
+    }
+  }
+
+  function handlePlayAgain() {
+    setGuesses([]);
+    setGameOver(false);
+    setWon(false);
+  }
+
+  const usedTeams = guesses.map((g) => g.team);
+  const attemptsLeft = MAX_GUESSES - guesses.length;
+
+  // Progressive Basketball Clue Bar
+  const clueStatus = useMemo(() => {
+    if (gameOver) {
+      return { icon: Eye, text: "Full player names & matchup revealed!" };
+    }
+    if (guesses.length === 1) {
+      return {
+        icon: Activity,
+        text: `Team Ball Movement: ${puzzle?.totalAssists ?? 25}+ assists recorded in this game`,
+      };
+    }
+    if (guesses.length === 2) {
+      return {
+        icon: Target,
+        text: `Top Connection: ${puzzle?.topComboText ?? "Key passer-to-scorer duo highlighted"}`,
+      };
+    }
+    if (guesses.length === 3) {
+      return {
+        icon: MapPin,
+        text: `Game Setting: ${puzzle?.locationClue ?? "Regular Season Game"}`,
+      };
+    }
+    return {
+      icon: Lock,
+      text: "Wrong guesses unlock assist stats, jersey #s, and duo combos",
+    };
+  }, [guesses.length, gameOver, puzzle]);
+
+  return (
+    <div
+      className="min-h-screen w-full flex flex-col items-center py-10 px-4"
+      style={{
+        background: "radial-gradient(ellipse at top, #1B1F2A 0%, #0E1016 70%)",
+        fontFamily: "'Inter', sans-serif",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+        .scoreboard-title { font-family: 'Teko', sans-serif; }
+      `}</style>
+
+      <div className="w-full max-w-xl">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
+            <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B93A5] font-semibold">
+              Daily Puzzle
+            </span>
+            <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
+          </div>
+          <h1 className="scoreboard-title text-white leading-none" style={{ fontSize: "50px", letterSpacing: "0.02em" }}>
+            THE <span style={{ color: "#EE6C2A" }}>NETWORK</span>
+          </h1>
+          <p className="text-[#8B93A5] text-sm mt-1">
+            {loading
+              ? "Loading today's puzzle…"
+              : error
+              ? "\u00a0"
+              : stale
+              ? `Showing yesterday's puzzle — ${puzzle?.gameContext}`
+              : puzzle?.gameContext}
+          </p>
+        </div>
+
+        {/* Streak / Best */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
+            <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Streak</span>
+            <span className="font-mono text-2xl font-bold" style={{ color: "#FFB627" }}>{streak}</span>
+          </div>
+          <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
+            <Trophy size={14} className="text-[#8B93A5]" />
+            <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Best</span>
+            <span className="font-mono text-2xl font-bold text-white">{best}</span>
+          </div>
+        </div>
+
+        {/* Content */}
+        {loading ? (
+          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
+            <p className="text-[#EDEFF4]">Checking for today's puzzle…</p>
+          </div>
+        ) : error ? (
+          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
+            <p className="text-[#EDEFF4] font-semibold mb-1">Puzzle not available yet</p>
+            <p className="text-[#8B93A5] text-sm">{error}</p>
+          </div>
+        ) : puzzle ? (
+          <>
+            {/* Diagram Card */}
+            <div className="rounded-xl border overflow-hidden" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
+              <div className="flex items-center justify-between px-4 py-2" style={{ backgroundColor: "#EE6C2A", color: "#0E1016" }}>
+                <span className="text-[11px] font-bold tracking-[0.3em] uppercase">
+                  Mystery Starting 5
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider opacity-90">
+                  {gameOver ? "Revealed" : `Clue ${guesses.length + 1}/4`}
+                </span>
+              </div>
+
+              <div className="p-4">
+                <StartingFiveDiagram
+                  nodes={puzzle.nodes}
+                  edges={puzzle.edges}
+                  guessCount={guesses.length}
+                  gameOver={gameOver}
+                />
+              </div>
+
+              {/* Progressive Clue Banner */}
+              <div className="px-5 py-2.5 border-t flex items-center justify-center gap-2" style={{ borderColor: "#2A2F3B", backgroundColor: "#141720" }}>
+                <clueStatus.icon size={14} className={guesses.length > 0 ? "text-[#FFB627]" : "text-[#5A6072]"} />
+                <span className={`text-xs ${guesses.length > 0 ? "text-[#FFB627] font-semibold" : "text-[#5A6072]"}`}>
+                  {clueStatus.text}
+                </span>
+              </div>
+            </div>
+
+            {/* Guess history */}
+            {guesses.length > 0 && (
+              <div className="mt-4 flex flex-col gap-2">
+                {guesses.map((g, i) => (
+                  <GuessRow key={i} guess={g} />
+                ))}
+              </div>
+            )}
+
+            {/* Game over: result card */}
+            {gameOver ? (
+              <div className="mt-4">
+                <div
+                  className="rounded-lg border px-4 py-4 text-center"
+                  style={{
+                    backgroundColor: won ? "rgba(60,184,120,0.12)" : "rgba(224,85,74,0.12)",
+                    borderColor: won ? "#3CB878" : "#E0554A",
+                  }}
+                >
+                  {won ? (
+                    <>
+                      <p className="text-[#3CB878] font-bold text-sm uppercase tracking-wider mb-1">
+                        Solved in {guesses.length} {guesses.length === 1 ? "guess" : "guesses"}!
+                      </p>
+                      <p className="text-white text-lg font-bold">{puzzle.answer}</p>
+                      <p className="text-[#8B93A5] text-sm mt-1">{puzzle.fullContext || puzzle.gameContext}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-[#E0554A] font-bold text-sm uppercase tracking-wider mb-1">
+                        Better luck tomorrow
+                      </p>
+                      <p className="text-white text-lg font-bold">{puzzle.answer}</p>
+                      <p className="text-[#8B93A5] text-sm mt-1">{puzzle.fullContext || puzzle.gameContext}</p>
+                    </>
+                  )}
+                </div>
+                <button
+                  onClick={handlePlayAgain}
+                  className="w-full mt-3 rounded-lg py-3 font-semibold text-white cursor-pointer"
+                  style={{ backgroundColor: "#EE6C2A" }}
+                >
+                  Play Again
+                </button>
+              </div>
+            ) : (
+              /* Active: attempts indicator + input */
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[#5A6072] text-xs uppercase tracking-wider">
+                    {attemptsLeft} {attemptsLeft === 1 ? "guess" : "guesses"} remaining
+                  </p>
+                  <div className="flex gap-1">
+                    {Array.from({ length: MAX_GUESSES }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-2 h-2 rounded-full transition-colors"
+                        style={{
+                          backgroundColor:
+                            i < guesses.length
+                              ? guesses[i].correct ? "#3CB878" : "#E0554A"
+                              : "#2A2F3B",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <TeamAutocomplete
+                  onSubmit={handleGuess}
+                  disabled={gameOver}
+                  usedTeams={usedTeams}
+                />
+                {guesses.length > 0 && (
+                  <p className="text-[#5A6072] text-xs mt-2 text-center">
+                    Hint badges turn <span style={{ color: "#3CB878" }}>green</span> when matching the mystery team's conference or division
+                  </p>
+                )}
+              </div>
+            )}
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
+}
