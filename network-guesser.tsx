@@ -1,7 +1,22 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, X, Flame, Trophy, ChevronRight, Eye, Lightbulb, Lock, Activity, Target, MapPin } from "lucide-react";
+import {
+  Check,
+  X,
+  Flame,
+  Trophy,
+  ChevronRight,
+  Eye,
+  Lock,
+  Activity,
+  Target,
+  MapPin,
+  BarChart2,
+  Share2,
+  History,
+  RotateCcw,
+} from "lucide-react";
 
 // ─── Team data (client-side, for autocomplete + hints) ────────────────────────
 
@@ -84,6 +99,32 @@ type Guess = {
   division: string;
 };
 
+type UserStats = {
+  gamesPlayed: number;
+  gamesWon: number;
+  currentStreak: number;
+  maxStreak: number;
+  lastPlayedDate: string;
+  guessDistribution: { [key: number]: number; fail: number };
+  history: Array<{
+    date: string;
+    team: string;
+    won: boolean;
+    guessesCount: number;
+    fullMatchup?: string;
+  }>;
+};
+
+const DEFAULT_STATS: UserStats = {
+  gamesPlayed: 0,
+  gamesWon: 0,
+  currentStreak: 0,
+  maxStreak: 0,
+  lastPlayedDate: "",
+  guessDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, fail: 0 },
+  history: [],
+};
+
 const MAX_GUESSES = 4;
 
 // ─── 5-Node Court Formation Layout ────────────────────────────────────────────
@@ -126,24 +167,17 @@ function StartingFiveDiagram({
 
   const maxWeight = edges.length ? Math.max(...edges.map((e) => e.weight)) : 1;
 
-  // Progressive node display:
-  // Guess 1: Position role (PG, SG, SF, PF, C)
-  // Guess 2: Position role + game assist count
-  // Guess 3: Jersey Number (#5, #34, etc.) + game assist count
-  // Guess 4: Role + Jersey Number
-  // Game Over: Full player name!
-
   function getPrimaryText(node: PuzzleNode) {
     if (gameOver) {
       return node.shortName || node.playerName?.split(" ").slice(-1)[0] || node.label;
     }
     if (guessCount === 2) {
-      return node.jersey || node.label; // Jersey number alone e.g. #5
+      return node.jersey || node.label;
     }
     if (guessCount >= 3) {
-      return `${node.label} ${node.jersey || ""}`.trim(); // Role + Jersey e.g. SF #5
+      return `${node.label} ${node.jersey || ""}`.trim();
     }
-    return node.label; // Role e.g. PG, SG
+    return node.label;
   }
 
   function getSecondaryBadge(node: PuzzleNode) {
@@ -198,7 +232,6 @@ function StartingFiveDiagram({
 
         return (
           <g key={node.id} className="transition-all duration-300">
-            {/* Main node circle */}
             <circle
               cx={pos.x}
               cy={pos.y}
@@ -208,7 +241,6 @@ function StartingFiveDiagram({
               strokeWidth={gameOver ? 2.5 : guessCount > 0 ? 2 : 1.5}
             />
 
-            {/* Primary text */}
             <text
               x={pos.x}
               y={pos.y + (secondary ? -2 : 4)}
@@ -221,7 +253,6 @@ function StartingFiveDiagram({
               {primary}
             </text>
 
-            {/* Secondary Badge */}
             {secondary && (
               <text
                 x={pos.x}
@@ -430,6 +461,156 @@ function TeamAutocomplete({
   );
 }
 
+// ─── Stats & History Modal ───────────────────────────────────────────────────
+
+function StatsModal({
+  stats,
+  onClose,
+  onShare,
+  copied,
+}: {
+  stats: UserStats;
+  onClose: () => void;
+  onShare: () => void;
+  copied: boolean;
+}) {
+  const [tab, setTab] = useState<"stats" | "history">("stats");
+  const winPercent = stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0;
+  const maxFreq = Math.max(1, ...Object.values(stats.guessDistribution));
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
+      <div
+        className="w-full max-w-md rounded-2xl border p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
+        style={{ backgroundColor: "#141722", borderColor: "#3A4050" }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1 rounded-lg text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
+        >
+          <X size={20} />
+        </button>
+
+        {/* Tab Header */}
+        <div className="flex gap-4 border-b pb-3 mb-5" style={{ borderColor: "#2A2F3B" }}>
+          <button
+            onClick={() => setTab("stats")}
+            className={`flex items-center gap-1.5 text-sm font-bold pb-1 cursor-pointer transition-colors ${
+              tab === "stats" ? "text-[#EE6C2A] border-b-2 border-[#EE6C2A]" : "text-[#8B93A5] hover:text-white"
+            }`}
+          >
+            <BarChart2 size={16} /> Career Stats
+          </button>
+          <button
+            onClick={() => setTab("history")}
+            className={`flex items-center gap-1.5 text-sm font-bold pb-1 cursor-pointer transition-colors ${
+              tab === "history" ? "text-[#EE6C2A] border-b-2 border-[#EE6C2A]" : "text-[#8B93A5] hover:text-white"
+            }`}
+          >
+            <History size={16} /> Game History
+          </button>
+        </div>
+
+        {tab === "stats" ? (
+          <div>
+            {/* 4 Stats Cards */}
+            <div className="grid grid-cols-4 gap-2 mb-6 text-center">
+              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
+                <span className="block text-2xl font-bold font-mono text-white">{stats.gamesPlayed}</span>
+                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Played</span>
+              </div>
+              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
+                <span className="block text-2xl font-bold font-mono text-[#3CB878]">{winPercent}%</span>
+                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Win %</span>
+              </div>
+              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
+                <span className="block text-2xl font-bold font-mono text-[#FFB627]">{stats.currentStreak}</span>
+                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Streak</span>
+              </div>
+              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
+                <span className="block text-2xl font-bold font-mono text-white">{stats.maxStreak}</span>
+                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Max</span>
+              </div>
+            </div>
+
+            {/* Guess Distribution Bar Chart */}
+            <div className="mb-6">
+              <h3 className="text-xs uppercase font-bold tracking-wider text-[#8B93A5] mb-3">Guess Distribution</h3>
+              <div className="flex flex-col gap-1.5 font-mono text-xs">
+                {[1, 2, 3, 4].map((num) => {
+                  const count = stats.guessDistribution[num] || 0;
+                  const pct = Math.max(7, Math.round((count / maxFreq) * 100));
+                  return (
+                    <div key={num} className="flex items-center gap-2">
+                      <span className="w-3 text-right font-bold text-[#8B93A5]">{num}</span>
+                      <div className="flex-1 bg-[#1B1F2A] rounded-sm overflow-hidden h-5">
+                        <div
+                          className="h-full rounded-sm flex items-center justify-end px-2 text-white font-bold transition-all duration-500"
+                          style={{
+                            width: `${count > 0 ? pct : 7}%`,
+                            backgroundColor: count > 0 ? "#EE6C2A" : "#2A2F3B",
+                          }}
+                        >
+                          {count}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Share Button */}
+            <button
+              onClick={onShare}
+              className="w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-opacity cursor-pointer shadow-lg"
+              style={{ backgroundColor: "#EE6C2A" }}
+            >
+              <Share2 size={16} /> {copied ? "Copied to Clipboard! 🎉" : "Share Today's Results"}
+            </button>
+          </div>
+        ) : (
+          /* History Tab */
+          <div className="max-h-72 overflow-y-auto pr-1 flex flex-col gap-2">
+            {stats.history.length === 0 ? (
+              <p className="text-center text-[#8B93A5] text-sm py-8">No completed games in history yet.</p>
+            ) : (
+              stats.history.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 rounded-xl border"
+                  style={{
+                    backgroundColor: item.won ? "rgba(60,184,120,0.06)" : "rgba(224,85,74,0.06)",
+                    borderColor: item.won ? "rgba(60,184,120,0.3)" : "rgba(224,85,74,0.3)",
+                  }}
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-sm text-white">{item.team}</span>
+                      {item.won ? (
+                        <span className="text-[10px] bg-[#3CB878]/20 text-[#3CB878] px-1.5 py-0.5 rounded font-bold uppercase">
+                          Solved in {item.guessesCount}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] bg-[#E0554A]/20 text-[#E0554A] px-1.5 py-0.5 rounded font-bold uppercase">
+                          Failed
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs text-[#8B93A5] block mt-0.5">{item.fullMatchup || item.date}</span>
+                  </div>
+                  <span className="text-xs font-mono text-[#5A6072] shrink-0">{item.date}</span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PassingNetworkGuesser() {
@@ -441,17 +622,49 @@ export default function PassingNetworkGuesser() {
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [best, setBest] = useState(0);
 
+  // Persistence stats
+  const [stats, setStats] = useState<UserStats>(DEFAULT_STATS);
+  const [showStatsModal, setShowStatsModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // 1. Load User Stats from LocalStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("dimer_user_stats");
+      if (saved) {
+        setStats(JSON.parse(saved));
+      }
+    } catch {
+      // ignore JSON parse error
+    }
+  }, []);
+
+  // 2. Load Puzzle & Restore Daily Game State
   useEffect(() => {
     async function loadPuzzle() {
       try {
         const res = await fetch("/api/puzzle/today");
         const body = await res.json().catch(() => null);
         if (!res.ok) throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
-        setPuzzle(body.puzzle);
+        const p: Puzzle = body.puzzle;
+        setPuzzle(p);
         setStale(!!body.stale);
+
+        // Restore game state for this specific puzzle date
+        if (p?.date) {
+          try {
+            const savedState = localStorage.getItem(`dimer_state_${p.date}`);
+            if (savedState) {
+              const state = JSON.parse(savedState);
+              if (Array.isArray(state.guesses)) setGuesses(state.guesses);
+              if (state.gameOver) setGameOver(true);
+              if (state.won) setWon(true);
+            }
+          } catch {
+            // ignore
+          }
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -461,10 +674,73 @@ export default function PassingNetworkGuesser() {
     loadPuzzle();
   }, []);
 
+  // 3. Save Game State whenever guesses/gameOver changes
+  useEffect(() => {
+    if (!puzzle?.date) return;
+    try {
+      localStorage.setItem(
+        `dimer_state_${puzzle.date}`,
+        JSON.stringify({
+          guesses,
+          gameOver,
+          won,
+        })
+      );
+    } catch {
+      // ignore
+    }
+  }, [guesses, gameOver, won, puzzle?.date]);
+
   const answerMeta = useMemo(
     () => (puzzle ? NBA_TEAMS.find((t) => t.full_name === puzzle.answer) : undefined),
     [puzzle]
   );
+
+  // Update Stats when a game completes
+  function recordGameStats(isWin: boolean, count: number) {
+    if (!puzzle) return;
+    setStats((prev) => {
+      // Avoid double counting if already in history for this date
+      const alreadyRecorded = prev.history.some((h) => h.date === puzzle.date);
+      if (alreadyRecorded) return prev;
+
+      const newStreak = isWin ? prev.currentStreak + 1 : 0;
+      const newMax = Math.max(prev.maxStreak, newStreak);
+      const newDist = { ...prev.guessDistribution };
+      if (isWin) {
+        newDist[count] = (newDist[count] || 0) + 1;
+      } else {
+        newDist.fail = (newDist.fail || 0) + 1;
+      }
+
+      const newStats: UserStats = {
+        gamesPlayed: prev.gamesPlayed + 1,
+        gamesWon: prev.gamesWon + (isWin ? 1 : 0),
+        currentStreak: newStreak,
+        maxStreak: newMax,
+        lastPlayedDate: puzzle.date,
+        guessDistribution: newDist,
+        history: [
+          {
+            date: puzzle.date,
+            team: puzzle.answer,
+            won: isWin,
+            guessesCount: count,
+            fullMatchup: puzzle.fullContext || puzzle.gameContext,
+          },
+          ...prev.history.slice(0, 49), // retain last 50 games
+        ],
+      };
+
+      try {
+        localStorage.setItem("dimer_user_stats", JSON.stringify(newStats));
+      } catch {
+        // ignore
+      }
+
+      return newStats;
+    });
+  }
 
   function handleGuess(teamName: string) {
     if (!puzzle || gameOver) return;
@@ -489,25 +765,52 @@ export default function PassingNetworkGuesser() {
     if (correct) {
       setWon(true);
       setGameOver(true);
-      const ns = streak + 1;
-      setStreak(ns);
-      setBest((b) => Math.max(b, ns));
+      recordGameStats(true, newGuesses.length);
+      setTimeout(() => setShowStatsModal(true), 900);
     } else if (newGuesses.length >= MAX_GUESSES) {
       setGameOver(true);
-      setStreak(0);
+      recordGameStats(false, newGuesses.length);
+      setTimeout(() => setShowStatsModal(true), 900);
     }
   }
 
   function handlePlayAgain() {
+    // Reset current round state (for testing/replay)
     setGuesses([]);
     setGameOver(false);
     setWon(false);
+    if (puzzle?.date) {
+      try {
+        localStorage.removeItem(`dimer_state_${puzzle.date}`);
+      } catch {}
+    }
+  }
+
+  // Wordle-Style Emoji Share generator
+  function handleShare() {
+    if (!puzzle) return;
+    const scoreText = won ? `${guesses.length}/${MAX_GUESSES}` : "X/4";
+    const emojiGrid = guesses
+      .map((g) => {
+        if (g.correct) return "🟩 🟩 🟩";
+        const c = g.sameConference ? "🟩" : "⬛";
+        const d = g.sameDivision ? "🟩" : "⬛";
+        return `${c} ${d} ⬛`;
+      })
+      .join("\n");
+
+    const shareText = `THE NETWORK 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.app`;
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
   }
 
   const usedTeams = guesses.map((g) => g.team);
   const attemptsLeft = MAX_GUESSES - guesses.length;
 
-  // Progressive Basketball Clue Bar
   const clueStatus = useMemo(() => {
     if (gameOver) {
       return { icon: Eye, text: "Full player names & matchup revealed!" };
@@ -549,9 +852,29 @@ export default function PassingNetworkGuesser() {
         .scoreboard-title { font-family: 'Teko', sans-serif; }
       `}</style>
 
+      {/* Stats Modal */}
+      {showStatsModal && (
+        <StatsModal
+          stats={stats}
+          onClose={() => setShowStatsModal(false)}
+          onShare={handleShare}
+          copied={copied}
+        />
+      )}
+
       <div className="w-full max-w-xl">
         {/* Header */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 relative">
+          {/* Top Right Stats Modal Trigger */}
+          <button
+            onClick={() => setShowStatsModal(true)}
+            title="View Stats & History"
+            className="absolute top-0 right-0 p-2 rounded-lg border flex items-center justify-center text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
+            style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}
+          >
+            <BarChart2 size={18} />
+          </button>
+
           <div className="flex items-center justify-center gap-2 mb-1">
             <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
             <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B93A5] font-semibold">
@@ -573,17 +896,25 @@ export default function PassingNetworkGuesser() {
           </p>
         </div>
 
-        {/* Streak / Best */}
+        {/* Streak / Best / Stats Strip */}
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
+            <Flame size={15} className="text-[#EE6C2A]" />
             <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Streak</span>
-            <span className="font-mono text-2xl font-bold" style={{ color: "#FFB627" }}>{streak}</span>
+            <span className="font-mono text-2xl font-bold" style={{ color: "#FFB627" }}>{stats.currentStreak}</span>
           </div>
           <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
             <Trophy size={14} className="text-[#8B93A5]" />
             <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Best</span>
-            <span className="font-mono text-2xl font-bold text-white">{best}</span>
+            <span className="font-mono text-2xl font-bold text-white">{stats.maxStreak}</span>
           </div>
+          <button
+            onClick={() => setShowStatsModal(true)}
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 border text-xs font-semibold text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
+            style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}
+          >
+            <History size={14} /> History
+          </button>
         </div>
 
         {/* Content */}
@@ -664,12 +995,29 @@ export default function PassingNetworkGuesser() {
                     </>
                   )}
                 </div>
+
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white cursor-pointer"
+                    style={{ backgroundColor: "#EE6C2A" }}
+                  >
+                    <Share2 size={16} /> {copied ? "Copied!" : "Share Results"}
+                  </button>
+                  <button
+                    onClick={() => setShowStatsModal(true)}
+                    className="flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white border cursor-pointer"
+                    style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}
+                  >
+                    <BarChart2 size={16} /> View Stats
+                  </button>
+                </div>
+
                 <button
                   onClick={handlePlayAgain}
-                  className="w-full mt-3 rounded-lg py-3 font-semibold text-white cursor-pointer"
-                  style={{ backgroundColor: "#EE6C2A" }}
+                  className="w-full mt-2 py-2 text-xs text-[#8B93A5] hover:text-white flex items-center justify-center gap-1 cursor-pointer transition-colors"
                 >
-                  Play Again
+                  <RotateCcw size={12} /> Reset & Replay Today&apos;s Puzzle
                 </button>
               </div>
             ) : (
@@ -701,7 +1049,7 @@ export default function PassingNetworkGuesser() {
                 />
                 {guesses.length > 0 && (
                   <p className="text-[#5A6072] text-xs mt-2 text-center">
-                    Hint badges turn <span style={{ color: "#3CB878" }}>green</span> when matching the mystery team's conference or division
+                    Hint badges turn <span style={{ color: "#3CB878" }}>green</span> when matching the mystery team&apos;s conference or division
                   </p>
                 )}
               </div>
