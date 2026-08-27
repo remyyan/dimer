@@ -1,8 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { loadTodayPuzzle } from "../../../../lib/puzzles/puzzle-store";
 
-export async function GET() {
-  const puzzle = loadTodayPuzzle();
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const dateParam = searchParams.get("date") || undefined;
+
+  const puzzle = loadTodayPuzzle(dateParam);
 
   if (!puzzle) {
     return NextResponse.json(
@@ -12,7 +15,7 @@ export async function GET() {
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const stale = puzzle.date !== today;
+  const stale = puzzle.date !== today && !dateParam;
 
   return NextResponse.json({ puzzle, stale });
 }

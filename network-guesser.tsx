@@ -484,7 +484,6 @@ function StatsModal({
         className="w-full max-w-md rounded-2xl border p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
         style={{ backgroundColor: "#141722", borderColor: "#3A4050" }}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1 rounded-lg text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
@@ -492,7 +491,6 @@ function StatsModal({
           <X size={20} />
         </button>
 
-        {/* Tab Header */}
         <div className="flex gap-4 border-b pb-3 mb-5" style={{ borderColor: "#2A2F3B" }}>
           <button
             onClick={() => setTab("stats")}
@@ -514,7 +512,6 @@ function StatsModal({
 
         {tab === "stats" ? (
           <div>
-            {/* 4 Stats Cards */}
             <div className="grid grid-cols-4 gap-2 mb-6 text-center">
               <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
                 <span className="block text-2xl font-bold font-mono text-white">{stats.gamesPlayed}</span>
@@ -534,7 +531,6 @@ function StatsModal({
               </div>
             </div>
 
-            {/* Guess Distribution Bar Chart */}
             <div className="mb-6">
               <h3 className="text-xs uppercase font-bold tracking-wider text-[#8B93A5] mb-3">Guess Distribution</h3>
               <div className="flex flex-col gap-1.5 font-mono text-xs">
@@ -561,7 +557,6 @@ function StatsModal({
               </div>
             </div>
 
-            {/* Share Button */}
             <button
               onClick={onShare}
               className="w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-opacity cursor-pointer shadow-lg"
@@ -571,7 +566,6 @@ function StatsModal({
             </button>
           </div>
         ) : (
-          /* History Tab */
           <div className="max-h-72 overflow-y-auto pr-1 flex flex-col gap-2">
             {stats.history.length === 0 ? (
               <p className="text-center text-[#8B93A5] text-sm py-8">No completed games in history yet.</p>
@@ -613,7 +607,7 @@ function StatsModal({
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function PassingNetworkGuesser() {
+export default function DimerGame() {
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [stale, setStale] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -623,7 +617,6 @@ export default function PassingNetworkGuesser() {
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
 
-  // Persistence stats
   const [stats, setStats] = useState<UserStats>(DEFAULT_STATS);
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -636,7 +629,7 @@ export default function PassingNetworkGuesser() {
         setStats(JSON.parse(saved));
       }
     } catch {
-      // ignore JSON parse error
+      // ignore
     }
   }, []);
 
@@ -651,7 +644,6 @@ export default function PassingNetworkGuesser() {
         setPuzzle(p);
         setStale(!!body.stale);
 
-        // Restore game state for this specific puzzle date
         if (p?.date) {
           try {
             const savedState = localStorage.getItem(`dimer_state_${p.date}`);
@@ -674,7 +666,7 @@ export default function PassingNetworkGuesser() {
     loadPuzzle();
   }, []);
 
-  // 3. Save Game State whenever guesses/gameOver changes
+  // 3. Save Game State
   useEffect(() => {
     if (!puzzle?.date) return;
     try {
@@ -696,11 +688,9 @@ export default function PassingNetworkGuesser() {
     [puzzle]
   );
 
-  // Update Stats when a game completes
   function recordGameStats(isWin: boolean, count: number) {
     if (!puzzle) return;
     setStats((prev) => {
-      // Avoid double counting if already in history for this date
       const alreadyRecorded = prev.history.some((h) => h.date === puzzle.date);
       if (alreadyRecorded) return prev;
 
@@ -728,7 +718,7 @@ export default function PassingNetworkGuesser() {
             guessesCount: count,
             fullMatchup: puzzle.fullContext || puzzle.gameContext,
           },
-          ...prev.history.slice(0, 49), // retain last 50 games
+          ...prev.history.slice(0, 49),
         ],
       };
 
@@ -775,7 +765,6 @@ export default function PassingNetworkGuesser() {
   }
 
   function handlePlayAgain() {
-    // Reset current round state (for testing/replay)
     setGuesses([]);
     setGameOver(false);
     setWon(false);
@@ -786,7 +775,6 @@ export default function PassingNetworkGuesser() {
     }
   }
 
-  // Wordle-Style Emoji Share generator
   function handleShare() {
     if (!puzzle) return;
     const scoreText = won ? `${guesses.length}/${MAX_GUESSES}` : "X/4";
@@ -799,7 +787,7 @@ export default function PassingNetworkGuesser() {
       })
       .join("\n");
 
-    const shareText = `THE NETWORK 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.app`;
+    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.app`;
 
     if (navigator.clipboard) {
       navigator.clipboard.writeText(shareText);
@@ -852,7 +840,6 @@ export default function PassingNetworkGuesser() {
         .scoreboard-title { font-family: 'Teko', sans-serif; }
       `}</style>
 
-      {/* Stats Modal */}
       {showStatsModal && (
         <StatsModal
           stats={stats}
@@ -865,7 +852,6 @@ export default function PassingNetworkGuesser() {
       <div className="w-full max-w-xl">
         {/* Header */}
         <div className="text-center mb-6 relative">
-          {/* Top Right Stats Modal Trigger */}
           <button
             onClick={() => setShowStatsModal(true)}
             title="View Stats & History"
@@ -878,12 +864,12 @@ export default function PassingNetworkGuesser() {
           <div className="flex items-center justify-center gap-2 mb-1">
             <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
             <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B93A5] font-semibold">
-              Daily Puzzle
+              Daily NBA Assist Puzzle
             </span>
             <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
           </div>
-          <h1 className="scoreboard-title text-white leading-none" style={{ fontSize: "50px", letterSpacing: "0.02em" }}>
-            THE <span style={{ color: "#EE6C2A" }}>NETWORK</span>
+          <h1 className="scoreboard-title text-white leading-none" style={{ fontSize: "56px", letterSpacing: "0.03em" }}>
+            <span style={{ color: "#FFFFFF" }}>DIMER</span>
           </h1>
           <p className="text-[#8B93A5] text-sm mt-1">
             {loading

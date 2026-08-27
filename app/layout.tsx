@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Network - NBA Passing Network Guesser",
-  description: "Guess the mystery NBA team from their passing and assist network.",
+  title: "DIMER - Daily NBA Passing Network Game",
+  description: "Guess the mystery NBA team from their starting 5 assist network.",
 };
 
 export default function RootLayout({
