@@ -4,21 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   X,
-  Flame,
-  Trophy,
   ChevronRight,
-  Eye,
-  Lock,
-  Activity,
-  Target,
-  MapPin,
   BarChart2,
   Share2,
   History,
   RotateCcw,
+  HelpCircle,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 
-// ─── Team data (client-side, for autocomplete + hints) ────────────────────────
+// ─── NBA Team Metadata ────────────────────────────────────────────────────────
 
 type TeamMeta = {
   full_name: string;
@@ -130,14 +126,14 @@ const MAX_GUESSES = 4;
 // ─── 5-Node Court Formation Layout ────────────────────────────────────────────
 
 const COURT_LAYOUT_5: Record<string, { x: number; y: number }> = {
-  p1: { x: 200, y: 65 },  // Point Guard (Top)
-  p2: { x: 335, y: 155 }, // Shooting Guard (Right Wing)
-  p3: { x: 65,  y: 155 }, // Small Forward (Left Wing)
-  p4: { x: 125, y: 300 }, // Power Forward (Low Left)
-  p5: { x: 275, y: 300 }, // Center (Low Right)
+  p1: { x: 200, y: 60 },  // Point Guard (Top of key)
+  p2: { x: 330, y: 145 }, // Shooting Guard (Right wing)
+  p3: { x: 70,  y: 145 }, // Small Forward (Left wing)
+  p4: { x: 125, y: 285 }, // Power Forward (Low post left)
+  p5: { x: 275, y: 285 }, // Center (Low post right)
 };
 
-// ─── Progressive Starting 5 Diagram ───────────────────────────────────────────
+// ─── Starting 5 Court Diagram ─────────────────────────────────────────────────
 
 function StartingFiveDiagram({
   nodes,
@@ -159,7 +155,7 @@ function StartingFiveDiagram({
       } else {
         const count = nodes.length;
         const angle = (idx * (Math.PI * 2)) / count - Math.PI / 2;
-        map.set(node.id, { x: 200 + Math.cos(angle) * 125, y: 180 + Math.sin(angle) * 125 });
+        map.set(node.id, { x: 200 + Math.cos(angle) * 115, y: 175 + Math.sin(angle) * 115 });
       }
     });
     return map;
@@ -184,21 +180,20 @@ function StartingFiveDiagram({
     if (gameOver) {
       return `${node.jersey || ""} • ${node.gameAssists ?? 0} AST`.trim();
     }
-    if (guessCount >= 1 && guessCount <= 2) {
-      return `${node.gameAssists ?? 0} AST`;
-    }
-    if (guessCount >= 3) {
+    if (guessCount >= 1) {
       return `${node.gameAssists ?? 0} AST`;
     }
     return null;
   }
 
   return (
-    <svg viewBox="0 0 400 375" className="w-full h-auto">
-      {/* Court markings */}
-      <circle cx={200} cy={65} r={40} fill="none" stroke="#2A2F3B" strokeWidth={1} strokeDasharray="3 3" />
-      <path d="M 90 355 L 90 230 L 310 230 L 310 355" fill="none" stroke="#232733" strokeWidth={1} />
-      <path d="M 40 355 A 180 180 0 0 1 360 355" fill="none" stroke="#232733" strokeWidth={1} />
+    <svg viewBox="0 0 400 355" className="w-full h-auto select-none">
+      {/* Clean Basketball Half-Court Line Art */}
+      {/* <rect x="15" y="10" width="370" height="335" rx="12" fill="#18181b" stroke="#27272a" strokeWidth="1.5" />
+      <circle cx="200" cy="60" r="44" fill="none" stroke="#27272a" strokeWidth="1" strokeDasharray="4 4" />
+      <path d="M 105 345 L 105 215 L 295 215 L 295 345" fill="none" stroke="#27272a" strokeWidth="1" />
+      <circle cx="200" cy="215" r="35" fill="none" stroke="#27272a" strokeWidth="1" />
+      <path d="M 45 345 A 175 175 0 0 1 355 345" fill="none" stroke="#27272a" strokeWidth="1" /> */}
 
       {/* Passing Edges */}
       {edges.map((edge, i) => {
@@ -214,7 +209,7 @@ function StartingFiveDiagram({
             y1={from.y}
             x2={to.x}
             y2={to.y}
-            stroke="#FFB627"
+            stroke="#f59e0b"
             strokeWidth={strokeW}
             strokeOpacity={opacity}
             strokeLinecap="round"
@@ -222,7 +217,7 @@ function StartingFiveDiagram({
         );
       })}
 
-      {/* Nodes */}
+      {/* Starting 5 Nodes */}
       {nodes.map((node) => {
         const pos = positions.get(node.id);
         if (!pos) return null;
@@ -232,36 +227,39 @@ function StartingFiveDiagram({
 
         return (
           <g key={node.id} className="transition-all duration-300">
+            {/* Main node circle */}
             <circle
               cx={pos.x}
               cy={pos.y}
-              r={gameOver ? 30 : 26}
-              fill="#1B1F2A"
-              stroke={gameOver ? "#EE6C2A" : guessCount > 0 ? "#FFB627" : "#3A4050"}
-              strokeWidth={gameOver ? 2.5 : guessCount > 0 ? 2 : 1.5}
+              r={gameOver ? 29 : 25}
+              fill="#27272a"
+              stroke={gameOver ? "#538d4e" : guessCount > 0 ? "#f59e0b" : "#3f3f46"}
+              strokeWidth={gameOver ? 2.5 : 1.5}
             />
 
+            {/* Primary text */}
             <text
               x={pos.x}
               y={pos.y + (secondary ? -2 : 4)}
               textAnchor="middle"
-              fontSize={gameOver ? (isLong ? 10 : 11) : guessCount >= 3 ? 11 : 13}
+              fontSize={gameOver ? (isLong ? 9.5 : 11) : guessCount >= 3 ? 10.5 : 12.5}
               fontWeight="700"
-              fill={gameOver ? "#EDEFF4" : "#FFFFFF"}
-              fontFamily="'IBM Plex Mono', monospace"
+              fill={gameOver ? "#ffffff" : "#f4f4f5"}
+              fontFamily="system-ui, -apple-system, sans-serif"
             >
               {primary}
             </text>
 
+            {/* Secondary Badge */}
             {secondary && (
               <text
                 x={pos.x}
-                y={pos.y + 12}
+                y={pos.y + 11}
                 textAnchor="middle"
-                fontSize="9"
+                fontSize="8.5"
                 fontWeight="600"
-                fill="#FFB627"
-                fontFamily="'IBM Plex Mono', monospace"
+                fill="#f59e0b"
+                fontFamily="system-ui, -apple-system, sans-serif"
               >
                 {secondary}
               </text>
@@ -273,46 +271,65 @@ function StartingFiveDiagram({
   );
 }
 
-// ─── Guess Row ────────────────────────────────────────────────────────────────
+// ─── Wordle-Style Guess Tile Row ──────────────────────────────────────────────
 
-function GuessRow({ guess }: { guess: Guess }) {
+function GuessRow({ guess, index }: { guess?: Guess; index: number }) {
+  if (!guess) {
+    // Empty row placeholder
+    return (
+      <div className="h-13 w-full rounded-md border border-[#27272a] bg-[#18181b]/50 flex items-center justify-center">
+        <span className="text-xs font-semibold text-[#3f3f46]">{index + 1}</span>
+      </div>
+    );
+  }
+
   const { team, correct, sameConference, sameDivision, conference, division } = guess;
-
-  const badge = (label: string, match: boolean) => (
-    <span
-      className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded"
-      style={{
-        backgroundColor: match ? "rgba(60,184,120,0.2)" : "rgba(255,255,255,0.06)",
-        color: match ? "#3CB878" : "#5A6072",
-        border: `1px solid ${match ? "#3CB878" : "#2A2F3B"}`,
-      }}
-    >
-      {label}
-    </span>
-  );
 
   return (
     <div
-      className="flex items-center gap-2 rounded-lg border px-3 py-2.5"
-      style={{
-        backgroundColor: correct ? "rgba(60,184,120,0.1)" : "rgba(255,255,255,0.03)",
-        borderColor: correct ? "#3CB878" : "#2A2F3B",
-      }}
+      className={`h-13 w-full rounded-md border px-3.5 flex items-center justify-between transition-all duration-300 ${
+        correct
+          ? "border-[#538d4e] bg-[#538d4e]/15"
+          : "border-[#3f3f46] bg-[#18181b]"
+      }`}
     >
-      {correct
-        ? <Check size={14} className="text-[#3CB878] shrink-0" strokeWidth={3} />
-        : <X size={14} className="text-[#E0554A] shrink-0" strokeWidth={3} />
-      }
-      <span className="text-sm font-semibold text-white flex-1 min-w-0 truncate">{team}</span>
-      <div className="flex gap-1.5 shrink-0">
-        {badge(conference, sameConference)}
-        {!correct && badge(division, sameDivision)}
+      <div className="flex items-center gap-2 min-w-0 flex-1">
+        {correct ? (
+          <Check size={16} className="text-[#538d4e] shrink-0" strokeWidth={3} />
+        ) : (
+          <X size={16} className="text-[#71717a] shrink-0" strokeWidth={2.5} />
+        )}
+        <span className="text-sm font-semibold text-white truncate">{team}</span>
+      </div>
+
+      <div className="flex items-center gap-1.5 shrink-0">
+        {/* Conference Tile */}
+        <div
+          className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider ${
+            sameConference
+              ? "bg-[#538d4e] text-white"
+              : "bg-[#27272a] text-[#71717a]"
+          }`}
+        >
+          {conference}
+        </div>
+
+        {/* Division Tile */}
+        <div
+          className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider ${
+            sameDivision
+              ? "bg-[#538d4e] text-white"
+              : "bg-[#27272a] text-[#71717a]"
+          }`}
+        >
+          {division}
+        </div>
       </div>
     </div>
   );
 }
 
-// ─── Autocomplete Input ───────────────────────────────────────────────────────
+// ─── Team Autocomplete Input ──────────────────────────────────────────────────
 
 function TeamAutocomplete({
   onSubmit,
@@ -339,7 +356,7 @@ function TeamAutocomplete({
           t.name.toLowerCase().includes(q) ||
           t.city.toLowerCase().includes(q) ||
           t.abbreviation.toLowerCase() === q)
-    ).slice(0, 6);
+    ).slice(0, 5);
   }, [value, usedTeams]);
 
   useEffect(() => {
@@ -397,7 +414,7 @@ function TeamAutocomplete({
   );
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <div className="flex gap-2">
         <div className="relative flex-1">
           <input
@@ -405,7 +422,11 @@ function TeamAutocomplete({
             type="text"
             value={value}
             disabled={disabled}
-            placeholder="Type a team name…"
+            placeholder="Type NBA team name..."
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            autoCapitalize="words"
             onChange={(e) => {
               setValue(e.target.value);
               setOpen(true);
@@ -413,33 +434,26 @@ function TeamAutocomplete({
             }}
             onFocus={() => { if (suggestions.length) setOpen(true); }}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-lg border px-4 py-3 text-sm font-semibold text-white outline-none transition-colors"
-            style={{
-              backgroundColor: "#1B1F2A",
-              borderColor: open && suggestions.length ? "#EE6C2A" : "#3A4050",
-              caretColor: "#FFB627",
-            }}
+            className="w-full rounded-md border border-[#3f3f46] bg-[#18181b] px-3.5 py-3 text-sm font-medium text-white placeholder-[#71717a] outline-none focus:border-[#d4d4d8] transition-colors"
           />
           {open && suggestions.length > 0 && (
             <div
               ref={dropdownRef}
-              className="absolute left-0 right-0 top-full z-10 mt-1 rounded-lg border overflow-hidden shadow-2xl"
-              style={{ backgroundColor: "#12141C", borderColor: "#3A4050" }}
+              className="absolute left-0 right-0 bottom-full mb-1 z-30 rounded-md border border-[#3f3f46] bg-[#18181b] shadow-2xl overflow-hidden"
             >
               {suggestions.map((team, i) => (
                 <button
                   key={team.full_name}
+                  type="button"
                   onMouseDown={(e) => { e.preventDefault(); select(team); }}
-                  className="w-full flex items-center justify-between px-4 py-2.5 text-left text-sm transition-colors cursor-pointer"
-                  style={{
-                    backgroundColor: i === highlighted ? "rgba(238,108,42,0.12)" : "transparent",
-                    color: i === highlighted ? "#EDEFF4" : "#8B93A5",
-                  }}
+                  onTouchStart={(e) => { e.preventDefault(); select(team); }}
+                  onClick={() => select(team)}
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-sm cursor-pointer transition-colors ${
+                    i === highlighted ? "bg-[#27272a] text-white" : "text-[#a1a1aa] hover:bg-[#27272a]/60 hover:text-white"
+                  }`}
                 >
                   <span className="font-semibold">{team.full_name}</span>
-                  <span className="text-[10px] uppercase tracking-wider" style={{ color: "#5A6072" }}>
-                    {team.conference} • {team.division}
-                  </span>
+                  <span className="text-xs text-[#71717a]">{team.conference} • {team.division}</span>
                 </button>
               ))}
             </div>
@@ -448,20 +462,74 @@ function TeamAutocomplete({
         <button
           onClick={trySubmit}
           disabled={disabled || !isValid}
-          className="flex items-center gap-1 rounded-lg px-4 py-3 text-sm font-bold transition-opacity cursor-pointer disabled:cursor-not-allowed"
-          style={{
-            backgroundColor: isValid && !disabled ? "#EE6C2A" : "#2A2F3B",
-            color: isValid && !disabled ? "#fff" : "#5A6072",
-          }}
+          className="rounded-md px-5 py-3 text-sm font-bold text-white transition-all cursor-pointer disabled:cursor-not-allowed bg-[#e65c00] hover:bg-[#d45500] disabled:bg-[#27272a] disabled:text-[#71717a]"
         >
-          Guess <ChevronRight size={14} strokeWidth={3} />
+          GUESS
         </button>
       </div>
     </div>
   );
 }
 
-// ─── Stats & History Modal ───────────────────────────────────────────────────
+// ─── How To Play Modal ────────────────────────────────────────────────────────
+
+function HowToPlayModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+      <div className="w-full max-w-md rounded-xl border border-[#27272a] bg-[#18181b] p-6 shadow-2xl relative text-white animate-in fade-in zoom-in-95 duration-150">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1 text-[#71717a] hover:text-white transition-colors cursor-pointer"
+        >
+          <X size={20} />
+        </button>
+
+        <h2 className="text-lg font-bold uppercase tracking-wider mb-3">How To Play</h2>
+        <p className="text-sm text-[#a1a1aa] mb-4">
+          Guess the mystery NBA team in <strong>4 tries</strong> from their starting 5 assist network.
+        </p>
+
+        <div className="flex flex-col gap-3 text-xs text-[#d4d4d8] border-y border-[#27272a] py-4 my-4">
+          <div className="flex items-start gap-2.5">
+            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
+            <span><strong>Line Thickness</strong> = How frequently one player assisted another in this real NBA game.</span>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
+            <span><strong>Progressive Clues</strong> = Each wrong guess unlocks player assist counts, jersey numbers, and team passing stats.</span>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
+            <span><strong>Tiles</strong> = Badges turn <span className="text-[#538d4e] font-bold">GREEN</span> when your guess matches the conference or division.</span>
+          </div>
+        </div>
+
+        <div className="space-y-2 mb-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#71717a]">Example Tile Feedback</p>
+          <div className="h-10 w-full rounded border border-[#3f3f46] bg-[#27272a] px-3 flex items-center justify-between text-xs font-semibold">
+            <span>Miami Heat</span>
+            <div className="flex gap-1.5">
+              <span className="bg-[#538d4e] text-white px-2 py-0.5 rounded font-bold">EAST</span>
+              <span className="bg-[#3f3f46] text-[#a1a1aa] px-2 py-0.5 rounded font-bold">SOUTHEAST</span>
+            </div>
+          </div>
+          <p className="text-[11px] text-[#71717a]">
+            Mystery team is in the <strong className="text-white">East</strong>, but NOT in the Southeast division.
+          </p>
+        </div>
+
+        <button
+          onClick={onClose}
+          className="w-full rounded-md py-2.5 text-sm font-bold bg-[#e65c00] text-white hover:bg-[#d45500] transition-colors cursor-pointer"
+        >
+          LET&apos;S PLAY
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Stats & History Modal (Wordle Style) ─────────────────────────────────────
 
 function StatsModal({
   stats,
@@ -479,74 +547,73 @@ function StatsModal({
   const maxFreq = Math.max(1, ...Object.values(stats.guessDistribution));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs">
-      <div
-        className="w-full max-w-md rounded-2xl border p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
-        style={{ backgroundColor: "#141722", borderColor: "#3A4050" }}
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+      <div className="w-full max-w-md rounded-xl border border-[#27272a] bg-[#18181b] p-6 shadow-2xl relative text-white animate-in fade-in zoom-in-95 duration-150">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1 text-[#71717a] hover:text-white transition-colors cursor-pointer"
         >
           <X size={20} />
         </button>
 
-        <div className="flex gap-4 border-b pb-3 mb-5" style={{ borderColor: "#2A2F3B" }}>
+        {/* Tab switch */}
+        <div className="flex gap-4 border-b border-[#27272a] pb-3 mb-5">
           <button
             onClick={() => setTab("stats")}
-            className={`flex items-center gap-1.5 text-sm font-bold pb-1 cursor-pointer transition-colors ${
-              tab === "stats" ? "text-[#EE6C2A] border-b-2 border-[#EE6C2A]" : "text-[#8B93A5] hover:text-white"
+            className={`text-xs font-bold uppercase tracking-wider pb-1 cursor-pointer transition-colors ${
+              tab === "stats" ? "text-[#e65c00] border-b-2 border-[#e65c00]" : "text-[#71717a] hover:text-white"
             }`}
           >
-            <BarChart2 size={16} /> Career Stats
+            Statistics
           </button>
           <button
             onClick={() => setTab("history")}
-            className={`flex items-center gap-1.5 text-sm font-bold pb-1 cursor-pointer transition-colors ${
-              tab === "history" ? "text-[#EE6C2A] border-b-2 border-[#EE6C2A]" : "text-[#8B93A5] hover:text-white"
+            className={`text-xs font-bold uppercase tracking-wider pb-1 cursor-pointer transition-colors ${
+              tab === "history" ? "text-[#e65c00] border-b-2 border-[#e65c00]" : "text-[#71717a] hover:text-white"
             }`}
           >
-            <History size={16} /> Game History
+            Game History
           </button>
         </div>
 
         {tab === "stats" ? (
           <div>
+            {/* 4 Stat numbers */}
             <div className="grid grid-cols-4 gap-2 mb-6 text-center">
-              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
-                <span className="block text-2xl font-bold font-mono text-white">{stats.gamesPlayed}</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Played</span>
+              <div>
+                <span className="block text-3xl font-bold font-mono">{stats.gamesPlayed}</span>
+                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Played</span>
               </div>
-              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
-                <span className="block text-2xl font-bold font-mono text-[#3CB878]">{winPercent}%</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Win %</span>
+              <div>
+                <span className="block text-3xl font-bold font-mono text-[#538d4e]">{winPercent}</span>
+                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Win %</span>
               </div>
-              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
-                <span className="block text-2xl font-bold font-mono text-[#FFB627]">{stats.currentStreak}</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Streak</span>
+              <div>
+                <span className="block text-3xl font-bold font-mono text-[#f59e0b]">{stats.currentStreak}</span>
+                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Current Streak</span>
               </div>
-              <div className="rounded-xl border p-2.5" style={{ backgroundColor: "#1B1F2A", borderColor: "#2A2F3B" }}>
-                <span className="block text-2xl font-bold font-mono text-white">{stats.maxStreak}</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Max</span>
+              <div>
+                <span className="block text-3xl font-bold font-mono">{stats.maxStreak}</span>
+                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Max Streak</span>
               </div>
             </div>
 
+            {/* Guess distribution */}
             <div className="mb-6">
-              <h3 className="text-xs uppercase font-bold tracking-wider text-[#8B93A5] mb-3">Guess Distribution</h3>
+              <h3 className="text-xs uppercase font-bold tracking-wider text-[#71717a] mb-2.5">Guess Distribution</h3>
               <div className="flex flex-col gap-1.5 font-mono text-xs">
                 {[1, 2, 3, 4].map((num) => {
                   const count = stats.guessDistribution[num] || 0;
-                  const pct = Math.max(7, Math.round((count / maxFreq) * 100));
+                  const pct = Math.max(8, Math.round((count / maxFreq) * 100));
                   return (
                     <div key={num} className="flex items-center gap-2">
-                      <span className="w-3 text-right font-bold text-[#8B93A5]">{num}</span>
-                      <div className="flex-1 bg-[#1B1F2A] rounded-sm overflow-hidden h-5">
+                      <span className="w-2.5 text-right font-bold text-[#71717a]">{num}</span>
+                      <div className="flex-1 bg-[#27272a] rounded-xs overflow-hidden h-5">
                         <div
-                          className="h-full rounded-sm flex items-center justify-end px-2 text-white font-bold transition-all duration-500"
-                          style={{
-                            width: `${count > 0 ? pct : 7}%`,
-                            backgroundColor: count > 0 ? "#EE6C2A" : "#2A2F3B",
-                          }}
+                          className={`h-full rounded-xs flex items-center justify-end px-2 font-bold text-white transition-all duration-500 ${
+                            count > 0 ? "bg-[#538d4e]" : "bg-[#3f3f46]"
+                          }`}
+                          style={{ width: `${count > 0 ? pct : 8}%` }}
                         >
                           {count}
                         </div>
@@ -559,42 +626,33 @@ function StatsModal({
 
             <button
               onClick={onShare}
-              className="w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-opacity cursor-pointer shadow-lg"
-              style={{ backgroundColor: "#EE6C2A" }}
+              className="w-full flex items-center justify-center gap-2 rounded-md py-3 text-sm font-bold bg-[#538d4e] hover:bg-[#467742] text-white transition-colors cursor-pointer"
             >
-              <Share2 size={16} /> {copied ? "Copied to Clipboard! 🎉" : "Share Today's Results"}
+              <Share2 size={16} /> {copied ? "COPIED TO CLIPBOARD!" : "SHARE RESULTS"}
             </button>
           </div>
         ) : (
           <div className="max-h-72 overflow-y-auto pr-1 flex flex-col gap-2">
             {stats.history.length === 0 ? (
-              <p className="text-center text-[#8B93A5] text-sm py-8">No completed games in history yet.</p>
+              <p className="text-center text-[#71717a] text-xs py-8">No completed games yet.</p>
             ) : (
               stats.history.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-xl border"
-                  style={{
-                    backgroundColor: item.won ? "rgba(60,184,120,0.06)" : "rgba(224,85,74,0.06)",
-                    borderColor: item.won ? "rgba(60,184,120,0.3)" : "rgba(224,85,74,0.3)",
-                  }}
+                  className="flex items-center justify-between p-2.5 rounded border border-[#27272a] bg-[#27272a]/40 text-xs"
                 >
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-white">{item.team}</span>
+                    <div className="flex items-center gap-2 font-semibold">
+                      <span>{item.team}</span>
                       {item.won ? (
-                        <span className="text-[10px] bg-[#3CB878]/20 text-[#3CB878] px-1.5 py-0.5 rounded font-bold uppercase">
-                          Solved in {item.guessesCount}
-                        </span>
+                        <span className="text-[10px] text-[#538d4e] font-bold">✓ {item.guessesCount}/4</span>
                       ) : (
-                        <span className="text-[10px] bg-[#E0554A]/20 text-[#E0554A] px-1.5 py-0.5 rounded font-bold uppercase">
-                          Failed
-                        </span>
+                        <span className="text-[10px] text-[#ef4444] font-bold">✗ Failed</span>
                       )}
                     </div>
-                    <span className="text-xs text-[#8B93A5] block mt-0.5">{item.fullMatchup || item.date}</span>
+                    <span className="text-[11px] text-[#71717a]">{item.fullMatchup || item.date}</span>
                   </div>
-                  <span className="text-xs font-mono text-[#5A6072] shrink-0">{item.date}</span>
+                  <span className="text-[11px] font-mono text-[#52525b]">{item.date}</span>
                 </div>
               ))
             )}
@@ -605,7 +663,7 @@ function StatsModal({
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Main Dimer Game Component ────────────────────────────────────────────────
 
 export default function DimerGame() {
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
@@ -619,21 +677,18 @@ export default function DimerGame() {
 
   const [stats, setStats] = useState<UserStats>(DEFAULT_STATS);
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // 1. Load User Stats from LocalStorage
+  // 1. Load User Stats
   useEffect(() => {
     try {
       const saved = localStorage.getItem("dimer_user_stats");
-      if (saved) {
-        setStats(JSON.parse(saved));
-      }
-    } catch {
-      // ignore
-    }
+      if (saved) setStats(JSON.parse(saved));
+    } catch {}
   }, []);
 
-  // 2. Load Puzzle & Restore Daily Game State
+  // 2. Load Today's Puzzle
   useEffect(() => {
     async function loadPuzzle() {
       try {
@@ -653,9 +708,7 @@ export default function DimerGame() {
               if (state.gameOver) setGameOver(true);
               if (state.won) setWon(true);
             }
-          } catch {
-            // ignore
-          }
+          } catch {}
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -672,15 +725,9 @@ export default function DimerGame() {
     try {
       localStorage.setItem(
         `dimer_state_${puzzle.date}`,
-        JSON.stringify({
-          guesses,
-          gameOver,
-          won,
-        })
+        JSON.stringify({ guesses, gameOver, won })
       );
-    } catch {
-      // ignore
-    }
+    } catch {}
   }, [guesses, gameOver, won, puzzle?.date]);
 
   const answerMeta = useMemo(
@@ -724,9 +771,7 @@ export default function DimerGame() {
 
       try {
         localStorage.setItem("dimer_user_stats", JSON.stringify(newStats));
-      } catch {
-        // ignore
-      }
+      } catch {}
 
       return newStats;
     });
@@ -756,11 +801,11 @@ export default function DimerGame() {
       setWon(true);
       setGameOver(true);
       recordGameStats(true, newGuesses.length);
-      setTimeout(() => setShowStatsModal(true), 900);
+      setTimeout(() => setShowStatsModal(true), 800);
     } else if (newGuesses.length >= MAX_GUESSES) {
       setGameOver(true);
       recordGameStats(false, newGuesses.length);
-      setTimeout(() => setShowStatsModal(true), 900);
+      setTimeout(() => setShowStatsModal(true), 800);
     }
   }
 
@@ -789,57 +834,99 @@ export default function DimerGame() {
 
     const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.app`;
 
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(shareText);
+    function onCopySuccess() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(shareText).then(onCopySuccess).catch(() => {
+        fallbackCopyText(shareText);
+        onCopySuccess();
+      });
+    } else {
+      fallbackCopyText(shareText);
+      onCopySuccess();
+    }
+  }
+
+  function fallbackCopyText(text: string) {
+    try {
+      const el = document.createElement("textarea");
+      el.value = text;
+      el.setAttribute("readonly", "");
+      el.style.position = "absolute";
+      el.style.left = "-9999px";
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+    } catch {}
   }
 
   const usedTeams = guesses.map((g) => g.team);
   const attemptsLeft = MAX_GUESSES - guesses.length;
 
+  // Progressive Clue Banner Text
   const clueStatus = useMemo(() => {
     if (gameOver) {
-      return { icon: Eye, text: "Full player names & matchup revealed!" };
+      return { text: "Mystery solved • Starting 5 revealed" };
     }
     if (guesses.length === 1) {
       return {
-        icon: Activity,
-        text: `Team Ball Movement: ${puzzle?.totalAssists ?? 25}+ assists recorded in this game`,
+        text: `Clue 1/3: Team recorded ${puzzle?.totalAssists ?? 25}+ assists in this game`,
       };
     }
     if (guesses.length === 2) {
       return {
-        icon: Target,
-        text: `Top Connection: ${puzzle?.topComboText ?? "Key passer-to-scorer duo highlighted"}`,
+        text: `Clue 2/3: Top connection was ${puzzle?.topComboText ?? "a key passing duo"}`,
       };
     }
     if (guesses.length === 3) {
       return {
-        icon: MapPin,
-        text: `Game Setting: ${puzzle?.locationClue ?? "Regular Season Game"}`,
+        text: `Final Clue: ${puzzle?.locationClue ?? "Regular season game"}`,
       };
     }
     return {
-      icon: Lock,
-      text: "Wrong guesses unlock assist stats, jersey #s, and duo combos",
+      text: "Wrong guesses unlock game assists, jersey #s, and duo clues",
     };
   }, [guesses.length, gameOver, puzzle]);
 
   return (
-    <div
-      className="min-h-screen w-full flex flex-col items-center py-10 px-4"
-      style={{
-        background: "radial-gradient(ellipse at top, #1B1F2A 0%, #0E1016 70%)",
-        fontFamily: "'Inter', sans-serif",
-      }}
-    >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
-        .scoreboard-title { font-family: 'Teko', sans-serif; }
-      `}</style>
+    <div className="min-h-screen w-full bg-[#121213] text-[#ffffff] flex flex-col items-center">
+      {/* ─── Minimal Wordle-Style Navigation Bar ─── */}
+      <header className="w-full border-b border-[#27272a] h-14 flex items-center justify-between px-4 max-w-xl">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowHelpModal(true)}
+            title="How to Play"
+            className="p-1.5 rounded text-[#71717a] hover:text-white transition-colors cursor-pointer"
+          >
+            <HelpCircle size={20} />
+          </button>
+        </div>
 
+        {/* Center Brand */}
+        <div className="text-center select-none">
+          <h1 className="text-2xl font-black tracking-[0.2em] uppercase leading-none font-sans text-white">
+            D<span className="text-[#e65c00]">I</span>MER
+          </h1>
+        </div>
+
+        {/* Right Action Icons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowStatsModal(true)}
+            title="Statistics"
+            className="p-1.5 rounded text-[#71717a] hover:text-white transition-colors cursor-pointer"
+          >
+            <BarChart2 size={20} />
+          </button>
+        </div>
+      </header>
+
+      {/* Modals */}
+      {showHelpModal && <HowToPlayModal onClose={() => setShowHelpModal(false)} />}
       {showStatsModal && (
         <StatsModal
           stats={stats}
@@ -849,84 +936,31 @@ export default function DimerGame() {
         />
       )}
 
-      <div className="w-full max-w-xl">
-        {/* Header */}
-        <div className="text-center mb-6 relative">
-          <button
-            onClick={() => setShowStatsModal(true)}
-            title="View Stats & History"
-            className="absolute top-0 right-0 p-2 rounded-lg border flex items-center justify-center text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
-            style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}
-          >
-            <BarChart2 size={18} />
-          </button>
-
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
-            <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B93A5] font-semibold">
-              Daily NBA Assist Puzzle
-            </span>
-            <Flame size={20} className="text-[#EE6C2A]" strokeWidth={2.5} />
-          </div>
-          <h1 className="scoreboard-title text-white leading-none" style={{ fontSize: "56px", letterSpacing: "0.03em" }}>
-            <span style={{ color: "#FFFFFF" }}>DIMER</span>
-          </h1>
-          <p className="text-[#8B93A5] text-sm mt-1">
-            {loading
-              ? "Loading today's puzzle…"
-              : error
-              ? "\u00a0"
-              : stale
-              ? `Showing yesterday's puzzle — ${puzzle?.gameContext}`
-              : puzzle?.gameContext}
-          </p>
-        </div>
-
-        {/* Streak / Best / Stats Strip */}
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
-            <Flame size={15} className="text-[#EE6C2A]" />
-            <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Streak</span>
-            <span className="font-mono text-2xl font-bold" style={{ color: "#FFB627" }}>{stats.currentStreak}</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-lg px-4 py-2 border" style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}>
-            <Trophy size={14} className="text-[#8B93A5]" />
-            <span className="text-[10px] uppercase tracking-wider text-[#8B93A5]">Best</span>
-            <span className="font-mono text-2xl font-bold text-white">{stats.maxStreak}</span>
-          </div>
-          <button
-            onClick={() => setShowStatsModal(true)}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-2 border text-xs font-semibold text-[#8B93A5] hover:text-white transition-colors cursor-pointer"
-            style={{ backgroundColor: "#12141C", borderColor: "#2A2F3B" }}
-          >
-            <History size={14} /> History
-          </button>
-        </div>
-
-        {/* Content */}
+      {/* ─── Main Game Container ─── */}
+      <main className="w-full max-w-md px-4 py-4 flex flex-col gap-4 flex-1">
         {loading ? (
-          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
-            <p className="text-[#EDEFF4]">Checking for today's puzzle…</p>
+          <div className="h-96 rounded-lg border border-[#27272a] bg-[#18181b] flex items-center justify-center">
+            <span className="text-sm font-medium text-[#71717a]">Loading puzzle...</span>
           </div>
         ) : error ? (
-          <div className="rounded-xl border p-8 text-center" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
-            <p className="text-[#EDEFF4] font-semibold mb-1">Puzzle not available yet</p>
-            <p className="text-[#8B93A5] text-sm">{error}</p>
+          <div className="h-96 rounded-lg border border-[#27272a] bg-[#18181b] flex flex-col items-center justify-center p-6 text-center">
+            <p className="text-sm font-bold text-white mb-1">Puzzle Unavailable</p>
+            <p className="text-xs text-[#71717a]">{error}</p>
           </div>
         ) : puzzle ? (
           <>
-            {/* Diagram Card */}
-            <div className="rounded-xl border overflow-hidden" style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}>
-              <div className="flex items-center justify-between px-4 py-2" style={{ backgroundColor: "#EE6C2A", color: "#0E1016" }}>
-                <span className="text-[11px] font-bold tracking-[0.3em] uppercase">
-                  Mystery Starting 5
+            {/* Mystery Diagram Card */}
+            <div className="w-full rounded-xl border border-[#27272a] bg-[#18181b] overflow-hidden">
+              <div className="px-4 py-2 border-b border-[#27272a] flex items-center justify-between text-xs">
+                <span className="font-bold text-[#a1a1aa] uppercase tracking-wider text-[11px]">
+                  Mystery Starting 5 Network
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider opacity-90">
-                  {gameOver ? "Revealed" : `Clue ${guesses.length + 1}/4`}
+                <span className="text-[11px] font-mono text-[#71717a]">
+                  {puzzle.date}
                 </span>
               </div>
 
-              <div className="p-4">
+              <div className="p-3">
                 <StartingFiveDiagram
                   nodes={puzzle.nodes}
                   edges={puzzle.edges}
@@ -935,114 +969,71 @@ export default function DimerGame() {
                 />
               </div>
 
-              {/* Progressive Clue Banner */}
-              <div className="px-5 py-2.5 border-t flex items-center justify-center gap-2" style={{ borderColor: "#2A2F3B", backgroundColor: "#141720" }}>
-                <clueStatus.icon size={14} className={guesses.length > 0 ? "text-[#FFB627]" : "text-[#5A6072]"} />
-                <span className={`text-xs ${guesses.length > 0 ? "text-[#FFB627] font-semibold" : "text-[#5A6072]"}`}>
+              {/* Minimal Clue Footer */}
+              <div className="px-4 py-2.5 border-t border-[#27272a] bg-[#141416] text-center">
+                <p className="text-xs text-[#a1a1aa] font-medium">
                   {clueStatus.text}
-                </span>
+                </p>
               </div>
             </div>
 
-            {/* Guess history */}
-            {guesses.length > 0 && (
-              <div className="mt-4 flex flex-col gap-2">
-                {guesses.map((g, i) => (
-                  <GuessRow key={i} guess={g} />
-                ))}
-              </div>
-            )}
+            {/* 4 Wordle-Style Guess Rows */}
+            <div className="flex flex-col gap-1.5">
+              {Array.from({ length: MAX_GUESSES }).map((_, i) => (
+                <GuessRow key={i} guess={guesses[i]} index={i} />
+              ))}
+            </div>
 
-            {/* Game over: result card */}
+            {/* Game Over Result or Autocomplete Input */}
             {gameOver ? (
-              <div className="mt-4">
-                <div
-                  className="rounded-lg border px-4 py-4 text-center"
-                  style={{
-                    backgroundColor: won ? "rgba(60,184,120,0.12)" : "rgba(224,85,74,0.12)",
-                    borderColor: won ? "#3CB878" : "#E0554A",
-                  }}
-                >
-                  {won ? (
-                    <>
-                      <p className="text-[#3CB878] font-bold text-sm uppercase tracking-wider mb-1">
-                        Solved in {guesses.length} {guesses.length === 1 ? "guess" : "guesses"}!
-                      </p>
-                      <p className="text-white text-lg font-bold">{puzzle.answer}</p>
-                      <p className="text-[#8B93A5] text-sm mt-1">{puzzle.fullContext || puzzle.gameContext}</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-[#E0554A] font-bold text-sm uppercase tracking-wider mb-1">
-                        Better luck tomorrow
-                      </p>
-                      <p className="text-white text-lg font-bold">{puzzle.answer}</p>
-                      <p className="text-[#8B93A5] text-sm mt-1">{puzzle.fullContext || puzzle.gameContext}</p>
-                    </>
-                  )}
+              <div className="w-full rounded-lg border border-[#27272a] bg-[#18181b] p-4 text-center animate-in fade-in duration-200">
+                <div className="mb-3">
+                  <p className={`text-xs font-bold uppercase tracking-widest ${won ? "text-[#538d4e]" : "text-[#ef4444]"}`}>
+                    {won ? `Solved in ${guesses.length} / ${MAX_GUESSES}` : "Game Over"}
+                  </p>
+                  <p className="text-lg font-bold text-white mt-0.5">{puzzle.answer}</p>
+                  <p className="text-xs text-[#71717a] mt-0.5">{puzzle.fullContext || puzzle.gameContext}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 mt-3">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={handleShare}
-                    className="flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white cursor-pointer"
-                    style={{ backgroundColor: "#EE6C2A" }}
+                    className="flex items-center justify-center gap-1.5 rounded-md py-2.5 text-xs font-bold bg-[#538d4e] hover:bg-[#467742] text-white transition-colors cursor-pointer"
                   >
-                    <Share2 size={16} /> {copied ? "Copied!" : "Share Results"}
+                    <Share2 size={14} /> {copied ? "COPIED!" : "SHARE"}
                   </button>
                   <button
                     onClick={() => setShowStatsModal(true)}
-                    className="flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white border cursor-pointer"
-                    style={{ backgroundColor: "#1B1F2A", borderColor: "#3A4050" }}
+                    className="flex items-center justify-center gap-1.5 rounded-md py-2.5 text-xs font-bold border border-[#3f3f46] hover:bg-[#27272a] text-white transition-colors cursor-pointer"
                   >
-                    <BarChart2 size={16} /> View Stats
+                    <BarChart2 size={14} /> STATS
                   </button>
                 </div>
 
                 <button
                   onClick={handlePlayAgain}
-                  className="w-full mt-2 py-2 text-xs text-[#8B93A5] hover:text-white flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                  className="mt-3 text-[11px] text-[#71717a] hover:text-white flex items-center justify-center gap-1 w-full transition-colors cursor-pointer"
                 >
-                  <RotateCcw size={12} /> Reset & Replay Today&apos;s Puzzle
+                  <RotateCcw size={11} /> Replay today&apos;s puzzle
                 </button>
               </div>
             ) : (
-              /* Active: attempts indicator + input */
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-[#5A6072] text-xs uppercase tracking-wider">
-                    {attemptsLeft} {attemptsLeft === 1 ? "guess" : "guesses"} remaining
-                  </p>
-                  <div className="flex gap-1">
-                    {Array.from({ length: MAX_GUESSES }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="w-2 h-2 rounded-full transition-colors"
-                        style={{
-                          backgroundColor:
-                            i < guesses.length
-                              ? guesses[i].correct ? "#3CB878" : "#E0554A"
-                              : "#2A2F3B",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
+              <div className="w-full mt-1">
                 <TeamAutocomplete
                   onSubmit={handleGuess}
                   disabled={gameOver}
                   usedTeams={usedTeams}
                 />
-                {guesses.length > 0 && (
-                  <p className="text-[#5A6072] text-xs mt-2 text-center">
-                    Hint badges turn <span style={{ color: "#3CB878" }}>green</span> when matching the mystery team&apos;s conference or division
-                  </p>
-                )}
               </div>
             )}
           </>
         ) : null}
-      </div>
+      </main>
+
+      {/* Minimal Footer */}
+      <footer className="w-full text-center py-4 text-[11px] text-[#52525b] border-t border-[#27272a]/60">
+        DIMER • Daily NBA Assist Network
+      </footer>
     </div>
   );
 }
