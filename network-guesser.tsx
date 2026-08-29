@@ -1,17 +1,12 @@
-'use client';
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   X,
-  ChevronRight,
   BarChart2,
   Share2,
-  History,
-  RotateCcw,
   HelpCircle,
-  Clock,
-  Sparkles,
 } from "lucide-react";
 
 // ─── NBA Team Metadata ────────────────────────────────────────────────────────
@@ -26,36 +21,246 @@ type TeamMeta = {
 };
 
 const NBA_TEAMS: TeamMeta[] = [
-  { full_name: "Atlanta Hawks",            city: "Atlanta",       name: "Hawks",          abbreviation: "ATL", conference: "East", division: "Southeast" },
-  { full_name: "Boston Celtics",           city: "Boston",        name: "Celtics",        abbreviation: "BOS", conference: "East", division: "Atlantic"  },
-  { full_name: "Brooklyn Nets",            city: "Brooklyn",      name: "Nets",           abbreviation: "BKN", conference: "East", division: "Atlantic"  },
-  { full_name: "Charlotte Hornets",        city: "Charlotte",     name: "Hornets",        abbreviation: "CHA", conference: "East", division: "Southeast" },
-  { full_name: "Chicago Bulls",            city: "Chicago",       name: "Bulls",          abbreviation: "CHI", conference: "East", division: "Central"   },
-  { full_name: "Cleveland Cavaliers",      city: "Cleveland",     name: "Cavaliers",      abbreviation: "CLE", conference: "East", division: "Central"   },
-  { full_name: "Dallas Mavericks",         city: "Dallas",        name: "Mavericks",      abbreviation: "DAL", conference: "West", division: "Southwest" },
-  { full_name: "Denver Nuggets",           city: "Denver",        name: "Nuggets",        abbreviation: "DEN", conference: "West", division: "Northwest" },
-  { full_name: "Detroit Pistons",          city: "Detroit",       name: "Pistons",        abbreviation: "DET", conference: "East", division: "Central"   },
-  { full_name: "Golden State Warriors",    city: "Golden State",  name: "Warriors",       abbreviation: "GSW", conference: "West", division: "Pacific"   },
-  { full_name: "Houston Rockets",          city: "Houston",       name: "Rockets",        abbreviation: "HOU", conference: "West", division: "Southwest" },
-  { full_name: "Indiana Pacers",           city: "Indiana",       name: "Pacers",         abbreviation: "IND", conference: "East", division: "Central"   },
-  { full_name: "LA Clippers",              city: "LA",            name: "Clippers",       abbreviation: "LAC", conference: "West", division: "Pacific"   },
-  { full_name: "Los Angeles Lakers",       city: "Los Angeles",   name: "Lakers",         abbreviation: "LAL", conference: "West", division: "Pacific"   },
-  { full_name: "Memphis Grizzlies",        city: "Memphis",       name: "Grizzlies",      abbreviation: "MEM", conference: "West", division: "Southwest" },
-  { full_name: "Miami Heat",               city: "Miami",         name: "Heat",           abbreviation: "MIA", conference: "East", division: "Southeast" },
-  { full_name: "Milwaukee Bucks",          city: "Milwaukee",     name: "Bucks",          abbreviation: "MIL", conference: "East", division: "Central"   },
-  { full_name: "Minnesota Timberwolves",   city: "Minnesota",     name: "Timberwolves",   abbreviation: "MIN", conference: "West", division: "Northwest" },
-  { full_name: "New Orleans Pelicans",     city: "New Orleans",   name: "Pelicans",       abbreviation: "NOP", conference: "West", division: "Southwest" },
-  { full_name: "New York Knicks",          city: "New York",      name: "Knicks",         abbreviation: "NYK", conference: "East", division: "Atlantic"  },
-  { full_name: "Oklahoma City Thunder",    city: "Oklahoma City", name: "Thunder",        abbreviation: "OKC", conference: "West", division: "Northwest" },
-  { full_name: "Orlando Magic",            city: "Orlando",       name: "Magic",          abbreviation: "ORL", conference: "East", division: "Southeast" },
-  { full_name: "Philadelphia 76ers",       city: "Philadelphia",  name: "76ers",          abbreviation: "PHI", conference: "East", division: "Atlantic"  },
-  { full_name: "Phoenix Suns",             city: "Phoenix",       name: "Suns",           abbreviation: "PHX", conference: "West", division: "Pacific"   },
-  { full_name: "Portland Trail Blazers",   city: "Portland",      name: "Trail Blazers",  abbreviation: "POR", conference: "West", division: "Northwest" },
-  { full_name: "Sacramento Kings",         city: "Sacramento",    name: "Kings",          abbreviation: "SAC", conference: "West", division: "Pacific"   },
-  { full_name: "San Antonio Spurs",        city: "San Antonio",   name: "Spurs",          abbreviation: "SAS", conference: "West", division: "Southwest" },
-  { full_name: "Toronto Raptors",          city: "Toronto",       name: "Raptors",        abbreviation: "TOR", conference: "East", division: "Atlantic"  },
-  { full_name: "Utah Jazz",                city: "Utah",          name: "Jazz",           abbreviation: "UTA", conference: "West", division: "Northwest" },
-  { full_name: "Washington Wizards",       city: "Washington",    name: "Wizards",        abbreviation: "WAS", conference: "East", division: "Southeast" },
+  {
+    full_name: "Atlanta Hawks",
+    city: "Atlanta",
+    name: "Hawks",
+    abbreviation: "ATL",
+    conference: "East",
+    division: "Southeast",
+  },
+  {
+    full_name: "Boston Celtics",
+    city: "Boston",
+    name: "Celtics",
+    abbreviation: "BOS",
+    conference: "East",
+    division: "Atlantic",
+  },
+  {
+    full_name: "Brooklyn Nets",
+    city: "Brooklyn",
+    name: "Nets",
+    abbreviation: "BKN",
+    conference: "East",
+    division: "Atlantic",
+  },
+  {
+    full_name: "Charlotte Hornets",
+    city: "Charlotte",
+    name: "Hornets",
+    abbreviation: "CHA",
+    conference: "East",
+    division: "Southeast",
+  },
+  {
+    full_name: "Chicago Bulls",
+    city: "Chicago",
+    name: "Bulls",
+    abbreviation: "CHI",
+    conference: "East",
+    division: "Central",
+  },
+  {
+    full_name: "Cleveland Cavaliers",
+    city: "Cleveland",
+    name: "Cavaliers",
+    abbreviation: "CLE",
+    conference: "East",
+    division: "Central",
+  },
+  {
+    full_name: "Dallas Mavericks",
+    city: "Dallas",
+    name: "Mavericks",
+    abbreviation: "DAL",
+    conference: "West",
+    division: "Southwest",
+  },
+  {
+    full_name: "Denver Nuggets",
+    city: "Denver",
+    name: "Nuggets",
+    abbreviation: "DEN",
+    conference: "West",
+    division: "Northwest",
+  },
+  {
+    full_name: "Detroit Pistons",
+    city: "Detroit",
+    name: "Pistons",
+    abbreviation: "DET",
+    conference: "East",
+    division: "Central",
+  },
+  {
+    full_name: "Golden State Warriors",
+    city: "Golden State",
+    name: "Warriors",
+    abbreviation: "GSW",
+    conference: "West",
+    division: "Pacific",
+  },
+  {
+    full_name: "Houston Rockets",
+    city: "Houston",
+    name: "Rockets",
+    abbreviation: "HOU",
+    conference: "West",
+    division: "Southwest",
+  },
+  {
+    full_name: "Indiana Pacers",
+    city: "Indiana",
+    name: "Pacers",
+    abbreviation: "IND",
+    conference: "East",
+    division: "Central",
+  },
+  {
+    full_name: "LA Clippers",
+    city: "LA",
+    name: "Clippers",
+    abbreviation: "LAC",
+    conference: "West",
+    division: "Pacific",
+  },
+  {
+    full_name: "Los Angeles Lakers",
+    city: "Los Angeles",
+    name: "Lakers",
+    abbreviation: "LAL",
+    conference: "West",
+    division: "Pacific",
+  },
+  {
+    full_name: "Memphis Grizzlies",
+    city: "Memphis",
+    name: "Grizzlies",
+    abbreviation: "MEM",
+    conference: "West",
+    division: "Southwest",
+  },
+  {
+    full_name: "Miami Heat",
+    city: "Miami",
+    name: "Heat",
+    abbreviation: "MIA",
+    conference: "East",
+    division: "Southeast",
+  },
+  {
+    full_name: "Milwaukee Bucks",
+    city: "Milwaukee",
+    name: "Bucks",
+    abbreviation: "MIL",
+    conference: "East",
+    division: "Central",
+  },
+  {
+    full_name: "Minnesota Timberwolves",
+    city: "Minnesota",
+    name: "Timberwolves",
+    abbreviation: "MIN",
+    conference: "West",
+    division: "Northwest",
+  },
+  {
+    full_name: "New Orleans Pelicans",
+    city: "New Orleans",
+    name: "Pelicans",
+    abbreviation: "NOP",
+    conference: "West",
+    division: "Southwest",
+  },
+  {
+    full_name: "New York Knicks",
+    city: "New York",
+    name: "Knicks",
+    abbreviation: "NYK",
+    conference: "East",
+    division: "Atlantic",
+  },
+  {
+    full_name: "Oklahoma City Thunder",
+    city: "Oklahoma City",
+    name: "Thunder",
+    abbreviation: "OKC",
+    conference: "West",
+    division: "Northwest",
+  },
+  {
+    full_name: "Orlando Magic",
+    city: "Orlando",
+    name: "Magic",
+    abbreviation: "ORL",
+    conference: "East",
+    division: "Southeast",
+  },
+  {
+    full_name: "Philadelphia 76ers",
+    city: "Philadelphia",
+    name: "76ers",
+    abbreviation: "PHI",
+    conference: "East",
+    division: "Atlantic",
+  },
+  {
+    full_name: "Phoenix Suns",
+    city: "Phoenix",
+    name: "Suns",
+    abbreviation: "PHX",
+    conference: "West",
+    division: "Pacific",
+  },
+  {
+    full_name: "Portland Trail Blazers",
+    city: "Portland",
+    name: "Trail Blazers",
+    abbreviation: "POR",
+    conference: "West",
+    division: "Northwest",
+  },
+  {
+    full_name: "Sacramento Kings",
+    city: "Sacramento",
+    name: "Kings",
+    abbreviation: "SAC",
+    conference: "West",
+    division: "Pacific",
+  },
+  {
+    full_name: "San Antonio Spurs",
+    city: "San Antonio",
+    name: "Spurs",
+    abbreviation: "SAS",
+    conference: "West",
+    division: "Southwest",
+  },
+  {
+    full_name: "Toronto Raptors",
+    city: "Toronto",
+    name: "Raptors",
+    abbreviation: "TOR",
+    conference: "East",
+    division: "Atlantic",
+  },
+  {
+    full_name: "Utah Jazz",
+    city: "Utah",
+    name: "Jazz",
+    abbreviation: "UTA",
+    conference: "West",
+    division: "Northwest",
+  },
+  {
+    full_name: "Washington Wizards",
+    city: "Washington",
+    name: "Wizards",
+    abbreviation: "WAS",
+    conference: "East",
+    division: "Southeast",
+  },
 ];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -126,9 +331,9 @@ const MAX_GUESSES = 4;
 // ─── 5-Node Court Formation Layout ────────────────────────────────────────────
 
 const COURT_LAYOUT_5: Record<string, { x: number; y: number }> = {
-  p1: { x: 200, y: 60 },  // Point Guard (Top of key)
+  p1: { x: 200, y: 60 }, // Point Guard (Top of key)
   p2: { x: 330, y: 145 }, // Shooting Guard (Right wing)
-  p3: { x: 70,  y: 145 }, // Small Forward (Left wing)
+  p3: { x: 70, y: 145 }, // Small Forward (Left wing)
   p4: { x: 125, y: 285 }, // Power Forward (Low post left)
   p5: { x: 275, y: 285 }, // Center (Low post right)
 };
@@ -155,7 +360,10 @@ function StartingFiveDiagram({
       } else {
         const count = nodes.length;
         const angle = (idx * (Math.PI * 2)) / count - Math.PI / 2;
-        map.set(node.id, { x: 200 + Math.cos(angle) * 115, y: 175 + Math.sin(angle) * 115 });
+        map.set(node.id, {
+          x: 200 + Math.cos(angle) * 115,
+          y: 175 + Math.sin(angle) * 115,
+        });
       }
     });
     return map;
@@ -165,7 +373,9 @@ function StartingFiveDiagram({
 
   function getPrimaryText(node: PuzzleNode) {
     if (gameOver) {
-      return node.shortName || node.playerName?.split(" ").slice(-1)[0] || node.label;
+      return (
+        node.shortName || node.playerName?.split(" ").slice(-1)[0] || node.label
+      );
     }
     if (guessCount === 2) {
       return node.jersey || node.label;
@@ -186,34 +396,67 @@ function StartingFiveDiagram({
     return null;
   }
 
+  const showArrows = gameOver || guessCount >= 2;
+
   return (
     <svg viewBox="0 0 400 355" className="w-full h-auto select-none">
-      {/* Clean Basketball Half-Court Line Art */}
-      {/* <rect x="15" y="10" width="370" height="335" rx="12" fill="#18181b" stroke="#27272a" strokeWidth="1.5" />
-      <circle cx="200" cy="60" r="44" fill="none" stroke="#27272a" strokeWidth="1" strokeDasharray="4 4" />
-      <path d="M 105 345 L 105 215 L 295 215 L 295 345" fill="none" stroke="#27272a" strokeWidth="1" />
-      <circle cx="200" cy="215" r="35" fill="none" stroke="#27272a" strokeWidth="1" />
-      <path d="M 45 345 A 175 175 0 0 1 355 345" fill="none" stroke="#27272a" strokeWidth="1" /> */}
-
-      {/* Passing Edges */}
+      {/* Passing Edges - Curved Paths for clean routing */}
       {edges.map((edge, i) => {
         const from = positions.get(edge.from);
         const to = positions.get(edge.to);
         if (!from || !to) return null;
-        const strokeW = 1.5 + (edge.weight / maxWeight) * 7.5;
-        const opacity = 0.35 + (edge.weight / maxWeight) * 0.65;
+
+        // Use a quadratic bezier to curve lines slightly so they don't visually overlap straight into other elements
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        
+        // Shorten the end point so the path stops exactly at the base of the arrow.
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const targetR = gameOver ? 28 : 24;
+        const arrowLength = 12;
+        const padding = 2;
+        const shorten = targetR + padding + arrowLength;
+        const endX = to.x - (dx / dist) * shorten;
+        const endY = to.y - (dy / dist) * shorten;
+
+        const cx = from.x + dx / 2 - dy * 0.15;
+        const cy = from.y + dy / 2 + dx * 0.15;
+
+        const strokeW = 1 + (edge.weight / maxWeight) * 4;
+        const opacity = 0.2 + (edge.weight / maxWeight) * 0.8;
+        const markerId = `arrow-${i}`;
+
         return (
-          <line
-            key={`${edge.from}-${edge.to}-${i}`}
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-            stroke="#f59e0b"
-            strokeWidth={strokeW}
-            strokeOpacity={opacity}
-            strokeLinecap="round"
-          />
+          <g key={`${edge.from}-${edge.to}-${i}`}>
+            {showArrows && (
+              <defs>
+                <marker
+                  id={markerId}
+                  markerUnits="userSpaceOnUse"
+                  markerWidth="16"
+                  markerHeight="16"
+                  refX="0" // Base of arrow is at path end
+                  refY="6" // Center of the 12px wide base
+                  orient="auto"
+                >
+                  <polygon
+                    points="0 0, 12 6, 0 12"
+                    fill="#ffffff"
+                    opacity={opacity}
+                  />
+                </marker>
+              </defs>
+            )}
+            <path
+              d={`M ${from.x} ${from.y} Q ${cx} ${cy} ${endX} ${endY}`}
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth={strokeW}
+              strokeOpacity={opacity}
+              strokeLinecap="butt"
+              markerEnd={showArrows ? `url(#${markerId})` : undefined}
+            />
+          </g>
         );
       })}
 
@@ -223,43 +466,57 @@ function StartingFiveDiagram({
         if (!pos) return null;
         const primary = getPrimaryText(node);
         const secondary = getSecondaryBadge(node);
-        const isLong = primary.length > 7;
+        const parts = primary.split(" ");
 
         return (
-          <g key={node.id} className="transition-all duration-300">
-            {/* Main node circle */}
+          <g key={node.id} className="transition-all duration-500 ease-out">
+            {/* Main node circle - pitch black with white border */}
             <circle
               cx={pos.x}
               cy={pos.y}
-              r={gameOver ? 29 : 25}
-              fill="#27272a"
-              stroke={gameOver ? "#538d4e" : guessCount > 0 ? "#f59e0b" : "#3f3f46"}
-              strokeWidth={gameOver ? 2.5 : 1.5}
+              r={gameOver ? 28 : 24}
+              fill="#000000"
+              stroke={gameOver ? "#10B981" : "#333333"}
+              strokeWidth={gameOver ? 2 : 1}
             />
 
-            {/* Primary text */}
+            {/* Primary text with automatic wrapping if multiple words */}
             <text
               x={pos.x}
-              y={pos.y + (secondary ? -2 : 4)}
+              y={pos.y + (secondary ? -6 : parts.length > 1 ? -4 : 4)}
               textAnchor="middle"
-              fontSize={gameOver ? (isLong ? 9.5 : 11) : guessCount >= 3 ? 10.5 : 12.5}
-              fontWeight="700"
-              fill={gameOver ? "#ffffff" : "#f4f4f5"}
-              fontFamily="system-ui, -apple-system, sans-serif"
+              fontSize={gameOver ? 10 : guessCount >= 3 ? 10 : 12}
+              fontWeight="500"
+              fill={gameOver ? "#ffffff" : "#a3a3a3"}
+              className="font-sans"
             >
-              {primary}
+              {parts.length > 1 ? (
+                <>
+                  <tspan x={pos.x} dy="0">
+                    {parts[0]}
+                  </tspan>
+                  <tspan x={pos.x} dy="1.1em">
+                    {parts.slice(1).join(" ")}
+                  </tspan>
+                </>
+              ) : (
+                <tspan x={pos.x} dy={secondary ? "4" : "0"}>
+                  {primary}
+                </tspan>
+              )}
             </text>
 
-            {/* Secondary Badge */}
+            {/* Secondary Badge - Clean mono stats */}
             {secondary && (
               <text
                 x={pos.x}
-                y={pos.y + 11}
+                y={pos.y + 13}
                 textAnchor="middle"
-                fontSize="8.5"
-                fontWeight="600"
-                fill="#f59e0b"
-                fontFamily="system-ui, -apple-system, sans-serif"
+                fontSize="8"
+                fontWeight="400"
+                fill="#ffffff"
+                className="font-mono tracking-tight"
+                opacity={0.7}
               >
                 {secondary}
               </text>
@@ -275,51 +532,62 @@ function StartingFiveDiagram({
 
 function GuessRow({ guess, index }: { guess?: Guess; index: number }) {
   if (!guess) {
-    // Empty row placeholder
+    // Empty row placeholder - solid muted background with a clear subtle label
     return (
-      <div className="h-13 w-full rounded-md border border-[#27272a] bg-[#18181b]/50 flex items-center justify-center">
-        <span className="text-xs font-semibold text-[#3f3f46]">{index + 1}</span>
+      <div className="h-12 w-full rounded-lg border border-neutral-800/50 bg-neutral-900/20 flex items-center px-4">
+        <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-600">
+          Attempt {index + 1}
+        </span>
       </div>
     );
   }
 
-  const { team, correct, sameConference, sameDivision, conference, division } = guess;
+  const { team, correct, sameConference, sameDivision, conference, division } =
+    guess;
 
   return (
     <div
-      className={`h-13 w-full rounded-md border px-3.5 flex items-center justify-between transition-all duration-300 ${
+      className={`h-12 w-full rounded-lg border px-4 flex items-center justify-between transition-all duration-300 ${
         correct
-          ? "border-[#538d4e] bg-[#538d4e]/15"
-          : "border-[#3f3f46] bg-[#18181b]"
+          ? "border-emerald-500/30 bg-emerald-500/10"
+          : "border-neutral-800 bg-neutral-900/50"
       }`}
     >
-      <div className="flex items-center gap-2 min-w-0 flex-1">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
         {correct ? (
-          <Check size={16} className="text-[#538d4e] shrink-0" strokeWidth={3} />
+          <Check
+            size={14}
+            className="text-emerald-500 shrink-0"
+            strokeWidth={3}
+          />
         ) : (
-          <X size={16} className="text-[#71717a] shrink-0" strokeWidth={2.5} />
+          <X size={14} className="text-neutral-500 shrink-0" strokeWidth={2} />
         )}
-        <span className="text-sm font-semibold text-white truncate">{team}</span>
+        <span
+          className={`text-sm font-medium truncate ${correct ? "text-emerald-50" : "text-neutral-200"}`}
+        >
+          {team}
+        </span>
       </div>
 
-      <div className="flex items-center gap-1.5 shrink-0">
-        {/* Conference Tile */}
+      <div className="flex items-center gap-2 shrink-0">
+        {/* Conference Tile - Secondary Accent (Blue/Indigo) */}
         <div
-          className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider ${
+          className={`px-2 py-0.5 rounded text-[10px] font-medium font-mono uppercase tracking-widest ${
             sameConference
-              ? "bg-[#538d4e] text-white"
-              : "bg-[#27272a] text-[#71717a]"
+              ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+              : "bg-neutral-800 text-neutral-500 border border-neutral-700/50"
           }`}
         >
           {conference}
         </div>
 
-        {/* Division Tile */}
+        {/* Division Tile - Secondary Accent (Purple/Fuchsia) */}
         <div
-          className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider ${
+          className={`px-2 py-0.5 rounded text-[10px] font-medium font-mono uppercase tracking-widest ${
             sameDivision
-              ? "bg-[#538d4e] text-white"
-              : "bg-[#27272a] text-[#71717a]"
+              ? "bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30"
+              : "bg-neutral-800 text-neutral-500 border border-neutral-700/50"
           }`}
         >
           {division}
@@ -355,7 +623,7 @@ function TeamAutocomplete({
         (t.full_name.toLowerCase().includes(q) ||
           t.name.toLowerCase().includes(q) ||
           t.city.toLowerCase().includes(q) ||
-          t.abbreviation.toLowerCase() === q)
+          t.abbreviation.toLowerCase() === q),
     ).slice(0, 5);
   }, [value, usedTeams]);
 
@@ -400,7 +668,7 @@ function TeamAutocomplete({
 
   function trySubmit() {
     const match = NBA_TEAMS.find(
-      (t) => t.full_name.toLowerCase() === value.trim().toLowerCase()
+      (t) => t.full_name.toLowerCase() === value.trim().toLowerCase(),
     );
     if (match) {
       onSubmit(match.full_name);
@@ -410,7 +678,7 @@ function TeamAutocomplete({
   }
 
   const isValid = NBA_TEAMS.some(
-    (t) => t.full_name.toLowerCase() === value.trim().toLowerCase()
+    (t) => t.full_name.toLowerCase() === value.trim().toLowerCase(),
   );
 
   return (
@@ -432,28 +700,40 @@ function TeamAutocomplete({
               setOpen(true);
               setHighlighted(0);
             }}
-            onFocus={() => { if (suggestions.length) setOpen(true); }}
+            onFocus={() => {
+              if (suggestions.length) setOpen(true);
+            }}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-md border border-[#3f3f46] bg-[#18181b] px-3.5 py-3 text-sm font-medium text-white placeholder-[#71717a] outline-none focus:border-[#d4d4d8] transition-colors"
+            className="w-full h-12 rounded-lg border border-neutral-800 bg-neutral-900/50 px-4 text-sm font-medium text-white placeholder-neutral-600 outline-none focus:border-neutral-500 focus:bg-neutral-900 transition-colors"
           />
           {open && suggestions.length > 0 && (
             <div
               ref={dropdownRef}
-              className="absolute left-0 right-0 bottom-full mb-1 z-30 rounded-md border border-[#3f3f46] bg-[#18181b] shadow-2xl overflow-hidden"
+              className="absolute left-0 right-0 bottom-full mb-2 z-30 rounded-lg border border-neutral-800 bg-neutral-900 shadow-2xl overflow-hidden backdrop-blur-xl"
             >
               {suggestions.map((team, i) => (
                 <button
                   key={team.full_name}
                   type="button"
-                  onMouseDown={(e) => { e.preventDefault(); select(team); }}
-                  onTouchStart={(e) => { e.preventDefault(); select(team); }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    select(team);
+                  }}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    select(team);
+                  }}
                   onClick={() => select(team)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-sm cursor-pointer transition-colors ${
-                    i === highlighted ? "bg-[#27272a] text-white" : "text-[#a1a1aa] hover:bg-[#27272a]/60 hover:text-white"
+                  className={`w-full flex items-center justify-between px-4 py-3 text-left text-sm cursor-pointer transition-colors ${
+                    i === highlighted
+                      ? "bg-neutral-800 text-white"
+                      : "text-neutral-400 hover:bg-neutral-800/60 hover:text-white"
                   }`}
                 >
-                  <span className="font-semibold">{team.full_name}</span>
-                  <span className="text-xs text-[#71717a]">{team.conference} • {team.division}</span>
+                  <span className="font-medium">{team.full_name}</span>
+                  <span className="text-[10px] font-mono text-neutral-500 tracking-wider uppercase">
+                    {team.conference} • {team.division}
+                  </span>
                 </button>
               ))}
             </div>
@@ -462,9 +742,9 @@ function TeamAutocomplete({
         <button
           onClick={trySubmit}
           disabled={disabled || !isValid}
-          className="rounded-md px-5 py-3 text-sm font-bold text-white transition-all cursor-pointer disabled:cursor-not-allowed bg-[#e65c00] hover:bg-[#d45500] disabled:bg-[#27272a] disabled:text-[#71717a]"
+          className="rounded-lg h-12 px-6 text-sm font-semibold text-black transition-all cursor-pointer disabled:cursor-not-allowed bg-white hover:bg-neutral-200 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:border-neutral-800 disabled:border"
         >
-          GUESS
+          SUBMIT
         </button>
       </div>
     </div>
@@ -475,61 +755,76 @@ function TeamAutocomplete({
 
 function HowToPlayModal({ onClose }: { onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-      <div className="w-full max-w-md rounded-xl border border-[#27272a] bg-[#18181b] p-6 shadow-2xl relative text-white animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="w-full max-w-md rounded-xl border border-neutral-800/60 bg-black p-6 shadow-2xl relative text-neutral-200 animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-[#71717a] hover:text-white transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1.5 text-neutral-500 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-neutral-900"
         >
-          <X size={20} />
+          <X size={16} />
         </button>
 
-        <h2 className="text-lg font-bold uppercase tracking-wider mb-3">How To Play</h2>
-        <p className="text-sm text-[#a1a1aa] mb-4">
-          Guess the mystery NBA team in <strong>4 tries</strong> from their starting 5 assist network.
+        <h2 className="text-base font-semibold mb-2">How To Play</h2>
+        <p className="text-sm text-neutral-400 mb-6">
+          Identify the mystery NBA team in{" "}
+          <strong className="text-white font-medium">4 attempts</strong> using
+          their starting 5 assist network.
         </p>
 
-        <div className="flex flex-col gap-3 text-xs text-[#d4d4d8] border-y border-[#27272a] py-4 my-4">
-          <div className="flex items-start gap-2.5">
-            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
-            <span><strong>Line Thickness</strong> = How frequently one player assisted another in this real NBA game.</span>
+        <div className="flex flex-col gap-4 text-xs text-neutral-300 border-y border-neutral-800 py-5 my-5">
+          <div className="flex items-start gap-3">
+            <span className="font-mono text-white text-xs mt-0.5 opacity-50">
+              01
+            </span>
+            <span>
+              <strong className="text-white font-medium">Line Thickness</strong>{" "}
+              indicates how frequently one player assisted another in a specific
+              real NBA game.
+            </span>
           </div>
-          <div className="flex items-start gap-2.5">
-            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
-            <span><strong>Progressive Clues</strong> = Each wrong guess unlocks player assist counts, jersey numbers, and team passing stats.</span>
+          <div className="flex items-start gap-3">
+            <span className="font-mono text-white text-xs mt-0.5 opacity-50">
+              02
+            </span>
+            <span>
+              <strong className="text-white font-medium">
+                Progressive Clues
+              </strong>{" "}
+              unlock with each incorrect guess, revealing player stats, jersey
+              numbers, and team metrics.
+            </span>
           </div>
-          <div className="flex items-start gap-2.5">
-            <span className="font-bold text-[#e65c00] text-sm leading-none">•</span>
-            <span><strong>Tiles</strong> = Badges turn <span className="text-[#538d4e] font-bold">GREEN</span> when your guess matches the conference or division.</span>
+          <div className="flex items-start gap-3">
+            <span className="font-mono text-white text-xs mt-0.5 opacity-50">
+              03
+            </span>
+            <span>
+              <strong className="text-white font-medium">Feedback Tiles</strong>{" "}
+              display{" "}
+              <span className="text-emerald-400 font-mono tracking-widest uppercase">
+                green
+              </span>{" "}
+              or{" "}
+              <span className="text-blue-400 font-mono tracking-widest uppercase">
+                blue
+              </span>{" "}
+              when your guess matches the mystery team's conference or division.
+            </span>
           </div>
-        </div>
-
-        <div className="space-y-2 mb-4">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#71717a]">Example Tile Feedback</p>
-          <div className="h-10 w-full rounded border border-[#3f3f46] bg-[#27272a] px-3 flex items-center justify-between text-xs font-semibold">
-            <span>Miami Heat</span>
-            <div className="flex gap-1.5">
-              <span className="bg-[#538d4e] text-white px-2 py-0.5 rounded font-bold">EAST</span>
-              <span className="bg-[#3f3f46] text-[#a1a1aa] px-2 py-0.5 rounded font-bold">SOUTHEAST</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-[#71717a]">
-            Mystery team is in the <strong className="text-white">East</strong>, but NOT in the Southeast division.
-          </p>
         </div>
 
         <button
           onClick={onClose}
-          className="w-full rounded-md py-2.5 text-sm font-bold bg-[#e65c00] text-white hover:bg-[#d45500] transition-colors cursor-pointer"
+          className="w-full rounded-lg py-3 text-sm font-semibold bg-white text-black hover:bg-neutral-200 transition-colors cursor-pointer"
         >
-          LET&apos;S PLAY
+          Continue
         </button>
       </div>
     </div>
   );
 }
 
-// ─── Stats & History Modal (Wordle Style) ─────────────────────────────────────
+// ─── Stats & History Modal ────────────────────────────────────────────────────
 
 function StatsModal({
   stats,
@@ -543,79 +838,112 @@ function StatsModal({
   copied: boolean;
 }) {
   const [tab, setTab] = useState<"stats" | "history">("stats");
-  const winPercent = stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0;
+  const winPercent =
+    stats.gamesPlayed > 0
+      ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100)
+      : 0;
   const maxFreq = Math.max(1, ...Object.values(stats.guessDistribution));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-      <div className="w-full max-w-md rounded-xl border border-[#27272a] bg-[#18181b] p-6 shadow-2xl relative text-white animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="w-full max-w-md rounded-xl border border-neutral-800/60 bg-black p-6 shadow-2xl relative text-neutral-200 animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-[#71717a] hover:text-white transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1.5 text-neutral-500 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-neutral-900"
         >
-          <X size={20} />
+          <X size={16} />
         </button>
 
         {/* Tab switch */}
-        <div className="flex gap-4 border-b border-[#27272a] pb-3 mb-5">
+        <div className="flex gap-6 border-b border-neutral-800 pb-3 mb-6">
           <button
             onClick={() => setTab("stats")}
-            className={`text-xs font-bold uppercase tracking-wider pb-1 cursor-pointer transition-colors ${
-              tab === "stats" ? "text-[#e65c00] border-b-2 border-[#e65c00]" : "text-[#71717a] hover:text-white"
+            className={`text-xs font-semibold tracking-wide pb-1 cursor-pointer transition-colors relative ${
+              tab === "stats"
+                ? "text-white"
+                : "text-neutral-500 hover:text-neutral-300"
             }`}
           >
             Statistics
+            {tab === "stats" && (
+              <div className="absolute -bottom-[13px] left-0 right-0 h-0.5 bg-white" />
+            )}
           </button>
           <button
             onClick={() => setTab("history")}
-            className={`text-xs font-bold uppercase tracking-wider pb-1 cursor-pointer transition-colors ${
-              tab === "history" ? "text-[#e65c00] border-b-2 border-[#e65c00]" : "text-[#71717a] hover:text-white"
+            className={`text-xs font-semibold tracking-wide pb-1 cursor-pointer transition-colors relative ${
+              tab === "history"
+                ? "text-white"
+                : "text-neutral-500 hover:text-neutral-300"
             }`}
           >
-            Game History
+            History
+            {tab === "history" && (
+              <div className="absolute -bottom-[13px] left-0 right-0 h-0.5 bg-white" />
+            )}
           </button>
         </div>
 
         {tab === "stats" ? (
           <div>
             {/* 4 Stat numbers */}
-            <div className="grid grid-cols-4 gap-2 mb-6 text-center">
+            <div className="grid grid-cols-4 gap-4 mb-8 text-center border border-neutral-800/60 rounded-xl p-4 bg-neutral-950">
               <div>
-                <span className="block text-3xl font-bold font-mono">{stats.gamesPlayed}</span>
-                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Played</span>
+                <span className="block text-2xl font-semibold font-mono text-white">
+                  {stats.gamesPlayed}
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1 block">
+                  Played
+                </span>
               </div>
               <div>
-                <span className="block text-3xl font-bold font-mono text-[#538d4e]">{winPercent}</span>
-                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Win %</span>
+                <span className="block text-2xl font-semibold font-mono text-emerald-400">
+                  {winPercent}
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1 block">
+                  Win %
+                </span>
               </div>
               <div>
-                <span className="block text-3xl font-bold font-mono text-[#f59e0b]">{stats.currentStreak}</span>
-                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Current Streak</span>
+                <span className="block text-2xl font-semibold font-mono text-amber-500">
+                  {stats.currentStreak}
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1 block">
+                  Streak
+                </span>
               </div>
               <div>
-                <span className="block text-3xl font-bold font-mono">{stats.maxStreak}</span>
-                <span className="text-[10px] uppercase font-semibold text-[#71717a]">Max Streak</span>
+                <span className="block text-2xl font-semibold font-mono text-white">
+                  {stats.maxStreak}
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1 block">
+                  Best
+                </span>
               </div>
             </div>
 
             {/* Guess distribution */}
-            <div className="mb-6">
-              <h3 className="text-xs uppercase font-bold tracking-wider text-[#71717a] mb-2.5">Guess Distribution</h3>
-              <div className="flex flex-col gap-1.5 font-mono text-xs">
+            <div className="mb-8">
+              <h3 className="text-[10px] uppercase tracking-widest text-neutral-500 mb-4 font-mono">
+                Distribution
+              </h3>
+              <div className="flex flex-col gap-2.5 font-mono text-xs">
                 {[1, 2, 3, 4].map((num) => {
                   const count = stats.guessDistribution[num] || 0;
                   const pct = Math.max(8, Math.round((count / maxFreq) * 100));
                   return (
-                    <div key={num} className="flex items-center gap-2">
-                      <span className="w-2.5 text-right font-bold text-[#71717a]">{num}</span>
-                      <div className="flex-1 bg-[#27272a] rounded-xs overflow-hidden h-5">
+                    <div key={num} className="flex items-center gap-3">
+                      <span className="w-2 text-right text-neutral-500">
+                        {num}
+                      </span>
+                      <div className="flex-1 bg-neutral-900 rounded-md overflow-hidden h-6 border border-neutral-800/50">
                         <div
-                          className={`h-full rounded-xs flex items-center justify-end px-2 font-bold text-white transition-all duration-500 ${
-                            count > 0 ? "bg-[#538d4e]" : "bg-[#3f3f46]"
+                          className={`h-full flex items-center justify-end px-2.5 text-black font-semibold transition-all duration-500 ${
+                            count > 0 ? "bg-white" : "bg-transparent"
                           }`}
                           style={{ width: `${count > 0 ? pct : 8}%` }}
                         >
-                          {count}
+                          {count > 0 ? count : ""}
                         </div>
                       </div>
                     </div>
@@ -626,33 +954,43 @@ function StatsModal({
 
             <button
               onClick={onShare}
-              className="w-full flex items-center justify-center gap-2 rounded-md py-3 text-sm font-bold bg-[#538d4e] hover:bg-[#467742] text-white transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer"
             >
-              <Share2 size={16} /> {copied ? "COPIED TO CLIPBOARD!" : "SHARE RESULTS"}
+              <Share2 size={16} /> {copied ? "Copied" : "Share"}
             </button>
           </div>
         ) : (
-          <div className="max-h-72 overflow-y-auto pr-1 flex flex-col gap-2">
+          <div className="max-h-72 overflow-y-auto pr-1 flex flex-col gap-2.5">
             {stats.history.length === 0 ? (
-              <p className="text-center text-[#71717a] text-xs py-8">No completed games yet.</p>
+              <p className="text-center text-neutral-500 text-sm py-10 font-mono">
+                No game history.
+              </p>
             ) : (
               stats.history.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2.5 rounded border border-[#27272a] bg-[#27272a]/40 text-xs"
+                  className="flex items-center justify-between p-3 rounded-lg border border-neutral-800 bg-neutral-900/30 text-xs"
                 >
                   <div>
-                    <div className="flex items-center gap-2 font-semibold">
+                    <div className="flex items-center gap-2.5 font-medium text-neutral-200">
                       <span>{item.team}</span>
                       {item.won ? (
-                        <span className="text-[10px] text-[#538d4e] font-bold">✓ {item.guessesCount}/4</span>
+                        <span className="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-1.5 rounded-md py-0.5 border border-emerald-500/20">
+                          ✓ {item.guessesCount}/4
+                        </span>
                       ) : (
-                        <span className="text-[10px] text-[#ef4444] font-bold">✗ Failed</span>
+                        <span className="text-[10px] text-neutral-500 font-mono bg-neutral-800 px-1.5 rounded-md py-0.5 border border-neutral-700/50">
+                          ✗ Fail
+                        </span>
                       )}
                     </div>
-                    <span className="text-[11px] text-[#71717a]">{item.fullMatchup || item.date}</span>
+                    <span className="text-[10px] text-neutral-500 mt-1 block">
+                      {item.fullMatchup || item.date}
+                    </span>
                   </div>
-                  <span className="text-[11px] font-mono text-[#52525b]">{item.date}</span>
+                  <span className="text-[10px] font-mono text-neutral-600 tracking-wider">
+                    {item.date}
+                  </span>
                 </div>
               ))
             )}
@@ -694,7 +1032,8 @@ export default function DimerGame() {
       try {
         const res = await fetch("/api/puzzle/today");
         const body = await res.json().catch(() => null);
-        if (!res.ok) throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
+        if (!res.ok)
+          throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
         const p: Puzzle = body.puzzle;
         setPuzzle(p);
         setStale(!!body.stale);
@@ -725,14 +1064,15 @@ export default function DimerGame() {
     try {
       localStorage.setItem(
         `dimer_state_${puzzle.date}`,
-        JSON.stringify({ guesses, gameOver, won })
+        JSON.stringify({ guesses, gameOver, won }),
       );
     } catch {}
   }, [guesses, gameOver, won, puzzle?.date]);
 
   const answerMeta = useMemo(
-    () => (puzzle ? NBA_TEAMS.find((t) => t.full_name === puzzle.answer) : undefined),
-    [puzzle]
+    () =>
+      puzzle ? NBA_TEAMS.find((t) => t.full_name === puzzle.answer) : undefined,
+    [puzzle],
   );
 
   function recordGameStats(isWin: boolean, count: number) {
@@ -782,8 +1122,16 @@ export default function DimerGame() {
 
     const guessMeta = NBA_TEAMS.find((t) => t.full_name === teamName);
     const correct = teamName === puzzle.answer;
-    const sameConf = !!(answerMeta && guessMeta && answerMeta.conference === guessMeta.conference);
-    const sameDivision = !!(answerMeta && guessMeta && answerMeta.division === guessMeta.division);
+    const sameConf = !!(
+      answerMeta &&
+      guessMeta &&
+      answerMeta.conference === guessMeta.conference
+    );
+    const sameDivision = !!(
+      answerMeta &&
+      guessMeta &&
+      answerMeta.division === guessMeta.division
+    );
 
     const newGuess: Guess = {
       team: teamName,
@@ -809,16 +1157,7 @@ export default function DimerGame() {
     }
   }
 
-  function handlePlayAgain() {
-    setGuesses([]);
-    setGameOver(false);
-    setWon(false);
-    if (puzzle?.date) {
-      try {
-        localStorage.removeItem(`dimer_state_${puzzle.date}`);
-      } catch {}
-    }
-  }
+
 
   function handleShare() {
     if (!puzzle) return;
@@ -826,8 +1165,8 @@ export default function DimerGame() {
     const emojiGrid = guesses
       .map((g) => {
         if (g.correct) return "🟩 🟩 🟩";
-        const c = g.sameConference ? "🟩" : "⬛";
-        const d = g.sameDivision ? "🟩" : "⬛";
+        const c = g.sameConference ? "🟦" : "⬛";
+        const d = g.sameDivision ? "🟪" : "⬛";
         return `${c} ${d} ⬛`;
       })
       .join("\n");
@@ -840,10 +1179,13 @@ export default function DimerGame() {
     }
 
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(shareText).then(onCopySuccess).catch(() => {
-        fallbackCopyText(shareText);
-        onCopySuccess();
-      });
+      navigator.clipboard
+        .writeText(shareText)
+        .then(onCopySuccess)
+        .catch(() => {
+          fallbackCopyText(shareText);
+          onCopySuccess();
+        });
     } else {
       fallbackCopyText(shareText);
       onCopySuccess();
@@ -865,68 +1207,70 @@ export default function DimerGame() {
   }
 
   const usedTeams = guesses.map((g) => g.team);
-  const attemptsLeft = MAX_GUESSES - guesses.length;
 
   // Progressive Clue Banner Text
   const clueStatus = useMemo(() => {
     if (gameOver) {
-      return { text: "Mystery solved • Starting 5 revealed" };
+      return { 
+        text: won ? "Network Solved" : "Network Revealed", 
+        detail: puzzle?.answer || "Unknown Team"
+      };
     }
     if (guesses.length === 1) {
       return {
-        text: `Clue 1/3: Team recorded ${puzzle?.totalAssists ?? 25}+ assists in this game`,
+        text: "Clue 1/3",
+        detail: `Team recorded ${puzzle?.totalAssists ?? 25}+ assists in this game`,
       };
     }
     if (guesses.length === 2) {
       return {
-        text: `Clue 2/3: Top connection was ${puzzle?.topComboText ?? "a key passing duo"}`,
+        text: "Clue 2/3",
+        detail: `Top connection: ${puzzle?.topComboText ?? "Key passing duo"}`,
       };
     }
     if (guesses.length === 3) {
       return {
-        text: `Final Clue: ${puzzle?.locationClue ?? "Regular season game"}`,
+        text: "Final Clue",
+        detail: puzzle?.locationClue ?? "Regular season game",
       };
     }
     return {
-      text: "Wrong guesses unlock game assists, jersey #s, and duo clues",
+      text: "Data Obscured",
+      detail: "Incorrect guesses unlock game context",
     };
   }, [guesses.length, gameOver, puzzle]);
 
   return (
-    <div className="min-h-screen w-full bg-[#121213] text-[#ffffff] flex flex-col items-center">
-      {/* ─── Minimal Wordle-Style Navigation Bar ─── */}
-      <header className="w-full border-b border-[#27272a] h-14 flex items-center justify-between px-4 max-w-xl">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowHelpModal(true)}
-            title="How to Play"
-            className="p-1.5 rounded text-[#71717a] hover:text-white transition-colors cursor-pointer"
-          >
-            <HelpCircle size={20} />
-          </button>
-        </div>
+    <div className="min-h-screen w-full bg-black text-neutral-200 flex flex-col items-center selection:bg-neutral-800 font-sans">
+      {/* ─── Ultra Minimal Header ─── */}
+      <header className="w-full border-b border-neutral-900 h-16 flex items-center justify-between px-6 max-w-lg">
+        <button
+          onClick={() => setShowHelpModal(true)}
+          className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+        >
+          <HelpCircle size={18} strokeWidth={2} />
+        </button>
 
         {/* Center Brand */}
-        <div className="text-center select-none">
-          <h1 className="text-2xl font-black tracking-[0.2em] uppercase leading-none font-sans text-white">
-            D<span className="text-[#e65c00]">I</span>MER
+        <div className="text-center select-none flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-white opacity-80" />
+          <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white ml-1">
+            DIMER
           </h1>
         </div>
 
-        {/* Right Action Icons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowStatsModal(true)}
-            title="Statistics"
-            className="p-1.5 rounded text-[#71717a] hover:text-white transition-colors cursor-pointer"
-          >
-            <BarChart2 size={20} />
-          </button>
-        </div>
+        <button
+          onClick={() => setShowStatsModal(true)}
+          className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+        >
+          <BarChart2 size={18} strokeWidth={2} />
+        </button>
       </header>
 
       {/* Modals */}
-      {showHelpModal && <HowToPlayModal onClose={() => setShowHelpModal(false)} />}
+      {showHelpModal && (
+        <HowToPlayModal onClose={() => setShowHelpModal(false)} />
+      )}
       {showStatsModal && (
         <StatsModal
           stats={stats}
@@ -937,30 +1281,39 @@ export default function DimerGame() {
       )}
 
       {/* ─── Main Game Container ─── */}
-      <main className="w-full max-w-md px-4 py-4 flex flex-col gap-4 flex-1">
+      <main className="w-full max-w-lg px-6 py-8 flex flex-col gap-6 flex-1">
         {loading ? (
-          <div className="h-96 rounded-lg border border-[#27272a] bg-[#18181b] flex items-center justify-center">
-            <span className="text-sm font-medium text-[#71717a]">Loading puzzle...</span>
+          <div className="h-80 flex items-center justify-center">
+            <span className="text-xs font-mono text-neutral-600 uppercase tracking-widest animate-pulse">
+              Initializing...
+            </span>
           </div>
         ) : error ? (
-          <div className="h-96 rounded-lg border border-[#27272a] bg-[#18181b] flex flex-col items-center justify-center p-6 text-center">
-            <p className="text-sm font-bold text-white mb-1">Puzzle Unavailable</p>
-            <p className="text-xs text-[#71717a]">{error}</p>
+          <div className="h-80 flex flex-col items-center justify-center text-center">
+            <p className="text-sm font-semibold text-white mb-2">
+              Network Error
+            </p>
+            <p className="text-xs text-neutral-500 font-mono">{error}</p>
           </div>
         ) : puzzle ? (
           <>
-            {/* Mystery Diagram Card */}
-            <div className="w-full rounded-xl border border-[#27272a] bg-[#18181b] overflow-hidden">
-              <div className="px-4 py-2 border-b border-[#27272a] flex items-center justify-between text-xs">
-                <span className="font-bold text-[#a1a1aa] uppercase tracking-wider text-[11px]">
-                  Mystery Starting 5 Network
-                </span>
-                <span className="text-[11px] font-mono text-[#71717a]">
+            {/* Mystery Diagram */}
+            <div className="w-full">
+              <div className="flex items-end justify-between mb-4 px-1">
+                <div>
+                  <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-1">
+                    {clueStatus.text}
+                  </span>
+                  <span className="text-xs font-medium text-neutral-300">
+                    {clueStatus.detail}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-neutral-600 tracking-wider">
                   {puzzle.date}
                 </span>
               </div>
 
-              <div className="p-3">
+              <div className="py-6 border-y border-neutral-900 bg-neutral-950/30">
                 <StartingFiveDiagram
                   nodes={puzzle.nodes}
                   edges={puzzle.edges}
@@ -968,72 +1321,59 @@ export default function DimerGame() {
                   gameOver={gameOver}
                 />
               </div>
-
-              {/* Minimal Clue Footer */}
-              <div className="px-4 py-2.5 border-t border-[#27272a] bg-[#141416] text-center">
-                <p className="text-xs text-[#a1a1aa] font-medium">
-                  {clueStatus.text}
-                </p>
-              </div>
             </div>
 
             {/* 4 Wordle-Style Guess Rows */}
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2 mt-2">
               {Array.from({ length: MAX_GUESSES }).map((_, i) => (
                 <GuessRow key={i} guess={guesses[i]} index={i} />
               ))}
             </div>
 
             {/* Game Over Result or Autocomplete Input */}
-            {gameOver ? (
-              <div className="w-full rounded-lg border border-[#27272a] bg-[#18181b] p-4 text-center animate-in fade-in duration-200">
-                <div className="mb-3">
-                  <p className={`text-xs font-bold uppercase tracking-widest ${won ? "text-[#538d4e]" : "text-[#ef4444]"}`}>
-                    {won ? `Solved in ${guesses.length} / ${MAX_GUESSES}` : "Game Over"}
-                  </p>
-                  <p className="text-lg font-bold text-white mt-0.5">{puzzle.answer}</p>
-                  <p className="text-xs text-[#71717a] mt-0.5">{puzzle.fullContext || puzzle.gameContext}</p>
-                </div>
+            <div className="mt-4">
+              {gameOver ? (
+                <div className="w-full rounded-xl border border-neutral-800 bg-neutral-900/40 p-6 text-center animate-in fade-in duration-300">
+                  <div className="mb-6 flex flex-col items-center">
+                    <p
+                      className={`text-[10px] font-mono uppercase tracking-widest mb-3 px-2 py-0.5 rounded-md border ${won ? "text-emerald-400 border-emerald-500/20 bg-emerald-500/10" : "text-neutral-500 border-neutral-700 bg-neutral-800"}`}
+                    >
+                      {won
+                        ? `Solved in ${guesses.length}/${MAX_GUESSES}`
+                        : "Unsolved"}
+                    </p>
+                    {/* Only show the full context text, not repeating the team name since it's in the rows */}
+                    <p className="text-sm text-neutral-300 max-w-[280px] leading-relaxed">
+                      {puzzle.fullContext || puzzle.gameContext}
+                    </p>
+                  </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={handleShare}
-                    className="flex items-center justify-center gap-1.5 rounded-md py-2.5 text-xs font-bold bg-[#538d4e] hover:bg-[#467742] text-white transition-colors cursor-pointer"
-                  >
-                    <Share2 size={14} /> {copied ? "COPIED!" : "SHARE"}
-                  </button>
-                  <button
-                    onClick={() => setShowStatsModal(true)}
-                    className="flex items-center justify-center gap-1.5 rounded-md py-2.5 text-xs font-bold border border-[#3f3f46] hover:bg-[#27272a] text-white transition-colors cursor-pointer"
-                  >
-                    <BarChart2 size={14} /> STATS
-                  </button>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={handleShare}
+                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer"
+                    >
+                      <Share2 size={16} /> {copied ? "Copied" : "Share"}
+                    </button>
+                    <button
+                      onClick={() => setShowStatsModal(true)}
+                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold border border-neutral-700 hover:bg-neutral-800 text-white transition-colors cursor-pointer"
+                    >
+                      <BarChart2 size={16} /> Stats
+                    </button>
+                  </div>
                 </div>
-
-                <button
-                  onClick={handlePlayAgain}
-                  className="mt-3 text-[11px] text-[#71717a] hover:text-white flex items-center justify-center gap-1 w-full transition-colors cursor-pointer"
-                >
-                  <RotateCcw size={11} /> Replay today&apos;s puzzle
-                </button>
-              </div>
-            ) : (
-              <div className="w-full mt-1">
+              ) : (
                 <TeamAutocomplete
                   onSubmit={handleGuess}
                   disabled={gameOver}
                   usedTeams={usedTeams}
                 />
-              </div>
-            )}
+              )}
+            </div>
           </>
         ) : null}
       </main>
-
-      {/* Minimal Footer */}
-      <footer className="w-full text-center py-4 text-[11px] text-[#52525b] border-t border-[#27272a]/60">
-        DIMER • Daily NBA Assist Network
-      </footer>
     </div>
   );
 }
