@@ -1200,36 +1200,50 @@ export default function DimerGame() {
 
   const usedTeams = guesses.map((g) => g.team);
 
-  // Progressive Clue Banner Text
-  const clueStatus = useMemo(() => {
-    if (gameOver) {
-      return {
-        text: won ? "Network Solved" : "Network Revealed",
-        detail: puzzle?.answer || "Unknown Team",
-      };
+  // Progressive Clues Array
+  const unlockedClues = useMemo(() => {
+    const list = [];
+    if (guesses.length >= 1 || gameOver) {
+      const startersAst =
+        puzzle?.nodes.reduce((acc, n) => acc + (n.gameAssists || 0), 0) || 0;
+      const totalAst = puzzle?.totalAssists || startersAst;
+      const benchAst = Math.max(0, totalAst - startersAst);
+      list.push({
+        label: "Clue 1/3",
+        detail: `Bench Unit: ${benchAst} assists`,
+      });
     }
-    if (guesses.length === 1) {
-      return {
-        text: "Clue 1/3",
-        detail: `Team recorded ${puzzle?.totalAssists ?? 25}+ assists in this game`,
-      };
+    if (guesses.length >= 2 || gameOver) {
+      let oppConf = "Opposing";
+      if (puzzle?.fullContext && puzzle?.answer) {
+        const match = puzzle.fullContext.match(/(.+) at (.+),/);
+        if (match) {
+          const away = match[1].trim();
+          const home = match[2].trim();
+          const oppName = puzzle.answer === away ? home : away;
+          const oppMeta = NBA_TEAMS.find(
+            (t) =>
+              t.full_name.toLowerCase() === oppName.toLowerCase() ||
+              t.abbreviation.toLowerCase() === oppName.toLowerCase() ||
+              t.name.toLowerCase() === oppName.toLowerCase() ||
+              t.city.toLowerCase() === oppName.toLowerCase(),
+          );
+          if (oppMeta)
+            oppConf = oppMeta.conference === "East" ? "Eastern" : "Western";
+        }
+      }
+      list.push({
+        label: "Clue 2/3",
+        detail: `Opponent: ${oppConf} Conference team`,
+      });
     }
-    if (guesses.length === 2) {
-      return {
-        text: "Clue 2/3",
-        detail: `Top connection: ${puzzle?.topComboText ?? "Key passing duo"}`,
-      };
-    }
-    if (guesses.length === 3) {
-      return {
-        text: "Final Clue",
+    if (guesses.length >= 3 || gameOver) {
+      list.push({
+        label: "Final Clue",
         detail: puzzle?.locationClue ?? "Regular season game",
-      };
+      });
     }
-    return {
-      text: "Data Obscured",
-      detail: "Incorrect guesses unlock game context",
-    };
+    return list;
   }, [guesses.length, gameOver, puzzle]);
 
   return (
@@ -1293,10 +1307,16 @@ export default function DimerGame() {
               <div className="flex items-end justify-between mb-4 px-1">
                 <div>
                   <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block mb-1">
-                    {clueStatus.text}
+                    {gameOver
+                      ? won
+                        ? "Network Solved"
+                        : "Network Revealed"
+                      : "Network Status"}
                   </span>
-                  <span className="text-xs font-medium text-neutral-300">
-                    {clueStatus.detail}
+                  <span
+                    className={`text-xs font-medium ${gameOver ? (won ? "text-emerald-400" : "text-neutral-300") : "text-neutral-400"}`}
+                  >
+                    {gameOver ? puzzle?.answer : "Data Obscured"}
                   </span>
                 </div>
                 <div className="text-right">
@@ -1318,6 +1338,27 @@ export default function DimerGame() {
                 />
               </div>
             </div>
+
+            {/* Progressive Clues */}
+            {unlockedClues.length > 0 && (
+              <div className="flex flex-col gap-2 mt-2 bg-neutral-900/40 p-3 rounded-lg border border-neutral-800">
+                {unlockedClues.map((c, i) => (
+                  <div key={c.label} className="flex items-center gap-3">
+                    <div className="h-6 w-6 rounded bg-neutral-800 text-neutral-400 flex items-center justify-center text-xs font-mono font-bold shrink-0">
+                      {i + 1}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest leading-none mb-1">
+                        {c.label}
+                      </span>
+                      <span className="text-sm text-neutral-200 leading-none">
+                        {c.detail}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* 4 Wordle-Style Guess Rows */}
             <div className="flex flex-col gap-2 mt-2">
