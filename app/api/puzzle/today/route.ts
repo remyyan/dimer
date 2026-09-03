@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loadTodayPuzzle } from "../../../../lib/puzzles/puzzle-store";
 import { loadTodayPuzzle, getDayIndex, getBankLength } from "../../../../lib/puzzles/puzzle-store";
 
 export async function GET(request: NextRequest) {

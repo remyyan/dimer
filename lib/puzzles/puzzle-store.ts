@@ -4,12 +4,17 @@ import bankData from "@/data/puzzles/bank.json";
 // Launch anchor date (Day 1)
 const LAUNCH_DATE_STR = "2026-08-25";
 
-function getDayIndex(targetDateStr: string): number {
+export function getDayIndex(targetDateStr: string): number {
   const target = new Date(targetDateStr);
   const launch = new Date(LAUNCH_DATE_STR);
   const diffMs = target.getTime() - launch.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   return Math.max(0, diffDays);
+}
+
+export function getBankLength(): number {
+  const bank = (Array.isArray(bankData) ? bankData : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles) as PuzzlePayload[];
+  return bank?.length || 100;
 }
 
 export function loadTodayPuzzle(dateOverride?: string): PuzzlePayload | null {
