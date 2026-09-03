@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Check,
-  X,
-  BarChart2,
-  Share2,
-  HelpCircle,
-} from "lucide-react";
+import { Check, X, BarChart2, Share2, HelpCircle } from "lucide-react";
 
 // ─── NBA Team Metadata ────────────────────────────────────────────────────────
 
@@ -396,7 +390,7 @@ function StartingFiveDiagram({
     return null;
   }
 
-  const showArrows = gameOver || guessCount >= 2;
+  const showArrows = true;
 
   return (
     <svg viewBox="0 0 400 355" className="w-full h-auto select-none">
@@ -409,7 +403,7 @@ function StartingFiveDiagram({
         // Use a quadratic bezier to curve lines slightly so they don't visually overlap straight into other elements
         const dx = to.x - from.x;
         const dy = to.y - from.y;
-        
+
         // Shorten the end point so the path stops exactly at the base of the arrow.
         const dist = Math.sqrt(dx * dx + dy * dy);
         const targetR = gameOver ? 28 : 24;
@@ -1157,8 +1151,6 @@ export default function DimerGame() {
     }
   }
 
-
-
   function handleShare() {
     if (!puzzle) return;
     const scoreText = won ? `${guesses.length}/${MAX_GUESSES}` : "X/4";
@@ -1211,9 +1203,9 @@ export default function DimerGame() {
   // Progressive Clue Banner Text
   const clueStatus = useMemo(() => {
     if (gameOver) {
-      return { 
-        text: won ? "Network Solved" : "Network Revealed", 
-        detail: puzzle?.answer || "Unknown Team"
+      return {
+        text: won ? "Network Solved" : "Network Revealed",
+        detail: puzzle?.answer || "Unknown Team",
       };
     }
     if (guesses.length === 1) {
@@ -1253,8 +1245,7 @@ export default function DimerGame() {
 
         {/* Center Brand */}
         <div className="text-center select-none flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-white opacity-80" />
-          <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white ml-1">
+          <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white">
             DIMER
           </h1>
         </div>
@@ -1308,9 +1299,14 @@ export default function DimerGame() {
                     {clueStatus.detail}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-neutral-600 tracking-wider">
-                  {puzzle.date}
-                </span>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">
+                    {puzzle.gameContext.replace("Mystery Game • ", "")}
+                  </span>
+                  <span className="text-[10px] font-mono text-neutral-600 tracking-wider block">
+                    {puzzle.date}
+                  </span>
+                </div>
               </div>
 
               <div className="py-6 border-y border-neutral-900 bg-neutral-950/30">
