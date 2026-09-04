@@ -1163,7 +1163,7 @@ export default function DimerGame() {
       })
       .join("\n");
 
-    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.app`;
+    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer-five.vercel.app`;
 
     function onCopySuccess() {
       setCopied(true);
