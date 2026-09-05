@@ -14,6 +14,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dimer.me"),
   title: "DIMER - Daily NBA Passing Network Game",
   description:
     "Guess the mystery NBA team from their starting 5 assist network in 4 tries.",
@@ -27,19 +28,40 @@ export const metadata: Metadata = {
     "assists",
     "daily game",
   ],
-  authors: [{ name: "DIMER" }],
+  alternates: {
+    canonical: "https://dimer.me",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=2" },
+      { url: "/favicon-32x32.png?v=2", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png?v=2", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: "/icon.png?v=2",
+  },
   openGraph: {
     title: "DIMER - Daily NBA Passing Network Game",
     description:
       "Guess the mystery NBA team from their starting 5 assist network in 4 tries.",
+    url: "https://dimer.me",
     type: "website",
     siteName: "DIMER",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: "DIMER - Daily NBA Passing Network Game",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "DIMER - Daily NBA Passing Network Game",
     description:
       "Guess the mystery NBA team from their starting 5 assist network in 4 tries.",
+    images: ["/logo.png"],
   },
 };
 

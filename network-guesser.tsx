@@ -406,7 +406,7 @@ function StartingFiveDiagram({
 
         // Shorten the end point so the path stops exactly at the base of the arrow.
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const targetR = gameOver ? 28 : 24;
+        const targetR = gameOver ? 30 : 24;
         const arrowLength = 12;
         const padding = 2;
         const shorten = targetR + padding + arrowLength;
@@ -461,6 +461,40 @@ function StartingFiveDiagram({
         const primary = getPrimaryText(node);
         const secondary = getSecondaryBadge(node);
         const parts = primary.split(" ");
+        const isMultiLine = parts.length > 1;
+        const line1 = parts[0] || "";
+        const line2 = isMultiLine ? parts.slice(1).join(" ") : "";
+        const longestLineLen = Math.max(
+          line1.length,
+          line2.length,
+          primary.length,
+        );
+
+        // Dynamically scale font size so long names (e.g. Caldwell-Pope, Gilgeous-Alexander) never overflow the node circle
+        let nameFontSize = 10;
+        if (gameOver) {
+          if (longestLineLen >= 16) {
+            nameFontSize = 5.5;
+          } else if (longestLineLen >= 13) {
+            nameFontSize = 6.5;
+          } else if (longestLineLen >= 11) {
+            nameFontSize = 7.5;
+          } else if (longestLineLen >= 9) {
+            nameFontSize = 8.5;
+          } else if (longestLineLen >= 8) {
+            nameFontSize = 9.2;
+          } else {
+            nameFontSize = 10;
+          }
+        } else {
+          nameFontSize = guessCount >= 3 ? 10 : 12;
+        }
+
+        const nodeR = gameOver ? 30 : 24;
+        const maxInnerW = nodeR * 2 - 8; // e.g. 52px when r=30
+        const estLine2Width = line2.length * (nameFontSize * 0.58);
+        const estLine1Width = primary.length * (nameFontSize * 0.58);
+        const estSecWidth = (secondary?.length || 0) * 4.4;
 
         return (
           <g key={node.id} className="transition-all duration-500 ease-out">
@@ -468,33 +502,54 @@ function StartingFiveDiagram({
             <circle
               cx={pos.x}
               cy={pos.y}
-              r={gameOver ? 28 : 24}
+              r={nodeR}
               fill="#000000"
               stroke={gameOver ? "#10B981" : "#333333"}
               strokeWidth={gameOver ? 2 : 1}
             />
 
-            {/* Primary text with automatic wrapping if multiple words */}
+            {/* Primary text with automatic wrapping and dynamic font scaling */}
             <text
               x={pos.x}
-              y={pos.y + (secondary ? -6 : parts.length > 1 ? -4 : 4)}
+              y={
+                pos.y +
+                (secondary ? (isMultiLine ? -5 : -2) : isMultiLine ? -4 : 4)
+              }
               textAnchor="middle"
-              fontSize={gameOver ? 10 : guessCount >= 3 ? 10 : 12}
+              fontSize={nameFontSize}
               fontWeight="500"
               fill={gameOver ? "#ffffff" : "#a3a3a3"}
               className="font-sans"
             >
-              {parts.length > 1 ? (
+              {isMultiLine ? (
                 <>
                   <tspan x={pos.x} dy="0">
-                    {parts[0]}
+                    {line1}
                   </tspan>
-                  <tspan x={pos.x} dy="1.1em">
-                    {parts.slice(1).join(" ")}
+                  <tspan
+                    x={pos.x}
+                    dy="1.15em"
+                    {...(estLine2Width > maxInnerW
+                      ? {
+                          textLength: maxInnerW,
+                          lengthAdjust: "spacingAndGlyphs",
+                        }
+                      : {})}
+                  >
+                    {line2}
                   </tspan>
                 </>
               ) : (
-                <tspan x={pos.x} dy={secondary ? "4" : "0"}>
+                <tspan
+                  x={pos.x}
+                  dy="0"
+                  {...(estLine1Width > maxInnerW
+                    ? {
+                        textLength: maxInnerW,
+                        lengthAdjust: "spacingAndGlyphs",
+                      }
+                    : {})}
+                >
                   {primary}
                 </tspan>
               )}
@@ -504,13 +559,19 @@ function StartingFiveDiagram({
             {secondary && (
               <text
                 x={pos.x}
-                y={pos.y + 13}
+                y={pos.y + (isMultiLine ? 13 : 11)}
                 textAnchor="middle"
-                fontSize="8"
+                fontSize={gameOver ? "7.5" : "8"}
                 fontWeight="400"
                 fill="#ffffff"
                 className="font-mono tracking-tight"
                 opacity={0.7}
+                {...(estSecWidth > maxInnerW
+                  ? {
+                      textLength: maxInnerW,
+                      lengthAdjust: "spacingAndGlyphs",
+                    }
+                  : {})}
               >
                 {secondary}
               </text>
@@ -795,12 +856,12 @@ function HowToPlayModal({ onClose }: { onClose: () => void }) {
             <span>
               <strong className="text-white font-medium">Feedback Tiles</strong>{" "}
               display{" "}
-              <span className="text-emerald-400 font-mono tracking-widest uppercase">
-                green
-              </span>{" "}
-              or{" "}
               <span className="text-blue-400 font-mono tracking-widest uppercase">
                 blue
+              </span>{" "}
+              or{" "}
+              <span className="text-fuchsia-400 font-mono tracking-widest uppercase">
+                purple
               </span>{" "}
               when your guess matches the mystery team's conference or division.
             </span>
@@ -970,11 +1031,11 @@ function StatsModal({
                       <span>{item.team}</span>
                       {item.won ? (
                         <span className="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-1.5 rounded-md py-0.5 border border-emerald-500/20">
-                          ✓ {item.guessesCount}/4
+                          {item.guessesCount}/4
                         </span>
                       ) : (
                         <span className="text-[10px] text-neutral-500 font-mono bg-neutral-800 px-1.5 rounded-md py-0.5 border border-neutral-700/50">
-                          ✗ Fail
+                          Failed
                         </span>
                       )}
                     </div>
@@ -1163,7 +1224,7 @@ export default function DimerGame() {
       })
       .join("\n");
 
-    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer-five.vercel.app`;
+    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.me`;
 
     function onCopySuccess() {
       setCopied(true);
@@ -1258,7 +1319,12 @@ export default function DimerGame() {
         </button>
 
         {/* Center Brand */}
-        <div className="text-center select-none flex items-center gap-1.5">
+        <div className="text-center select-none flex items-center gap-2">
+          <img
+            src="/logo-white.png"
+            alt="Dimer"
+            className="w-5 h-5 object-contain"
+          />
           <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white">
             DIMER
           </h1>
@@ -1377,7 +1443,7 @@ export default function DimerGame() {
                     >
                       {won
                         ? `Solved in ${guesses.length}/${MAX_GUESSES}`
-                        : "Unsolved"}
+                        : "Failed"}
                     </p>
                     {/* Only show the full context text, not repeating the team name since it's in the rows */}
                     <p className="text-sm text-neutral-300 max-w-[280px] leading-relaxed">
