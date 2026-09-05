@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loadTodayPuzzle, getDayIndex, getBankLength } from "../../../../lib/puzzles/puzzle-store";
 import {
   loadTodayPuzzle,
   getDayIndex,
@@ -16,13 +15,10 @@ export async function GET(request: NextRequest) {
   if (!puzzle) {
     return NextResponse.json(
       { error: "Puzzle not available yet — check back later." },
-      { status: 404 }
       { status: 404 },
     );
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-  
   const today = getEasternDateStr();
 
   // -- EMAIL ALERT LOGIC --
@@ -30,7 +26,6 @@ export async function GET(request: NextRequest) {
   const dayIdx = getDayIndex(today);
   const total = getBankLength();
   const remaining = total - (dayIdx % total);
-  
 
   if (remaining === 7 && !dateParam) {
     if (process.env.RESEND_API_KEY) {
@@ -38,15 +33,12 @@ export async function GET(request: NextRequest) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.RESEND_API_KEY}`
           Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: "remyan.yc@gmail.com",
           subject: "DIMER ALERT: Only 7 puzzles left!",
-          html: "<p>You only have 7 days of fresh puzzles left before the bank loops. Time to run <code>npm run gen:bank</code>!</p>"
-        })
           html: "<p>You only have 7 days of fresh puzzles left before the bank loops. Time to run <code>npm run gen:bank</code>!</p>",
         }),
       }).catch(console.error);

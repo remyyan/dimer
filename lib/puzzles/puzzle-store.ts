@@ -13,7 +13,6 @@ export function getDayIndex(targetDateStr: string): number {
 }
 
 export function getBankLength(): number {
-  const bank = (Array.isArray(bankData) ? bankData : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles) as PuzzlePayload[];
   const bank = (
     Array.isArray(bankData)
       ? bankData
@@ -29,11 +28,9 @@ export function getEasternDateStr(d: Date = new Date()): string {
 }
 
 export function loadTodayPuzzle(dateOverride?: string): PuzzlePayload | null {
-  const todayStr = dateOverride || new Date().toISOString().slice(0, 10);
   const todayStr = dateOverride || getEasternDateStr();
 
   try {
-    const bank = (Array.isArray(bankData) ? bankData : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles) as PuzzlePayload[];
     const bank = (
       Array.isArray(bankData)
         ? bankData
