@@ -14,14 +14,31 @@ export function getDayIndex(targetDateStr: string): number {
 
 export function getBankLength(): number {
   const bank = (Array.isArray(bankData) ? bankData : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles) as PuzzlePayload[];
+  const bank = (
+    Array.isArray(bankData)
+      ? bankData
+      : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles
+  ) as PuzzlePayload[];
   return bank?.length || 100;
+}
+
+export function getEasternDateStr(d: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+  }).format(d);
 }
 
 export function loadTodayPuzzle(dateOverride?: string): PuzzlePayload | null {
   const todayStr = dateOverride || new Date().toISOString().slice(0, 10);
+  const todayStr = dateOverride || getEasternDateStr();
 
   try {
     const bank = (Array.isArray(bankData) ? bankData : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles) as PuzzlePayload[];
+    const bank = (
+      Array.isArray(bankData)
+        ? bankData
+        : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles
+    ) as PuzzlePayload[];
     if (bank && bank.length > 0) {
       const dayIdx = getDayIndex(todayStr);
       const puzzle = bank[dayIdx % bank.length];
