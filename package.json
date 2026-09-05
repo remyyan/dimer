@@ -11,6 +11,7 @@
     "gen:bank": "node scripts/generate-puzzle-bank.cjs"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "lucide-react": "^1.31.0",
     "next": "^16.3.0",
     "node-fetch": "^3.3.2",
