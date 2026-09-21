@@ -64,22 +64,47 @@ function chooseDistractors(answerFullName) {
   return [...pool].sort(() => Math.random() - 0.5).slice(0, 3).map((t) => t.full_name);
 }
 
-/**
- * Standardize 5 players into position roles: PG, SG, SF, PF, C
- */
+const POSITIONS_FILE = path.join(process.cwd(), 'data', 'player-positions.json');
+let manualPositions = {};
+try {
+  if (fs.existsSync(POSITIONS_FILE)) {
+    manualPositions = JSON.parse(fs.readFileSync(POSITIONS_FILE, 'utf8'));
+  }
+} catch (e) {
+  console.warn('Could not read data/player-positions.json', e.message);
+}
+
 function assignStartingRoles(players) {
-  const posOrder = { G: 1, PG: 1, SG: 2, F: 3, SF: 3, PF: 4, C: 5 };
-  const sorted = [...players].sort((a, b) => (posOrder[a.position] || 3) - (posOrder[b.position] || 3));
+  // Pos order for sorting. Specific overrides have exact numbers.
+  // Generics sit between them.
+  const posOrder = { PG: 1, SG: 2, SF: 3, PF: 4, C: 5, G: 1.5, F: 3.5 };
+  
+  const sorted = [...players].sort((a, b) => {
+    // If a player has a manual override in the json, use it, else fallback to API position
+    const posA = manualPositions[a.name] || a.position;
+    const posB = manualPositions[b.name] || b.position;
+    return (posOrder[posA] || 3) - (posOrder[posB] || 3);
+  });
 
   const standardRoles = ['PG', 'SG', 'SF', 'PF', 'C'];
-  return sorted.slice(0, 5).map((player, idx) => ({
-    id: `p${idx + 1}`,
-    role: standardRoles[idx] || `P${idx + 1}`,
-    playerName: player.name,
-    shortName: player.shortName || player.name,
-    position: player.position,
-    jersey: player.jersey ? `#${player.jersey}` : `#${idx + 1}`,
-  }));
+  return sorted.slice(0, 5).map((player, idx) => {
+    const assignedRole = standardRoles[idx] || `P${idx + 1}`;
+    // If we have a manual override, maybe we can even use it as the label?
+    // But the graph usually wants strictly PG, SG, SF, PF, C labels.
+    // If the user's manual override is e.g. "SG", we can force the label to be exactly that!
+    // But if we force it, we might end up with two 'PG's if the data is weird.
+    // To be perfectly safe, we'll still map to standardRoles but rely on the sort being accurate.
+    // Actually, if the user provides 100% accurate overrides, the sorted array WILL naturally align 
+    // perfectly with standardRoles (PG, SG, SF, PF, C).
+    return {
+      id: `p${idx + 1}`,
+      role: assignedRole,
+      playerName: player.name,
+      shortName: player.shortName || player.name,
+      position: player.position,
+      jersey: player.jersey ? `#${player.jersey}` : `#${idx + 1}`,
+    };
+  });
 }
 
 /**

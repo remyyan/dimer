@@ -1,95 +1,125 @@
 {
-  "date": "2026-08-27",
-  "answer": "Denver Nuggets",
+  "date": "2026-09-11",
+  "answer": "Philadelphia 76ers",
   "gameContext": "Mystery Game • 2025-26 Season",
-  "fullContext": "Denver Nuggets at Houston Rockets, Nov 2025",
-  "totalAssists": 28,
-  "topComboText": "#27 ➔ #15 generated 5 assists",
-  "locationClue": "Road Game in November",
+  "fullContext": "Golden State Warriors at Philadelphia 76ers, Dec 2025",
+  "totalAssists": 23,
+  "topComboText": "#25 ➔ #0 generated 2 assists",
+  "locationClue": "Home Game in December",
   "nodes": [
     {
       "id": "p1",
       "label": "PG",
-      "playerName": "Jamal Murray",
-      "shortName": "J. Murray",
-      "jersey": "#27",
+      "playerName": "Tyrese Maxey",
+      "shortName": "T. Maxey",
+      "jersey": "#0",
       "position": "G",
-      "gameAssists": 10
+      "gameAssists": 2
     },
     {
       "id": "p2",
       "label": "SG",
-      "playerName": "Peyton Watson",
-      "shortName": "P. Watson",
-      "jersey": "#8",
+      "playerName": "VJ Edgecombe",
+      "shortName": "V. Edgecombe",
+      "jersey": "#77",
       "position": "G",
-      "gameAssists": 3
+      "gameAssists": 5
     },
     {
       "id": "p3",
       "label": "SF",
-      "playerName": "Aaron Gordon",
-      "shortName": "A. Gordon",
-      "jersey": "#32",
-      "position": "F",
-      "gameAssists": 0
+      "playerName": "Quentin Grimes",
+      "shortName": "Q. Grimes",
+      "jersey": "#5",
+      "position": "G",
+      "gameAssists": 6
     },
     {
       "id": "p4",
       "label": "PF",
-      "playerName": "Cameron Johnson",
-      "shortName": "C. Johnson",
-      "jersey": "#23",
+      "playerName": "Dominick Barlow",
+      "shortName": "D. Barlow",
+      "jersey": "#25",
       "position": "F",
-      "gameAssists": 1
+      "gameAssists": 3
     },
     {
       "id": "p5",
       "label": "C",
-      "playerName": "Nikola Jokic",
-      "shortName": "N. Jokic",
-      "jersey": "#15",
+      "playerName": "Joel Embiid",
+      "shortName": "J. Embiid",
+      "jersey": "#21",
       "position": "C",
-      "gameAssists": 9
+      "gameAssists": 3
     }
   ],
   "edges": [
     {
-      "from": "p1",
+      "from": "p2",
+      "to": "p5",
+      "weight": 1
+    },
+    {
+      "from": "p5",
       "to": "p2",
       "weight": 1
     },
     {
-      "from": "p5",
+      "from": "p3",
       "to": "p4",
+      "weight": 1
+    },
+    {
+      "from": "p4",
+      "to": "p5",
+      "weight": 1
+    },
+    {
+      "from": "p4",
+      "to": "p1",
       "weight": 2
+    },
+    {
+      "from": "p3",
+      "to": "p2",
+      "weight": 1
+    },
+    {
+      "from": "p3",
+      "to": "p1",
+      "weight": 1
+    },
+    {
+      "from": "p2",
+      "to": "p1",
+      "weight": 2
+    },
+    {
+      "from": "p3",
+      "to": "p5",
+      "weight": 1
+    },
+    {
+      "from": "p5",
+      "to": "p1",
+      "weight": 1
     },
     {
       "from": "p1",
       "to": "p5",
-      "weight": 5
-    },
-    {
-      "from": "p2",
-      "to": "p5",
       "weight": 1
     },
     {
       "from": "p2",
-      "to": "p1",
+      "to": "p3",
       "weight": 1
-    },
-    {
-      "from": "p5",
-      "to": "p1",
-      "weight": 2
     }
   ],
   "options": [
-    "Phoenix Suns",
-    "New Orleans Pelicans",
-    "Denver Nuggets",
-    "Sacramento Kings"
+    "Philadelphia 76ers",
+    "New York Knicks",
+    "Orlando Magic",
+    "Atlanta Hawks"
   ],
   "source": "live"
 }
