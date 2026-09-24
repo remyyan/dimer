@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUserData(userSnap.data() as UserData);
         } else {
           // Initialize new user, potentially migrating from local storage
-          let existingLocalStats: any = null;
+          let existingLocalStats: unknown = null;
           try {
             if (typeof window !== "undefined") {
               const saved = localStorage.getItem("dimer_user_stats");

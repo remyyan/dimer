@@ -887,7 +887,7 @@ function HowToPlayModal({ onClose }: { onClose: () => void }) {
               <span className="text-fuchsia-400 font-mono tracking-widest uppercase">
                 purple
               </span>{" "}
-              when your guess matches the mystery team's conference or division.
+              when your guess matches the mystery team&apos;s conference or division.
             </span>
           </div>
           <div className="flex items-start gap-3">
@@ -926,7 +926,7 @@ function StatsModal({
   onClose: () => void;
   onShare: () => void;
   copied: boolean;
-  userData?: any;
+  userData?: UserData | null;
   ratingChange?: number | null;
 }) {
   const [tab, setTab] = useState<"stats" | "history">("stats");
@@ -1306,8 +1306,12 @@ function AuthModal({ onClose }: { onClose: () => void }) {
       setLoading(true);
       await signInWithGoogle();
       onClose();
-    } catch (err: any) {
-      setError(err.message || "Failed to sign in with Google");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Failed to sign in with Google");
+      } else {
+        setError(String(err));
+      }
       setLoading(false);
     }
   }
@@ -1323,13 +1327,14 @@ function AuthModal({ onClose }: { onClose: () => void }) {
         await signUpWithEmail(email, password);
       }
       onClose();
-    } catch (err: any) {
-      if (err.code === "auth/invalid-credential") {
+    } catch (err: unknown) {
+      const fbErr = err as { code?: string; message?: string };
+      if (fbErr.code === "auth/invalid-credential") {
         setError("Incorrect email or password.");
-      } else if (err.code === "auth/email-already-in-use") {
+      } else if (fbErr.code === "auth/email-already-in-use") {
         setError("An account with this email already exists.");
       } else {
-        setError(err.message || "Authentication failed");
+        setError(fbErr.message || "Authentication failed");
       }
       setLoading(false);
     }
@@ -1459,6 +1464,7 @@ export default function DimerGame() {
   // Sync stats with userData if available
   useEffect(() => {
     if (userData) {
+      // eslint-disable-next-line
       setStats({
         currentStreak: userData.currentStreak,
         maxStreak: userData.maxStreak,
@@ -1475,6 +1481,7 @@ export default function DimerGame() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("dimer_user_stats");
+      // eslint-disable-next-line
       if (saved) setStats(JSON.parse(saved));
     } catch {}
   }, []);

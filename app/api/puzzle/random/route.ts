@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBankLength, loadPuzzleByIndex } from "../../../../lib/puzzles/puzzle-store";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const total = getBankLength();
   if (total === 0) {
     return NextResponse.json(
