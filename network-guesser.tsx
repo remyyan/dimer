@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, X, BarChart2, Share2, HelpCircle, LogOut, Trophy, Settings } from "lucide-react";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth, UserData } from "@/lib/AuthContext";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -1464,6 +1464,7 @@ export default function DimerGame() {
         maxStreak: userData.maxStreak,
         gamesPlayed: userData.gamesPlayed,
         gamesWon: userData.gamesWon,
+        lastPlayedDate: userData.history.length > 0 ? userData.history[0].date : "",
         guessDistribution: userData.guessDistribution,
         history: userData.history,
       });
@@ -1620,7 +1621,9 @@ export default function DimerGame() {
       return newStats;
     });
     
-    if (statsToSync && userData) {
+    if (!statsToSync) return;
+
+    if (userData) {
       // Calculate Dimer Rating change
       let newRating = userData.dimerRating || 1000;
       let diff = 0;
@@ -1636,10 +1639,10 @@ export default function DimerGame() {
       setRatingChange(diff);
       
       updateUserData({ 
-        ...statsToSync,
+        ...(statsToSync as UserStats),
         dimerRating: newRating 
       } as Partial<UserData>);
-    } else if (statsToSync) {
+    } else {
       // For local play
       let newRating = stats.dimerRating || 1000;
       let diff = 0;
@@ -1652,13 +1655,13 @@ export default function DimerGame() {
       }
       setRatingChange(diff);
       
-      const mergedLocal = { ...statsToSync, dimerRating: newRating };
+      const mergedLocal = { ...(statsToSync as UserStats), dimerRating: newRating };
       setStats(mergedLocal);
       try {
         localStorage.setItem("dimer_user_stats", JSON.stringify(mergedLocal));
       } catch {}
       
-      updateUserData(statsToSync as Partial<UserData>);
+      // We don't call updateUserData if userData is null because we are in offline fallback mode
     }
   }
 

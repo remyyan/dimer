@@ -30,10 +30,10 @@ export interface UserData {
   guessDistribution: Record<number | "fail", number>;
   history: Array<{
     date: string;
+    team: string;
     won: boolean;
-    guesses: number;
-    answer: string;
-    identity?: string;
+    guessesCount: number;
+    fullMatchup?: string;
   }>;
 }
 
@@ -41,6 +41,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signInWithGoogle: async () => {},
+  signInWithEmail: async () => {},
+  signUpWithEmail: async () => {},
   logout: async () => {},
   userData: null,
   updateUserData: async () => {},
