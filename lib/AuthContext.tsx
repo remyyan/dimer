@@ -19,6 +19,8 @@ interface AuthContextType {
 export interface UserData {
   dimerRating: number;
   unlimitedStreak: number;
+  username?: string;
+  country?: string;
   
   // Existing local storage stats
   currentStreak: number;

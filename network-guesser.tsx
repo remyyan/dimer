@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, X, BarChart2, Share2, HelpCircle, LogOut } from "lucide-react";
+import { Check, X, BarChart2, Share2, HelpCircle, LogOut, Trophy, Settings } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 // ─── NBA Team Metadata ────────────────────────────────────────────────────────
 
@@ -1115,6 +1117,180 @@ function StatsModal({
   );
 }
 
+// ─── Leaderboard Modal ────────────────────────────────────────────────────────
+
+type LeaderboardEntry = {
+  id: string;
+  username: string;
+  dimerRating: number;
+};
+
+function LeaderboardModal({ onClose }: { onClose: () => void }) {
+  const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      try {
+        const q = query(collection(db, "users"), orderBy("dimerRating", "desc"), limit(50));
+        const snap = await getDocs(q);
+        const data: LeaderboardEntry[] = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          data.push({
+            id: doc.id,
+            username: d.username || "Anonymous Dimer",
+            dimerRating: d.dimerRating || 1000,
+          });
+        });
+        setLeaders(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLeaderboard();
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="w-full max-w-md rounded-xl border border-neutral-800/60 bg-black p-6 shadow-2xl relative text-neutral-200 animate-in fade-in zoom-in-95 duration-200">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 text-neutral-500 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-neutral-900"
+        >
+          <X size={16} />
+        </button>
+
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Trophy size={20} className="text-amber-400" /> Global Leaderboard
+        </h2>
+
+        {loading ? (
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#EE6C2A]"></div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+            {leaders.map((l, i) => (
+              <div key={l.id} className="flex items-center justify-between bg-neutral-900/50 p-3 rounded-lg border border-neutral-800/50">
+                <div className="flex items-center gap-3">
+                  <span className="text-neutral-500 font-mono text-xs w-5 text-right">{i + 1}</span>
+                  <span className="text-white font-medium text-sm">{l.username}</span>
+                </div>
+                <span className="text-emerald-400 font-mono font-bold">{l.dimerRating}</span>
+              </div>
+            ))}
+            {leaders.length === 0 && (
+              <div className="text-center text-neutral-500 py-10 text-sm">
+                No players on the leaderboard yet.
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Profile / Settings Modal ────────────────────────────────────────────────
+
+function ProfileModal({ onClose }: { onClose: () => void }) {
+  const { user, userData, updateUserData } = useAuth();
+  const [username, setUsername] = useState(userData?.username || "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    const newName = username.trim();
+    if (!newName) return;
+    
+    if (newName === userData?.username) {
+      onClose();
+      return;
+    }
+    
+    if (!window.confirm(`Are you sure you want to change your username to "${newName}"?`)) {
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+
+    try {
+      // Uniqueness check using where clause
+      const { where } = await import("firebase/firestore");
+      const q = query(collection(db, "users"), where("username", "==", newName), limit(1));
+      const snap = await getDocs(q);
+      
+      let isTaken = false;
+      snap.forEach(doc => {
+        if (doc.id !== user?.uid) {
+          isTaken = true;
+        }
+      });
+
+      if (isTaken) {
+        setError("That username is already taken.");
+        setSaving(false);
+        return;
+      }
+
+      await updateUserData({ username: newName });
+      onClose();
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update username.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="w-full max-w-sm rounded-xl border border-neutral-800/60 bg-black p-6 shadow-2xl relative text-neutral-200 animate-in fade-in zoom-in-95 duration-200">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 text-neutral-500 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-neutral-900"
+        >
+          <X size={16} />
+        </button>
+
+        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Settings size={20} className="text-neutral-400" /> Edit Profile
+        </h2>
+
+        <form onSubmit={handleSave} className="flex flex-col gap-4">
+          <div>
+            <label className="block text-xs text-neutral-500 uppercase tracking-widest mb-2">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-neutral-500 text-white"
+              placeholder="e.g. DimerGod99"
+              maxLength={20}
+              required
+            />
+          </div>
+          
+          {error && <p className="text-red-400 text-xs">{error}</p>}
+          
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer mt-4 disabled:opacity-50"
+          >
+            {saving ? "Checking & Saving..." : "Save Profile"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Auth Modal ───────────────────────────────────────────────────────────────
 
 function AuthModal({ onClose }: { onClose: () => void }) {
@@ -1274,6 +1450,8 @@ export default function DimerGame() {
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [copied, setCopied] = useState(false);
   
   const [ratingChange, setRatingChange] = useState<number | null>(null);
@@ -1611,16 +1789,18 @@ export default function DimerGame() {
   return (
     <div className="min-h-screen w-full bg-black text-neutral-200 flex flex-col items-center selection:bg-neutral-800 font-sans">
       {/* ─── Ultra Minimal Header ─── */}
-      <header className="w-full border-b border-neutral-900 h-16 flex items-center justify-between px-6 max-w-lg">
-        <button
-          onClick={() => setShowHelpModal(true)}
-          className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
-        >
-          <HelpCircle size={18} strokeWidth={2} />
-        </button>
+      <header className="w-full border-b border-neutral-900 h-16 flex items-center px-6 max-w-lg relative">
+        <div className="flex-1 flex justify-start">
+          <button
+            onClick={() => setShowHelpModal(true)}
+            className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+          >
+            <HelpCircle size={18} strokeWidth={2} />
+          </button>
+        </div>
 
         {/* Center Brand */}
-        <div className="text-center select-none flex items-center gap-2">
+        <div className="absolute left-1/2 -translate-x-1/2 text-center select-none flex items-center gap-2">
           <img
             src="/logo-white.png"
             alt="Dimer"
@@ -1630,21 +1810,37 @@ export default function DimerGame() {
             DIMER
           </h1>
           {isUnlimited && (
-            <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold ml-1 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">
+            <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold ml-1 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20 absolute -top-2 -right-8 sm:static sm:top-auto sm:right-auto">
               Unlimited
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex-1 flex items-center justify-end gap-2">
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="text-amber-500 hover:text-amber-400 transition-colors cursor-pointer p-1"
+            title="Leaderboard"
+          >
+            <Trophy size={18} strokeWidth={2} />
+          </button>
           {user ? (
-            <button
-              onClick={logout}
-              className="text-emerald-500 hover:text-emerald-400 transition-colors cursor-pointer p-1"
-              title="Sign Out"
-            >
-              <LogOut size={18} strokeWidth={2} />
-            </button>
+            <>
+              <button
+                onClick={() => setShowProfile(true)}
+                className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+                title="Edit Profile"
+              >
+                <Settings size={18} strokeWidth={2} />
+              </button>
+              <button
+                onClick={logout}
+                className="text-emerald-500 hover:text-emerald-400 transition-colors cursor-pointer p-1"
+                title="Sign Out"
+              >
+                <LogOut size={18} strokeWidth={2} />
+              </button>
+            </>
           ) : (
             <button
               onClick={() => setShowAuthModal(true)}
@@ -1656,6 +1852,7 @@ export default function DimerGame() {
           <button
             onClick={() => setShowStatsModal(true)}
             className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+            title="Stats"
           >
             <BarChart2 size={18} strokeWidth={2} />
           </button>
@@ -1668,6 +1865,12 @@ export default function DimerGame() {
       )}
       {showAuthModal && (
         <AuthModal onClose={() => setShowAuthModal(false)} />
+      )}
+      {showLeaderboard && (
+        <LeaderboardModal onClose={() => setShowLeaderboard(false)} />
+      )}
+      {showProfile && (
+        <ProfileModal onClose={() => setShowProfile(false)} />
       )}
       {showStatsModal && (
         <StatsModal
