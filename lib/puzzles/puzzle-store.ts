@@ -50,3 +50,19 @@ export function loadTodayPuzzle(dateOverride?: string): PuzzlePayload | null {
 
   return null;
 }
+
+export function loadPuzzleByIndex(index: number): PuzzlePayload | null {
+  try {
+    const bank = (
+      Array.isArray(bankData)
+        ? bankData
+        : (bankData as unknown as { puzzles: PuzzlePayload[] }).puzzles
+    ) as PuzzlePayload[];
+    if (bank && bank.length > index) {
+      return bank[index];
+    }
+  } catch (err) {
+    console.error("Error loading puzzle from bank:", err);
+  }
+  return null;
+}

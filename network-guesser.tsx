@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, X, BarChart2, Share2, HelpCircle } from "lucide-react";
+import { Check, X, BarChart2, Share2, HelpCircle, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
 
 // ─── NBA Team Metadata ────────────────────────────────────────────────────────
 
@@ -303,6 +304,8 @@ type UserStats = {
   currentStreak: number;
   maxStreak: number;
   lastPlayedDate: string;
+  dimerRating?: number;
+  unlimitedStreak?: number;
   guessDistribution: { [key: number]: number; fail: number };
   history: Array<{
     date: string;
@@ -319,6 +322,8 @@ const DEFAULT_STATS: UserStats = {
   currentStreak: 0,
   maxStreak: 0,
   lastPlayedDate: "",
+  dimerRating: 1000,
+  unlimitedStreak: 0,
   guessDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, fail: 0 },
   history: [],
 };
@@ -393,15 +398,20 @@ function StartingFiveDiagram({
     return null;
   }
 
+  const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+
   const showArrows = true;
 
   return (
-    <svg viewBox="0 0 400 355" className="w-full h-auto select-none">
+    <svg viewBox="0 0 400 355" className="w-full h-auto select-none" onMouseLeave={() => setFocusedNodeId(null)}>
       {/* Passing Edges - Curved Paths for clean routing */}
       {edges.map((edge, i) => {
         const from = positions.get(edge.from);
         const to = positions.get(edge.to);
         if (!from || !to) return null;
+
+        const isDimmed = focusedNodeId && edge.from !== focusedNodeId && edge.to !== focusedNodeId;
+        if (isDimmed) return null;
 
         // Use a quadratic bezier to curve lines slightly so they don't visually overlap straight into other elements
         const dx = to.x - from.x;
@@ -420,7 +430,7 @@ function StartingFiveDiagram({
         const cy = from.y + dy / 2 + dx * 0.15;
 
         const strokeW = 1 + (edge.weight / maxWeight) * 4;
-        const opacity = 0.2 + (edge.weight / maxWeight) * 0.8;
+        const opacity = focusedNodeId ? 0.9 : 0.2 + (edge.weight / maxWeight) * 0.8;
         const markerId = `arrow-${i}`;
 
         return (
@@ -461,6 +471,9 @@ function StartingFiveDiagram({
       {nodes.map((node) => {
         const pos = positions.get(node.id);
         if (!pos) return null;
+        
+        const isDimmedNode = focusedNodeId && focusedNodeId !== node.id;
+        const nodeOpacity = isDimmedNode ? 0.3 : 1;
         const primary = getPrimaryText(node);
         const secondary = getSecondaryBadge(node);
         const parts = primary.split(" ");
@@ -500,7 +513,13 @@ function StartingFiveDiagram({
         const estSecWidth = (secondary?.length || 0) * 4.4;
 
         return (
-          <g key={node.id} className="transition-all duration-500 ease-out">
+          <g 
+            key={node.id} 
+            className="transition-all duration-500 ease-out cursor-pointer"
+            opacity={nodeOpacity}
+            onMouseEnter={() => setFocusedNodeId(node.id)}
+            onClick={() => setFocusedNodeId(prev => prev === node.id ? null : node.id)}
+          >
             {/* Main node circle - pitch black with white border */}
             <circle
               cx={pos.x}
@@ -869,6 +888,15 @@ function HowToPlayModal({ onClose }: { onClose: () => void }) {
               when your guess matches the mystery team's conference or division.
             </span>
           </div>
+          <div className="flex items-start gap-3">
+            <span className="font-mono text-white text-xs mt-0.5 opacity-50">
+              04
+            </span>
+            <span>
+              <strong className="text-white font-medium">Dimer Rating</strong>{" "}
+              (Daily Puzzle only) tracks your skill. <span className="text-emerald-400">Wins:</span> +30 (1st guess), +20 (2nd), +10 (3rd), +5 (4th). <span className="text-red-400">Losses:</span> -15.
+            </span>
+          </div>
         </div>
 
         <button
@@ -889,11 +917,15 @@ function StatsModal({
   onClose,
   onShare,
   copied,
+  userData,
+  ratingChange,
 }: {
   stats: UserStats;
   onClose: () => void;
   onShare: () => void;
   copied: boolean;
+  userData?: any;
+  ratingChange?: number | null;
 }) {
   const [tab, setTab] = useState<"stats" | "history">("stats");
   const winPercent =
@@ -944,6 +976,30 @@ function StatsModal({
 
         {tab === "stats" ? (
           <div>
+            {/* Dimer Rating Card */}
+            {userData && (
+              <div className="mb-6 flex flex-col items-center justify-center border border-neutral-800/60 bg-neutral-900/40 rounded-xl p-4 relative">
+                <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold mb-1">
+                  Dimer Rating
+                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-4xl font-black font-mono text-white tracking-tight">
+                    {userData.dimerRating}
+                  </span>
+                  {ratingChange !== null && ratingChange !== undefined && (
+                    <span 
+                      className={`text-sm font-bold font-mono animate-in slide-in-from-bottom-2 fade-in duration-500 ${
+                        ratingChange >= 0 ? "text-emerald-400" : "text-red-400"
+                      }`}
+                    >
+                      {ratingChange >= 0 ? `+${ratingChange}` : ratingChange}
+                      {ratingChange >= 0 ? "↑" : "↓"}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* 4 Stat numbers */}
             <div className="grid grid-cols-4 gap-4 mb-8 text-center border border-neutral-800/60 rounded-xl p-4 bg-neutral-950">
               <div>
@@ -1059,9 +1115,147 @@ function StatsModal({
   );
 }
 
+// ─── Auth Modal ───────────────────────────────────────────────────────────────
+
+function AuthModal({ onClose }: { onClose: () => void }) {
+  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleGoogle() {
+    try {
+      setLoading(true);
+      await signInWithGoogle();
+      onClose();
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in with Google");
+      setLoading(false);
+    }
+  }
+
+  async function handleEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      if (isLogin) {
+        await signInWithEmail(email, password);
+      } else {
+        await signUpWithEmail(email, password);
+      }
+      onClose();
+    } catch (err: any) {
+      if (err.code === "auth/invalid-credential") {
+        setError("Incorrect email or password.");
+      } else if (err.code === "auth/email-already-in-use") {
+        setError("An account with this email already exists.");
+      } else {
+        setError(err.message || "Authentication failed");
+      }
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      <div className="w-full max-w-sm rounded-xl border border-neutral-800/60 bg-black p-6 shadow-2xl relative text-neutral-200 animate-in fade-in zoom-in-95 duration-200">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 text-neutral-500 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-neutral-900"
+        >
+          <X size={16} />
+        </button>
+
+        <h2 className="text-xl font-bold text-white mb-6">
+          {isLogin ? "Welcome Back" : "Create Account"}
+        </h2>
+
+        <button
+          onClick={handleGoogle}
+          disabled={loading}
+          className="w-full mb-6 flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer disabled:opacity-50"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="currentColor"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="currentColor"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            />
+            <path
+              fill="currentColor"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            />
+          </svg>
+          Continue with Google
+        </button>
+
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-neutral-800"></div>
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-black px-2 text-neutral-500 uppercase tracking-widest">Or</span>
+          </div>
+        </div>
+
+        <form onSubmit={handleEmail} className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#EE6C2A] text-white"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#EE6C2A] text-white"
+            required
+          />
+          
+          {error && <p className="text-red-400 text-xs">{error}</p>}
+          
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg py-3 text-sm font-semibold border border-[#EE6C2A]/50 bg-[#EE6C2A] hover:bg-[#EE6C2A]/80 text-white transition-colors cursor-pointer mt-2 disabled:opacity-50"
+          >
+            {isLogin ? "Sign In" : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="text-center text-xs text-neutral-500 mt-6">
+          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-[#EE6C2A] hover:underline cursor-pointer font-semibold"
+          >
+            {isLogin ? "Sign up" : "Log in"}
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Dimer Game Component ────────────────────────────────────────────────
 
 export default function DimerGame() {
+  const { user, signInWithGoogle, logout, userData, updateUserData } = useAuth();
+
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [stale, setStale] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -1071,10 +1265,32 @@ export default function DimerGame() {
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
 
+  // Unlimited mode states
+  const [isUnlimited, setIsUnlimited] = useState(false);
+  const [unlimitedLocalStreak, setUnlimitedLocalStreak] = useState(0);
+
+  // Fallback local stats if not logged in
   const [stats, setStats] = useState<UserStats>(DEFAULT_STATS);
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  const [ratingChange, setRatingChange] = useState<number | null>(null);
+
+  // Sync stats with userData if available
+  useEffect(() => {
+    if (userData) {
+      setStats({
+        currentStreak: userData.currentStreak,
+        maxStreak: userData.maxStreak,
+        gamesPlayed: userData.gamesPlayed,
+        gamesWon: userData.gamesWon,
+        guessDistribution: userData.guessDistribution,
+        history: userData.history,
+      });
+    }
+  }, [userData]);
 
   // 1. Load User Stats
   useEffect(() => {
@@ -1116,16 +1332,43 @@ export default function DimerGame() {
     loadPuzzle();
   }, []);
 
-  // 3. Save Game State
+  async function loadUnlimitedPuzzle() {
+    setLoading(true);
+    setGameOver(false);
+    setWon(false);
+    setGuesses([]);
+    setIsUnlimited(true);
+    setRatingChange(null);
+    
+    try {
+      const res = await fetch("/api/puzzle/random");
+      const body = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(body?.error ?? "Failed to load unlimited puzzle");
+      setPuzzle(body.puzzle);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function returnToDaily() {
+    setIsUnlimited(false);
+    setLoading(true);
+    // Reload page to reset state simply and reliably, or just reset state and load today's puzzle
+    window.location.reload();
+  }
+
+  // 3. Save Game State (Daily Puzzle Only)
   useEffect(() => {
-    if (!puzzle?.date) return;
+    if (!puzzle?.date || isUnlimited) return;
     try {
       localStorage.setItem(
         `dimer_state_${puzzle.date}`,
         JSON.stringify({ guesses, gameOver, won }),
       );
     } catch {}
-  }, [guesses, gameOver, won, puzzle?.date]);
+  }, [guesses, gameOver, won, puzzle?.date, isUnlimited]);
 
   const answerMeta = useMemo(
     () =>
@@ -1135,6 +1378,30 @@ export default function DimerGame() {
 
   function recordGameStats(isWin: boolean, count: number) {
     if (!puzzle) return;
+    
+    if (isUnlimited) {
+      if (isWin) {
+        if (userData) {
+          updateUserData({
+            unlimitedStreak: (userData.unlimitedStreak || 0) + 1,
+          });
+        } else {
+          setUnlimitedLocalStreak(prev => prev + 1);
+        }
+      } else {
+        if (userData) {
+          updateUserData({
+            unlimitedStreak: 0,
+          });
+        } else {
+          setUnlimitedLocalStreak(0);
+        }
+      }
+      return;
+    }
+
+    let statsToSync: UserStats | null = null;
+    
     setStats((prev) => {
       const alreadyRecorded = prev.history.some((h) => h.date === puzzle.date);
       if (alreadyRecorded) return prev;
@@ -1170,9 +1437,51 @@ export default function DimerGame() {
       try {
         localStorage.setItem("dimer_user_stats", JSON.stringify(newStats));
       } catch {}
-
+      
+      statsToSync = newStats;
       return newStats;
     });
+    
+    if (statsToSync && userData) {
+      // Calculate Dimer Rating change
+      let newRating = userData.dimerRating || 1000;
+      let diff = 0;
+      if (isWin) {
+        // First guess = +30, Second = +20, Third = +10, Fourth = +5
+        diff = count === 1 ? 30 : count === 2 ? 20 : count === 3 ? 10 : 5;
+        newRating += diff;
+      } else {
+        diff = -15;
+        newRating = Math.max(0, newRating - 15);
+      }
+      
+      setRatingChange(diff);
+      
+      updateUserData({ 
+        ...statsToSync,
+        dimerRating: newRating 
+      } as Partial<UserData>);
+    } else if (statsToSync) {
+      // For local play
+      let newRating = stats.dimerRating || 1000;
+      let diff = 0;
+      if (isWin) {
+        diff = count === 1 ? 30 : count === 2 ? 20 : count === 3 ? 10 : 5;
+        newRating += diff;
+      } else {
+        diff = -15;
+        newRating = Math.max(0, newRating - 15);
+      }
+      setRatingChange(diff);
+      
+      const mergedLocal = { ...statsToSync, dimerRating: newRating };
+      setStats(mergedLocal);
+      try {
+        localStorage.setItem("dimer_user_stats", JSON.stringify(mergedLocal));
+      } catch {}
+      
+      updateUserData(statsToSync as Partial<UserData>);
+    }
   }
 
   function handleGuess(teamName: string) {
@@ -1320,26 +1629,57 @@ export default function DimerGame() {
           <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white">
             DIMER
           </h1>
+          {isUnlimited && (
+            <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold ml-1 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">
+              Unlimited
+            </span>
+          )}
         </div>
 
-        <button
-          onClick={() => setShowStatsModal(true)}
-          className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
-        >
-          <BarChart2 size={18} strokeWidth={2} />
-        </button>
+        <div className="flex items-center gap-2">
+          {user ? (
+            <button
+              onClick={logout}
+              className="text-emerald-500 hover:text-emerald-400 transition-colors cursor-pointer p-1"
+              title="Sign Out"
+            >
+              <LogOut size={18} strokeWidth={2} />
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1 text-xs font-semibold uppercase tracking-wider"
+            >
+              Login
+            </button>
+          )}
+          <button
+            onClick={() => setShowStatsModal(true)}
+            className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+          >
+            <BarChart2 size={18} strokeWidth={2} />
+          </button>
+        </div>
       </header>
 
       {/* Modals */}
       {showHelpModal && (
         <HowToPlayModal onClose={() => setShowHelpModal(false)} />
       )}
+      {showAuthModal && (
+        <AuthModal onClose={() => setShowAuthModal(false)} />
+      )}
       {showStatsModal && (
         <StatsModal
           stats={stats}
-          onClose={() => setShowStatsModal(false)}
+          onClose={() => {
+            setShowStatsModal(false);
+            setRatingChange(null);
+          }}
           onShare={handleShare}
           copied={copied}
+          userData={userData}
+          ratingChange={ratingChange}
         />
       )}
 
@@ -1443,7 +1783,23 @@ export default function DimerGame() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={loadUnlimitedPuzzle}
+                    className="w-full flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold border border-indigo-500/50 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 transition-colors cursor-pointer mb-3"
+                  >
+                    {isUnlimited ? "Play Another" : "Play Unlimited Mode"}
+                  </button>
+
+                  {isUnlimited && (
+                    <button
+                      onClick={returnToDaily}
+                      className="w-full flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold border border-neutral-700 hover:bg-neutral-800 text-neutral-400 transition-colors cursor-pointer mb-3"
+                    >
+                      Back to Daily Puzzle
+                    </button>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-3 mb-3">
                     <button
                       onClick={handleShare}
                       className="flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer"
@@ -1457,6 +1813,12 @@ export default function DimerGame() {
                       <BarChart2 size={16} /> Stats
                     </button>
                   </div>
+                  
+                  {isUnlimited && (
+                    <div className="mt-3 text-xs text-neutral-500 font-mono tracking-widest uppercase">
+                      Unlimited Streak: {userData?.unlimitedStreak || stats.unlimitedStreak || unlimitedLocalStreak}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <TeamAutocomplete

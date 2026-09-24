@@ -66,6 +66,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from "@/lib/AuthContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -77,7 +79,9 @@ export default function RootLayout({
       className={`h-full antialiased ${inter.variable} ${mono.variable}`}
     >
       <body className="min-h-full flex flex-col bg-black text-neutral-200 font-sans selection:bg-neutral-800 selection:text-white">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Analytics />
       </body>
     </html>
