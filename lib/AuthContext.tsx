@@ -77,7 +77,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userSnap = await getDoc(userDocRef);
         
         if (userSnap.exists()) {
-          setUserData(userSnap.data() as UserData);
+          const data = userSnap.data() as UserData;
+          
+          // SILENT PATCH: If a user migrated before the backfill script, their Elo is stuck at 1000.
+          // Let's recalculate it if it's exactly 1000 but they have wins.
+          if (data.dimerRating === 1000 && data.history && data.history.length > 0) {
+            let recalc = 1000;
+            const chronologicalHistory = [...data.history].reverse();
+            for (const game of chronologicalHistory) {
+              if (game.won) {
+                const guesses = (game as any).guessesCount || (game as any).guesses;
+                if (guesses === 1) recalc += 30;
+                else if (guesses === 2) recalc += 20;
+                else if (guesses === 3) recalc += 10;
+                else if (guesses === 4) recalc += 5;
+              } else {
+                recalc = Math.max(0, recalc - 15);
+              }
+            }
+            if (recalc > 1000) {
+              data.dimerRating = recalc;
+              await setDoc(userDocRef, { dimerRating: recalc }, { merge: true });
+              setMigrationRatingChange(recalc - 1000);
+            }
+          }
+          
+          setUserData(data);
         } else {
           // Initialize new user, potentially migrating from local storage
           let existingLocalStats: Partial<UserData> | null = null;
@@ -88,7 +113,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           } catch (e) {}
 
-          const localRating = existingLocalStats?.dimerRating || 1000;
+          let localRating = existingLocalStats?.dimerRating;
+          if (localRating === undefined || localRating === null) {
+            localRating = 1000;
+            if (existingLocalStats?.history && Array.isArray(existingLocalStats.history)) {
+              const chronologicalHistory = [...existingLocalStats.history].reverse();
+              for (const game of chronologicalHistory) {
+                if (game.won) {
+                  const guesses = game.guessesCount || game.guesses;
+                  if (guesses === 1) localRating += 30;
+                  else if (guesses === 2) localRating += 20;
+                  else if (guesses === 3) localRating += 10;
+                  else if (guesses === 4) localRating += 5;
+                } else {
+                  localRating = Math.max(0, localRating - 15);
+                }
+              }
+            }
+          }
+          
           const diff = localRating - 1000;
           if (diff !== 0) {
             setMigrationRatingChange(diff);

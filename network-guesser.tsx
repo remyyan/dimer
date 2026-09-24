@@ -1601,49 +1601,38 @@ export default function DimerGame() {
       return;
     }
 
-    let statsToSync: UserStats | null = null;
-    
-    setStats((prev) => {
-      const alreadyRecorded = prev.history.some((h) => h.date === puzzle.date);
-      if (alreadyRecorded) return prev;
+    const alreadyRecorded = stats.history.some((h) => h.date === puzzle.date);
+    if (alreadyRecorded) return;
 
-      const newStreak = isWin ? prev.currentStreak + 1 : 0;
-      const newMax = Math.max(prev.maxStreak, newStreak);
-      const newDist = { ...prev.guessDistribution };
-      if (isWin) {
-        newDist[count] = (newDist[count] || 0) + 1;
-      } else {
-        newDist.fail = (newDist.fail || 0) + 1;
-      }
+    const newStreak = isWin ? stats.currentStreak + 1 : 0;
+    const newMax = Math.max(stats.maxStreak, newStreak);
+    const newDist = { ...stats.guessDistribution };
+    if (isWin) {
+      newDist[count] = (newDist[count] || 0) + 1;
+    } else {
+      newDist.fail = (newDist.fail || 0) + 1;
+    }
 
-      const newStats: UserStats = {
-        gamesPlayed: prev.gamesPlayed + 1,
-        gamesWon: prev.gamesWon + (isWin ? 1 : 0),
-        currentStreak: newStreak,
-        maxStreak: newMax,
-        lastPlayedDate: puzzle.date,
-        guessDistribution: newDist,
-        history: [
-          {
-            date: puzzle.date,
-            team: puzzle.answer,
-            won: isWin,
-            guessesCount: count,
-            fullMatchup: puzzle.fullContext || puzzle.gameContext,
-          },
-          ...prev.history.slice(0, 49),
-        ],
-      };
+    const newStats: UserStats = {
+      gamesPlayed: stats.gamesPlayed + 1,
+      gamesWon: stats.gamesWon + (isWin ? 1 : 0),
+      currentStreak: newStreak,
+      maxStreak: newMax,
+      lastPlayedDate: puzzle.date,
+      guessDistribution: newDist,
+      history: [
+        {
+          date: puzzle.date,
+          team: puzzle.answer,
+          won: isWin,
+          guessesCount: count,
+          fullMatchup: puzzle.fullContext || puzzle.gameContext,
+        },
+        ...stats.history.slice(0, 49),
+      ],
+    };
 
-      try {
-        localStorage.setItem("dimer_user_stats", JSON.stringify(newStats));
-      } catch {}
-      
-      statsToSync = newStats;
-      return newStats;
-    });
-    
-    if (!statsToSync) return;
+    const statsToSync = newStats;
 
     if (userData) {
       // Calculate Dimer Rating change
