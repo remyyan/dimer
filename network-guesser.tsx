@@ -277,8 +277,11 @@ type Puzzle = {
   gameContext: string;
   fullContext?: string;
   totalAssists?: number;
+  benchAssists?: number;
   topComboText?: string;
   locationClue?: string;
+  opponentTeam?: string;
+  topScorerPoints?: number;
   nodes: PuzzleNode[];
   edges: PuzzleEdge[];
   options: string[];
@@ -1265,44 +1268,33 @@ export default function DimerGame() {
   const unlockedClues = useMemo(() => {
     const list = [];
     if (guesses.length >= 1 || gameOver) {
-      const startersAst =
-        puzzle?.nodes.reduce((acc, n) => acc + (n.gameAssists || 0), 0) || 0;
-      const totalAst = puzzle?.totalAssists || startersAst;
-      const benchAst = Math.max(0, totalAst - startersAst);
+      const benchAst = puzzle?.benchAssists ?? (
+        (puzzle?.totalAssists || 0) -
+        (puzzle?.nodes.reduce((acc, n) => acc + (n.gameAssists || 0), 0) || 0)
+      );
       list.push({
         label: "Clue 1/3",
-        detail: `Bench Unit: ${benchAst} assists`,
+        detail: `Bench Unit: ${Math.max(0, benchAst)} assists`,
       });
     }
     if (guesses.length >= 2 || gameOver) {
-      let oppConf = "Opposing";
-      if (puzzle?.fullContext && puzzle?.answer) {
-        const match = puzzle.fullContext.match(/(.+) at (.+),/);
-        if (match) {
-          const away = match[1].trim();
-          const home = match[2].trim();
-          const oppName = puzzle.answer === away ? home : away;
-          const oppMeta = NBA_TEAMS.find(
-            (t) =>
-              t.full_name.toLowerCase() === oppName.toLowerCase() ||
-              t.abbreviation.toLowerCase() === oppName.toLowerCase() ||
-              t.name.toLowerCase() === oppName.toLowerCase() ||
-              t.city.toLowerCase() === oppName.toLowerCase(),
-          );
-          if (oppMeta)
-            oppConf = oppMeta.conference === "East" ? "Eastern" : "Western";
-        }
-      }
       list.push({
         label: "Clue 2/3",
-        detail: `Opponent: ${oppConf} Conference team`,
+        detail: "Player jersey numbers revealed on court",
       });
     }
     if (guesses.length >= 3 || gameOver) {
-      list.push({
-        label: "Final Clue",
-        detail: puzzle?.locationClue ?? "Regular season game",
-      });
+      if (puzzle?.topScorerPoints) {
+        list.push({
+          label: "Final Clue",
+          detail: `Leading scorer dropped ${puzzle.topScorerPoints} points`,
+        });
+      } else {
+        list.push({
+          label: "Final Clue",
+          detail: puzzle?.locationClue ?? "Regular season game",
+        });
+      }
     }
     return list;
   }, [guesses.length, gameOver, puzzle]);

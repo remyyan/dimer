@@ -1,73 +1,86 @@
 {
-  "date": "2026-09-11",
-  "answer": "Philadelphia 76ers",
+  "date": "2026-09-24",
+  "answer": "Minnesota Timberwolves",
   "gameContext": "Mystery Game • 2025-26 Season",
-  "fullContext": "Golden State Warriors at Philadelphia 76ers, Dec 2025",
-  "totalAssists": 23,
-  "topComboText": "#25 ➔ #0 generated 2 assists",
+  "fullContext": "Brooklyn Nets at Minnesota Timberwolves, Dec 2025",
+  "totalAssists": 27,
+  "benchAssists": 4,
+  "topComboText": "#30 ➔ #3 generated 3 assists",
   "locationClue": "Home Game in December",
+  "opponentTeam": "Brooklyn Nets",
+  "topScorerPoints": 28,
   "nodes": [
     {
       "id": "p1",
       "label": "PG",
-      "playerName": "Tyrese Maxey",
-      "shortName": "T. Maxey",
+      "playerName": "Donte DiVincenzo",
+      "shortName": "D. DiVincenzo",
       "jersey": "#0",
-      "position": "G",
-      "gameAssists": 2
-    },
-    {
-      "id": "p2",
-      "label": "SG",
-      "playerName": "VJ Edgecombe",
-      "shortName": "V. Edgecombe",
-      "jersey": "#77",
-      "position": "G",
-      "gameAssists": 5
-    },
-    {
-      "id": "p3",
-      "label": "SF",
-      "playerName": "Quentin Grimes",
-      "shortName": "Q. Grimes",
-      "jersey": "#5",
       "position": "G",
       "gameAssists": 6
     },
     {
+      "id": "p2",
+      "label": "SG",
+      "playerName": "Anthony Edwards",
+      "shortName": "A. Edwards",
+      "jersey": "#5",
+      "position": "G",
+      "gameAssists": 2
+    },
+    {
+      "id": "p3",
+      "label": "SF",
+      "playerName": "Jaden McDaniels",
+      "shortName": "J. McDaniels",
+      "jersey": "#3",
+      "position": "F",
+      "gameAssists": 4
+    },
+    {
       "id": "p4",
       "label": "PF",
-      "playerName": "Dominick Barlow",
-      "shortName": "D. Barlow",
-      "jersey": "#25",
+      "playerName": "Julius Randle",
+      "shortName": "J. Randle",
+      "jersey": "#30",
       "position": "F",
-      "gameAssists": 3
+      "gameAssists": 11
     },
     {
       "id": "p5",
       "label": "C",
-      "playerName": "Joel Embiid",
-      "shortName": "J. Embiid",
-      "jersey": "#21",
+      "playerName": "Rudy Gobert",
+      "shortName": "R. Gobert",
+      "jersey": "#27",
       "position": "C",
-      "gameAssists": 3
+      "gameAssists": 0
     }
   ],
   "edges": [
     {
-      "from": "p2",
-      "to": "p5",
-      "weight": 1
+      "from": "p4",
+      "to": "p1",
+      "weight": 2
     },
     {
-      "from": "p5",
+      "from": "p1",
+      "to": "p3",
+      "weight": 2
+    },
+    {
+      "from": "p4",
+      "to": "p3",
+      "weight": 3
+    },
+    {
+      "from": "p3",
       "to": "p2",
       "weight": 1
     },
     {
-      "from": "p3",
+      "from": "p2",
       "to": "p4",
-      "weight": 1
+      "weight": 2
     },
     {
       "from": "p4",
@@ -75,32 +88,17 @@
       "weight": 1
     },
     {
-      "from": "p4",
-      "to": "p1",
-      "weight": 2
+      "from": "p1",
+      "to": "p4",
+      "weight": 3
     },
     {
-      "from": "p3",
+      "from": "p4",
       "to": "p2",
-      "weight": 1
-    },
-    {
-      "from": "p3",
-      "to": "p1",
-      "weight": 1
-    },
-    {
-      "from": "p2",
-      "to": "p1",
       "weight": 2
     },
     {
       "from": "p3",
-      "to": "p5",
-      "weight": 1
-    },
-    {
-      "from": "p5",
       "to": "p1",
       "weight": 1
     },
@@ -108,18 +106,13 @@
       "from": "p1",
       "to": "p5",
       "weight": 1
-    },
-    {
-      "from": "p2",
-      "to": "p3",
-      "weight": 1
     }
   ],
   "options": [
-    "Philadelphia 76ers",
-    "New York Knicks",
-    "Orlando Magic",
-    "Atlanta Hawks"
+    "Minnesota Timberwolves",
+    "Golden State Warriors",
+    "New Orleans Pelicans",
+    "Houston Rockets"
   ],
   "source": "live"
 }

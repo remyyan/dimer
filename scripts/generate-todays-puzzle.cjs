@@ -143,10 +143,13 @@ function buildStartingFiveGraph(pairs, starters, allAthletes) {
 
   // Count game assists per player
   const playerAssists = new Map();
+  let benchAssists = 0;
   for (const { passer } of pairs) {
     const id = playerNameToId.get(passer);
     if (id) {
       playerAssists.set(id, (playerAssists.get(id) || 0) + 1);
+    } else {
+      benchAssists++;
     }
   }
 
@@ -196,7 +199,7 @@ function buildStartingFiveGraph(pairs, starters, allAthletes) {
     gameAssists: playerAssists.get(n.id) || 0,
   }));
 
-  return { nodes, edges, topComboText, totalAssists: pairs.length };
+  return { nodes, edges, topComboText, totalAssists: pairs.length, benchAssists };
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -280,7 +283,7 @@ async function main() {
     throw new Error('Could not find a game with enough play-by-play data.');
   }
 
-  const { nodes, edges, topComboText, totalAssists } = buildStartingFiveGraph(
+  const { nodes, edges, topComboText, totalAssists, benchAssists } = buildStartingFiveGraph(
     selectedData.pairs,
     selectedData.starters,
     selectedData.allAthletes
@@ -300,6 +303,9 @@ async function main() {
   const isHome = selectedTricode === selectedGame.homeTricode;
   const locationClue = `${isHome ? 'Home' : 'Road'} Game in ${monthName}`;
   const fullMatchup = `${selectedGame.visitorTeam} at ${selectedGame.homeTeam}, ${monthYear}`;
+  const opponentTeam = isHome ? selectedGame.visitorTeam : selectedGame.homeTeam;
+  
+  const topScorerPoints = Math.max(...(selectedData.allAthletes || []).map(a => a.points || 0), 0);
 
   const payload = {
     date: fmtDate(new Date()),
@@ -307,8 +313,11 @@ async function main() {
     gameContext: `Mystery Game • ${selectedSeasonLabel} Season`,
     fullContext: fullMatchup,
     totalAssists,
+    benchAssists,
     topComboText,
     locationClue,
+    opponentTeam,
+    topScorerPoints,
     nodes,
     edges,
     options,

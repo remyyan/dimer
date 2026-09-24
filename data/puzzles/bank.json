@@ -1,451 +1,15 @@
 [
   {
-    "date": "2026-09-11",
-    "answer": "Minnesota Timberwolves",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Minnesota Timberwolves at San Antonio Spurs, May 2026",
-    "totalAssists": 19,
-    "topComboText": "#10 ➔ #1 generated 2 assists",
-    "locationClue": "Road Game in May",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Mike Conley",
-        "shortName": "M. Conley",
-        "jersey": "#10",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Terrence Shannon Jr.",
-        "shortName": "T. Shannon Jr.",
-        "jersey": "#1",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Jaden McDaniels",
-        "shortName": "J. McDaniels",
-        "jersey": "#3",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Julius Randle",
-        "shortName": "J. Randle",
-        "jersey": "#30",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Rudy Gobert",
-        "shortName": "R. Gobert",
-        "jersey": "#27",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Houston Rockets",
-      "Sacramento Kings",
-      "Denver Nuggets",
-      "Minnesota Timberwolves"
-    ],
-    "source": "live",
-    "id": "dimer-1"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Utah Jazz",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Utah Jazz at Indiana Pacers, Feb 2026",
-    "totalAssists": 38,
-    "topComboText": "#8 ➔ #23 generated 7 assists",
-    "locationClue": "Road Game in February",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Isaiah Collier",
-        "shortName": "I. Collier",
-        "jersey": "#8",
-        "position": "G",
-        "gameAssists": 22
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Lauri Markkanen",
-        "shortName": "L. Markkanen",
-        "jersey": "#23",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Cody Williams",
-        "shortName": "C. Williams",
-        "jersey": "#5",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Ace Bailey",
-        "shortName": "A. Bailey",
-        "jersey": "#19",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Kyle Filipowski",
-        "shortName": "K. Filipowski",
-        "jersey": "#22",
-        "position": "F",
-        "gameAssists": 5
-      }
-    ],
-    "edges": [
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 3
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 7
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 2
-      }
-    ],
-    "options": [
-      "Denver Nuggets",
-      "Minnesota Timberwolves",
-      "Utah Jazz",
-      "San Antonio Spurs"
-    ],
-    "source": "live",
-    "id": "dimer-2"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Denver Nuggets",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Utah Jazz at Denver Nuggets, Dec 2025",
-    "totalAssists": 37,
-    "topComboText": "#15 ➔ #27 generated 3 assists",
-    "locationClue": "Home Game in December",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jamal Murray",
-        "shortName": "J. Murray",
-        "jersey": "#27",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Spencer Jones",
-        "shortName": "S. Jones",
-        "jersey": "#21",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Cameron Johnson",
-        "shortName": "C. Johnson",
-        "jersey": "#23",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Peyton Watson",
-        "shortName": "P. Watson",
-        "jersey": "#8",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Nikola Jokic",
-        "shortName": "N. Jokic",
-        "jersey": "#15",
-        "position": "C",
-        "gameAssists": 13
-      }
-    ],
-    "edges": [
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 3
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 3
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 3
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Denver Nuggets",
-      "New Orleans Pelicans",
-      "Dallas Mavericks",
-      "San Antonio Spurs"
-    ],
-    "source": "live",
-    "id": "dimer-3"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Atlanta Hawks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Brooklyn Nets at Atlanta Hawks, Feb 2026",
-    "totalAssists": 28,
-    "topComboText": "#3 ➔ #17 generated 2 assists",
-    "locationClue": "Home Game in February",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "CJ McCollum",
-        "shortName": "C. McCollum",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Nickeil Alexander-Walker",
-        "shortName": "N. Alexander-Walker",
-        "jersey": "#7",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Dyson Daniels",
-        "shortName": "D. Daniels",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 8
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Jalen Johnson",
-        "shortName": "J. Johnson",
-        "jersey": "#1",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Onyeka Okongwu",
-        "shortName": "O. Okongwu",
-        "jersey": "#17",
-        "position": "F",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Detroit Pistons",
-      "Charlotte Hornets",
-      "Atlanta Hawks",
-      "Toronto Raptors"
-    ],
-    "source": "live",
-    "id": "dimer-4"
-  },
-  {
-    "date": "2026-09-11",
+    "date": "2026-09-24",
     "answer": "San Antonio Spurs",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "San Antonio Spurs at Washington Wizards, Dec 2025",
+    "fullContext": "Oklahoma City Thunder at San Antonio Spurs, May 2026",
     "totalAssists": 26,
-    "topComboText": "#5 ➔ #4 generated 3 assists",
-    "locationClue": "Road Game in December",
+    "benchAssists": 6,
+    "topComboText": "#1 ➔ #4 generated 3 assists",
+    "locationClue": "Home Game in May",
+    "opponentTeam": "Oklahoma City Thunder",
+    "topScorerPoints": 26,
     "nodes": [
       {
         "id": "p1",
@@ -463,7 +27,7 @@
         "shortName": "S. Castle",
         "jersey": "#5",
         "position": "G",
-        "gameAssists": 11
+        "gameAssists": 7
       },
       {
         "id": "p3",
@@ -472,28 +36,1153 @@
         "shortName": "D. Vassell",
         "jersey": "#24",
         "position": "G",
-        "gameAssists": 1
+        "gameAssists": 2
       },
       {
         "id": "p4",
         "label": "PF",
-        "playerName": "Harrison Barnes",
-        "shortName": "H. Barnes",
-        "jersey": "#40",
+        "playerName": "Julian Champagnie",
+        "shortName": "J. Champagnie",
+        "jersey": "#30",
         "position": "F",
         "gameAssists": 2
       },
       {
         "id": "p5",
         "label": "C",
-        "playerName": "Luke Kornet",
-        "shortName": "L. Kornet",
-        "jersey": "#7",
+        "playerName": "Victor Wembanyama",
+        "shortName": "V. Wembanyama",
+        "jersey": "#1",
+        "position": "F",
+        "gameAssists": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "p2",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p5",
+        "weight": 2
+      }
+    ],
+    "options": [
+      "Phoenix Suns",
+      "Minnesota Timberwolves",
+      "LA Clippers",
+      "San Antonio Spurs"
+    ],
+    "source": "live",
+    "id": "dimer-1"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Boston Celtics",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Boston Celtics at Charlotte Hornets, Mar 2026",
+    "totalAssists": 23,
+    "benchAssists": 6,
+    "topComboText": "#11 ➔ #88 generated 4 assists",
+    "locationClue": "Road Game in March",
+    "opponentTeam": "Charlotte Hornets",
+    "topScorerPoints": 32,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Payton Pritchard",
+        "shortName": "P. Pritchard",
+        "jersey": "#11",
+        "position": "G",
+        "gameAssists": 6
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Sam Hauser",
+        "shortName": "S. Hauser",
+        "jersey": "#30",
+        "position": "F",
+        "gameAssists": 0
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Jordan Walsh",
+        "shortName": "J. Walsh",
+        "jersey": "#27",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Jayson Tatum",
+        "shortName": "J. Tatum",
+        "jersey": "#0",
+        "position": "F",
+        "gameAssists": 8
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Neemias Queta",
+        "shortName": "N. Queta",
+        "jersey": "#88",
+        "position": "C",
+        "gameAssists": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 4
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "New York Knicks",
+      "Indiana Pacers",
+      "Milwaukee Bucks",
+      "Boston Celtics"
+    ],
+    "source": "live",
+    "id": "dimer-2"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Minnesota Timberwolves",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Minnesota Timberwolves at Charlotte Hornets, Nov 2025",
+    "totalAssists": 31,
+    "benchAssists": 6,
+    "topComboText": "#3 ➔ #27 generated 3 assists",
+    "locationClue": "Road Game in November",
+    "opponentTeam": "Charlotte Hornets",
+    "topScorerPoints": 30,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Mike Conley",
+        "shortName": "M. Conley",
+        "jersey": "#10",
+        "position": "G",
+        "gameAssists": 6
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Donte DiVincenzo",
+        "shortName": "D. DiVincenzo",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 4
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Jaden McDaniels",
+        "shortName": "J. McDaniels",
+        "jersey": "#3",
+        "position": "F",
+        "gameAssists": 6
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Julius Randle",
+        "shortName": "J. Randle",
+        "jersey": "#30",
+        "position": "F",
+        "gameAssists": 4
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Rudy Gobert",
+        "shortName": "R. Gobert",
+        "jersey": "#27",
+        "position": "C",
+        "gameAssists": 5
+      }
+    ],
+    "edges": [
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p5",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Minnesota Timberwolves",
+      "Golden State Warriors",
+      "LA Clippers",
+      "Los Angeles Lakers"
+    ],
+    "source": "live",
+    "id": "dimer-3"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Dallas Mavericks",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Dallas Mavericks at Miami Heat, Nov 2025",
+    "totalAssists": 23,
+    "benchAssists": 13,
+    "topComboText": "#10 ➔ #00 generated 2 assists",
+    "locationClue": "Road Game in November",
+    "opponentTeam": "Miami Heat",
+    "topScorerPoints": 27,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Brandon Williams",
+        "shortName": "B. Williams",
+        "jersey": "#10",
+        "position": "G",
+        "gameAssists": 5
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Max Christie",
+        "shortName": "M. Christie",
+        "jersey": "#00",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "P.J. Washington",
+        "shortName": "P.J. Washington",
+        "jersey": "#25",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Cooper Flagg",
+        "shortName": "C. Flagg",
+        "jersey": "#32",
+        "position": "F",
+        "gameAssists": 3
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Daniel Gafford",
+        "shortName": "D. Gafford",
+        "jersey": "#21",
+        "position": "F",
+        "gameAssists": 0
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Los Angeles Lakers",
+      "New Orleans Pelicans",
+      "San Antonio Spurs",
+      "Dallas Mavericks"
+    ],
+    "source": "live",
+    "id": "dimer-4"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Golden State Warriors",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Sacramento Kings at Golden State Warriors, Apr 2026",
+    "totalAssists": 27,
+    "benchAssists": 6,
+    "topComboText": "#2 ➔ #8 generated 2 assists",
+    "locationClue": "Home Game in April",
+    "opponentTeam": "Sacramento Kings",
+    "topScorerPoints": 21,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "De'Anthony Melton",
+        "shortName": "D. Melton",
+        "jersey": "#8",
+        "position": "G",
+        "gameAssists": 5
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Pat Spencer",
+        "shortName": "P. Spencer",
+        "jersey": "#61",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Brandin Podziemski",
+        "shortName": "B. Podziemski",
+        "jersey": "#2",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Malevy Leons",
+        "shortName": "M. Leons",
+        "jersey": "#33",
+        "position": "F",
+        "gameAssists": 3
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Draymond Green",
+        "shortName": "D. Green",
+        "jersey": "#23",
+        "position": "F",
+        "gameAssists": 7
+      }
+    ],
+    "edges": [
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p2",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Minnesota Timberwolves",
+      "Portland Trail Blazers",
+      "Oklahoma City Thunder",
+      "Golden State Warriors"
+    ],
+    "source": "live",
+    "id": "dimer-5"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Detroit Pistons",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Dallas Mavericks at Detroit Pistons, Nov 2025",
+    "totalAssists": 29,
+    "benchAssists": 6,
+    "topComboText": "#2 ➔ #0 generated 7 assists",
+    "locationClue": "Home Game in November",
+    "opponentTeam": "Dallas Mavericks",
+    "topScorerPoints": 33,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Cade Cunningham",
+        "shortName": "C. Cunningham",
+        "jersey": "#2",
+        "position": "G",
+        "gameAssists": 18
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Duncan Robinson",
+        "shortName": "D. Robinson",
+        "jersey": "#55",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Ausar Thompson",
+        "shortName": "A. Thompson",
+        "jersey": "#9",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Tobias Harris",
+        "shortName": "T. Harris",
+        "jersey": "#12",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Jalen Duren",
+        "shortName": "J. Duren",
+        "jersey": "#0",
+        "position": "C",
+        "gameAssists": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 7
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 4
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Detroit Pistons",
+      "Milwaukee Bucks",
+      "Miami Heat",
+      "Philadelphia 76ers"
+    ],
+    "source": "live",
+    "id": "dimer-6"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Philadelphia 76ers",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Orlando Magic at Philadelphia 76ers, Apr 2026",
+    "totalAssists": 17,
+    "benchAssists": 4,
+    "topComboText": "#0 ➔ #9 generated 4 assists",
+    "locationClue": "Home Game in April",
+    "opponentTeam": "Orlando Magic",
+    "topScorerPoints": 31,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Tyrese Maxey",
+        "shortName": "T. Maxey",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 6
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "VJ Edgecombe",
+        "shortName": "V. Edgecombe",
+        "jersey": "#77",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Kelly Oubre Jr.",
+        "shortName": "K. Oubre Jr.",
+        "jersey": "#9",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Paul George",
+        "shortName": "P. George",
+        "jersey": "#8",
+        "position": "F",
+        "gameAssists": 5
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Adem Bona",
+        "shortName": "A. Bona",
+        "jersey": "#30",
         "position": "C",
         "gameAssists": 0
       }
     ],
     "edges": [
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 4
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Boston Celtics",
+      "Philadelphia 76ers",
+      "Atlanta Hawks",
+      "Chicago Bulls"
+    ],
+    "source": "live",
+    "id": "dimer-7"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "San Antonio Spurs",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "New York Knicks at San Antonio Spurs, Jun 2026",
+    "totalAssists": 22,
+    "benchAssists": 5,
+    "topComboText": "#4 ➔ #1 generated 3 assists",
+    "locationClue": "Home Game in June",
+    "opponentTeam": "New York Knicks",
+    "topScorerPoints": 29,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "De'Aaron Fox",
+        "shortName": "D. Fox",
+        "jersey": "#4",
+        "position": "G",
+        "gameAssists": 5
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Stephon Castle",
+        "shortName": "S. Castle",
+        "jersey": "#5",
+        "position": "G",
+        "gameAssists": 4
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Devin Vassell",
+        "shortName": "D. Vassell",
+        "jersey": "#24",
+        "position": "G",
+        "gameAssists": 5
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Julian Champagnie",
+        "shortName": "J. Champagnie",
+        "jersey": "#30",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Victor Wembanyama",
+        "shortName": "V. Wembanyama",
+        "jersey": "#1",
+        "position": "F",
+        "gameAssists": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 3
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Los Angeles Lakers",
+      "LA Clippers",
+      "Minnesota Timberwolves",
+      "San Antonio Spurs"
+    ],
+    "source": "live",
+    "id": "dimer-8"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Charlotte Hornets",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Toronto Raptors at Charlotte Hornets, Jan 2026",
+    "totalAssists": 19,
+    "benchAssists": 0,
+    "topComboText": "#1 ➔ #4 generated 2 assists",
+    "locationClue": "Home Game in January",
+    "opponentTeam": "Toronto Raptors",
+    "topScorerPoints": 22,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "LaMelo Ball",
+        "shortName": "L. Ball",
+        "jersey": "#1",
+        "position": "G",
+        "gameAssists": 7
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Sion James",
+        "shortName": "S. James",
+        "jersey": "#4",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Kon Knueppel",
+        "shortName": "K. Knueppel",
+        "jersey": "#7",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Miles Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#0",
+        "position": "F",
+        "gameAssists": 5
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Moussa Diabate",
+        "shortName": "M. Diabate",
+        "jersey": "#14",
+        "position": "F",
+        "gameAssists": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Chicago Bulls",
+      "Miami Heat",
+      "Washington Wizards",
+      "Charlotte Hornets"
+    ],
+    "source": "live",
+    "id": "dimer-9"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Charlotte Hornets",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Atlanta Hawks at Charlotte Hornets, Dec 2025",
+    "totalAssists": 39,
+    "benchAssists": 8,
+    "topComboText": "#1 ➔ #7 generated 6 assists",
+    "locationClue": "Home Game in December",
+    "opponentTeam": "Atlanta Hawks",
+    "topScorerPoints": 28,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "LaMelo Ball",
+        "shortName": "L. Ball",
+        "jersey": "#1",
+        "position": "G",
+        "gameAssists": 13
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Brandon Miller",
+        "shortName": "B. Miller",
+        "jersey": "#24",
+        "position": "F",
+        "gameAssists": 7
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Kon Knueppel",
+        "shortName": "K. Knueppel",
+        "jersey": "#7",
+        "position": "G",
+        "gameAssists": 7
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Miles Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#0",
+        "position": "F",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Ryan Kalkbrenner",
+        "shortName": "R. Kalkbrenner",
+        "jersey": "#11",
+        "position": "C",
+        "gameAssists": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 6
+      },
+      {
+        "from": "p3",
+        "to": "p5",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Charlotte Hornets",
+      "Washington Wizards",
+      "Toronto Raptors",
+      "Boston Celtics"
+    ],
+    "source": "live",
+    "id": "dimer-10"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Philadelphia 76ers",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Philadelphia 76ers at Indiana Pacers, Feb 2026",
+    "totalAssists": 29,
+    "benchAssists": 9,
+    "topComboText": "#0 ➔ #21 generated 4 assists",
+    "locationClue": "Road Game in February",
+    "opponentTeam": "Indiana Pacers",
+    "topScorerPoints": 32,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Tyrese Maxey",
+        "shortName": "T. Maxey",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 8
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "VJ Edgecombe",
+        "shortName": "V. Edgecombe",
+        "jersey": "#77",
+        "position": "G",
+        "gameAssists": 4
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Kelly Oubre Jr.",
+        "shortName": "K. Oubre Jr.",
+        "jersey": "#9",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Dominick Barlow",
+        "shortName": "D. Barlow",
+        "jersey": "#25",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Joel Embiid",
+        "shortName": "J. Embiid",
+        "jersey": "#21",
+        "position": "C",
+        "gameAssists": 5
+      }
+    ],
+    "edges": [
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 4
+      },
       {
         "from": "p3",
         "to": "p5",
@@ -502,26 +1191,6 @@
       {
         "from": "p2",
         "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 3
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 3
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
         "weight": 1
       },
       {
@@ -536,7 +1205,686 @@
       },
       {
         "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
         "to": "p3",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Philadelphia 76ers",
+      "Miami Heat",
+      "Atlanta Hawks",
+      "Boston Celtics"
+    ],
+    "source": "live",
+    "id": "dimer-11"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "New York Knicks",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Utah Jazz at New York Knicks, Dec 2025",
+    "totalAssists": 30,
+    "benchAssists": 12,
+    "topComboText": "#3 ➔ #11 generated 2 assists",
+    "locationClue": "Home Game in December",
+    "opponentTeam": "Utah Jazz",
+    "topScorerPoints": 33,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Jalen Brunson",
+        "shortName": "J. Brunson",
+        "jersey": "#11",
+        "position": "G",
+        "gameAssists": 4
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Mikal Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#25",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Josh Hart",
+        "shortName": "J. Hart",
+        "jersey": "#3",
+        "position": "G",
+        "gameAssists": 6
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "OG Anunoby",
+        "shortName": "O. Anunoby",
+        "jersey": "#8",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Karl-Anthony Towns",
+        "shortName": "K. Towns",
+        "jersey": "#32",
+        "position": "C",
+        "gameAssists": 4
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Washington Wizards",
+      "Miami Heat",
+      "New York Knicks",
+      "Milwaukee Bucks"
+    ],
+    "source": "live",
+    "id": "dimer-12"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Sacramento Kings",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Sacramento Kings at Cleveland Cavaliers, Jan 2026",
+    "totalAssists": 26,
+    "benchAssists": 18,
+    "topComboText": "#18 ➔ #8 generated 2 assists",
+    "locationClue": "Road Game in January",
+    "opponentTeam": "Cleveland Cavaliers",
+    "topScorerPoints": 24,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Russell Westbrook",
+        "shortName": "R. Westbrook",
+        "jersey": "#18",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "DeMar DeRozan",
+        "shortName": "D. DeRozan",
+        "jersey": "#10",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Zach LaVine",
+        "shortName": "Z. LaVine",
+        "jersey": "#8",
+        "position": "G",
+        "gameAssists": 0
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Precious Achiuwa",
+        "shortName": "P. Achiuwa",
+        "jersey": "#9",
+        "position": "PF",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Maxime Raynaud",
+        "shortName": "M. Raynaud",
+        "jersey": "#42",
+        "position": "C",
+        "gameAssists": 0
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p1",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Utah Jazz",
+      "Minnesota Timberwolves",
+      "Denver Nuggets",
+      "Sacramento Kings"
+    ],
+    "source": "live",
+    "id": "dimer-13"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Golden State Warriors",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Golden State Warriors at New Orleans Pelicans, Nov 2025",
+    "totalAssists": 34,
+    "benchAssists": 14,
+    "topComboText": "#10 ➔ #4 generated 5 assists",
+    "locationClue": "Road Game in November",
+    "opponentTeam": "New Orleans Pelicans",
+    "topScorerPoints": 32,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Stephen Curry",
+        "shortName": "S. Curry",
+        "jersey": "#30",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Will Richard",
+        "shortName": "W. Richard",
+        "jersey": "#3",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Moses Moody",
+        "shortName": "M. Moody",
+        "jersey": "#4",
+        "position": "G",
+        "gameAssists": 0
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Jimmy Butler III",
+        "shortName": "J. Butler III",
+        "jersey": "#10",
+        "position": "F",
+        "gameAssists": 10
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Draymond Green",
+        "shortName": "D. Green",
+        "jersey": "#23",
+        "position": "F",
+        "gameAssists": 6
+      }
+    ],
+    "edges": [
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 5
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "New Orleans Pelicans",
+      "Portland Trail Blazers",
+      "Golden State Warriors",
+      "Minnesota Timberwolves"
+    ],
+    "source": "live",
+    "id": "dimer-14"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Washington Wizards",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Washington Wizards at Miami Heat, Apr 2026",
+    "totalAssists": 28,
+    "benchAssists": 14,
+    "topComboText": "#7 ➔ #27 generated 3 assists",
+    "locationClue": "Road Game in April",
+    "opponentTeam": "Miami Heat",
+    "topScorerPoints": 31,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Bub Carrington",
+        "shortName": "B. Carrington",
+        "jersey": "#7",
+        "position": "G",
+        "gameAssists": 5
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Will Riley",
+        "shortName": "W. Riley",
+        "jersey": "#27",
+        "position": "G",
+        "gameAssists": 0
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Tre Johnson",
+        "shortName": "T. Johnson",
+        "jersey": "#12",
+        "position": "G",
+        "gameAssists": 4
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Bilal Coulibaly",
+        "shortName": "B. Coulibaly",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Anthony Gill",
+        "shortName": "A. Gill",
+        "jersey": "#16",
+        "position": "F",
+        "gameAssists": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      }
+    ],
+    "options": [
+      "Charlotte Hornets",
+      "Washington Wizards",
+      "Milwaukee Bucks",
+      "Orlando Magic"
+    ],
+    "source": "live",
+    "id": "dimer-15"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Brooklyn Nets",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Washington Wizards at Brooklyn Nets, Apr 2026",
+    "totalAssists": 29,
+    "benchAssists": 13,
+    "topComboText": "#88 ➔ #22 generated 3 assists",
+    "locationClue": "Home Game in April",
+    "opponentTeam": "Washington Wizards",
+    "topScorerPoints": 23,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Drake Powell",
+        "shortName": "D. Powell",
+        "jersey": "#4",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Nolan Traore",
+        "shortName": "N. Traore",
+        "jersey": "#88",
+        "position": "G",
+        "gameAssists": 7
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Jalen Wilson",
+        "shortName": "J. Wilson",
+        "jersey": "#22",
+        "position": "F",
+        "gameAssists": 4
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "E.J. Liddell",
+        "shortName": "E.J. Liddell",
+        "jersey": "#9",
+        "position": "F",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Chaney Johnson",
+        "shortName": "C. Johnson",
+        "jersey": "#31",
+        "position": "F",
+        "gameAssists": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 2
+      }
+    ],
+    "options": [
+      "Boston Celtics",
+      "Philadelphia 76ers",
+      "Washington Wizards",
+      "Brooklyn Nets"
+    ],
+    "source": "live",
+    "id": "dimer-16"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Milwaukee Bucks",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Memphis Grizzlies at Milwaukee Bucks, Apr 2026",
+    "totalAssists": 30,
+    "benchAssists": 14,
+    "topComboText": "#18 ➔ #21 generated 2 assists",
+    "locationClue": "Home Game in April",
+    "opponentTeam": "Memphis Grizzlies",
+    "topScorerPoints": 24,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "AJ Green",
+        "shortName": "A. Green",
+        "jersey": "#20",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Ryan Rollins",
+        "shortName": "R. Rollins",
+        "jersey": "#13",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Ousmane Dieng",
+        "shortName": "O. Dieng",
+        "jersey": "#21",
+        "position": "F",
+        "gameAssists": 6
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Kyle Kuzma",
+        "shortName": "K. Kuzma",
+        "jersey": "#18",
+        "position": "F",
+        "gameAssists": 6
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Myles Turner",
+        "shortName": "M. Turner",
+        "jersey": "#3",
+        "position": "C",
+        "gameAssists": 0
+      }
+    ],
+    "edges": [
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p5",
         "weight": 1
       },
       {
@@ -546,22 +1894,397 @@
       }
     ],
     "options": [
-      "Dallas Mavericks",
-      "San Antonio Spurs",
-      "Denver Nuggets",
-      "Portland Trail Blazers"
+      "Philadelphia 76ers",
+      "Milwaukee Bucks",
+      "Detroit Pistons",
+      "Chicago Bulls"
     ],
     "source": "live",
-    "id": "dimer-5"
+    "id": "dimer-17"
   },
   {
-    "date": "2026-09-11",
+    "date": "2026-09-24",
+    "answer": "New York Knicks",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Indiana Pacers at New York Knicks, Feb 2026",
+    "totalAssists": 33,
+    "benchAssists": 7,
+    "topComboText": "#3 ➔ #25 generated 6 assists",
+    "locationClue": "Home Game in February",
+    "opponentTeam": "Indiana Pacers",
+    "topScorerPoints": 40,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Jalen Brunson",
+        "shortName": "J. Brunson",
+        "jersey": "#11",
+        "position": "G",
+        "gameAssists": 8
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Landry Shamet",
+        "shortName": "L. Shamet",
+        "jersey": "#44",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Mikal Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#25",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Josh Hart",
+        "shortName": "J. Hart",
+        "jersey": "#3",
+        "position": "G",
+        "gameAssists": 11
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Karl-Anthony Towns",
+        "shortName": "K. Towns",
+        "jersey": "#32",
+        "position": "C",
+        "gameAssists": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 6
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 3
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "New York Knicks",
+      "Indiana Pacers",
+      "Atlanta Hawks",
+      "Philadelphia 76ers"
+    ],
+    "source": "live",
+    "id": "dimer-18"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Detroit Pistons",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Detroit Pistons at Miami Heat, Nov 2025",
+    "totalAssists": 29,
+    "benchAssists": 10,
+    "topComboText": "#2 ➔ #12 generated 3 assists",
+    "locationClue": "Road Game in November",
+    "opponentTeam": "Miami Heat",
+    "topScorerPoints": 29,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Cade Cunningham",
+        "shortName": "C. Cunningham",
+        "jersey": "#2",
+        "position": "G",
+        "gameAssists": 8
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Duncan Robinson",
+        "shortName": "D. Robinson",
+        "jersey": "#55",
+        "position": "F",
+        "gameAssists": 5
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Ausar Thompson",
+        "shortName": "A. Thompson",
+        "jersey": "#9",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Tobias Harris",
+        "shortName": "T. Harris",
+        "jersey": "#12",
+        "position": "F",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Isaiah Stewart",
+        "shortName": "I. Stewart",
+        "jersey": "#28",
+        "position": "F",
+        "gameAssists": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Detroit Pistons",
+      "Washington Wizards",
+      "Chicago Bulls",
+      "Miami Heat"
+    ],
+    "source": "live",
+    "id": "dimer-19"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Detroit Pistons",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Detroit Pistons at Philadelphia 76ers, Apr 2026",
+    "totalAssists": 33,
+    "benchAssists": 10,
+    "topComboText": "#24 ➔ #9 generated 3 assists",
+    "locationClue": "Road Game in April",
+    "opponentTeam": "Philadelphia 76ers",
+    "topScorerPoints": 19,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Daniss Jenkins",
+        "shortName": "D. Jenkins",
+        "jersey": "#24",
+        "position": "G",
+        "gameAssists": 14
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Duncan Robinson",
+        "shortName": "D. Robinson",
+        "jersey": "#55",
+        "position": "F",
+        "gameAssists": 2
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Ausar Thompson",
+        "shortName": "A. Thompson",
+        "jersey": "#9",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Tobias Harris",
+        "shortName": "T. Harris",
+        "jersey": "#12",
+        "position": "F",
+        "gameAssists": 2
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Jalen Duren",
+        "shortName": "J. Duren",
+        "jersey": "#0",
+        "position": "C",
+        "gameAssists": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 3
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 3
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Atlanta Hawks",
+      "Charlotte Hornets",
+      "Milwaukee Bucks",
+      "Detroit Pistons"
+    ],
+    "source": "live",
+    "id": "dimer-20"
+  },
+  {
+    "date": "2026-09-24",
     "answer": "Sacramento Kings",
     "gameContext": "Mystery Game • 2025-26 Season",
     "fullContext": "Charlotte Hornets at Sacramento Kings, Mar 2026",
     "totalAssists": 24,
+    "benchAssists": 2,
     "topComboText": "#3 ➔ #5 generated 3 assists",
     "locationClue": "Home Game in March",
+    "opponentTeam": "Charlotte Hornets",
+    "topScorerPoints": 39,
     "nodes": [
       {
         "id": "p1",
@@ -659,29 +2382,200 @@
     "options": [
       "Sacramento Kings",
       "Dallas Mavericks",
-      "Denver Nuggets",
-      "Portland Trail Blazers"
+      "Oklahoma City Thunder",
+      "San Antonio Spurs"
     ],
     "source": "live",
-    "id": "dimer-6"
+    "id": "dimer-21"
   },
   {
-    "date": "2026-09-11",
-    "answer": "Minnesota Timberwolves",
+    "date": "2026-09-24",
+    "answer": "Washington Wizards",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "San Antonio Spurs at Minnesota Timberwolves, May 2026",
+    "fullContext": "Washington Wizards at Boston Celtics, Nov 2025",
     "totalAssists": 25,
-    "topComboText": "#3 ➔ #5 generated 2 assists",
-    "locationClue": "Home Game in May",
+    "benchAssists": 13,
+    "topComboText": "#18 ➔ #20 generated 3 assists",
+    "locationClue": "Road Game in November",
+    "opponentTeam": "Boston Celtics",
+    "topScorerPoints": 31,
     "nodes": [
       {
         "id": "p1",
         "label": "PG",
-        "playerName": "Ayo Dosunmu",
-        "shortName": "A. Dosunmu",
-        "jersey": "#13",
+        "playerName": "CJ McCollum",
+        "shortName": "C. McCollum",
+        "jersey": "#3",
         "position": "G",
-        "gameAssists": 9
+        "gameAssists": 4
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Bilal Coulibaly",
+        "shortName": "B. Coulibaly",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Justin Champagnie",
+        "shortName": "J. Champagnie",
+        "jersey": "#9",
+        "position": "F",
+        "gameAssists": 0
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Kyshawn George",
+        "shortName": "K. George",
+        "jersey": "#18",
+        "position": "F",
+        "gameAssists": 3
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Alex Sarr",
+        "shortName": "A. Sarr",
+        "jersey": "#20",
+        "position": "C",
+        "gameAssists": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 3
+      },
+      {
+        "from": "p2",
+        "to": "p5",
+        "weight": 2
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Washington Wizards",
+      "Miami Heat",
+      "Charlotte Hornets",
+      "Chicago Bulls"
+    ],
+    "source": "live",
+    "id": "dimer-22"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "New York Knicks",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "New York Knicks at Detroit Pistons, Jan 2026",
+    "totalAssists": 15,
+    "benchAssists": 11,
+    "topComboText": "Multiple dynamic passing pairs",
+    "locationClue": "Road Game in January",
+    "opponentTeam": "Detroit Pistons",
+    "topScorerPoints": 25,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Jalen Brunson",
+        "shortName": "J. Brunson",
+        "jersey": "#11",
+        "position": "G",
+        "gameAssists": 0
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Mikal Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#25",
+        "position": "G",
+        "gameAssists": 1
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "OG Anunoby",
+        "shortName": "O. Anunoby",
+        "jersey": "#8",
+        "position": "F",
+        "gameAssists": 1
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Karl-Anthony Towns",
+        "shortName": "K. Towns",
+        "jersey": "#32",
+        "position": "C",
+        "gameAssists": 1
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Mitchell Robinson",
+        "shortName": "M. Robinson",
+        "jersey": "#23",
+        "position": "C",
+        "gameAssists": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "New York Knicks",
+      "Charlotte Hornets",
+      "Cleveland Cavaliers",
+      "Chicago Bulls"
+    ],
+    "source": "live",
+    "id": "dimer-23"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Minnesota Timberwolves",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Portland Trail Blazers at Minnesota Timberwolves, Feb 2026",
+    "totalAssists": 26,
+    "benchAssists": 10,
+    "topComboText": "#0 ➔ #3 generated 2 assists",
+    "locationClue": "Home Game in February",
+    "opponentTeam": "Portland Trail Blazers",
+    "topScorerPoints": 41,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Donte DiVincenzo",
+        "shortName": "D. DiVincenzo",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 5
       },
       {
         "id": "p2",
@@ -699,7 +2593,7 @@
         "shortName": "J. McDaniels",
         "jersey": "#3",
         "position": "F",
-        "gameAssists": 3
+        "gameAssists": 6
       },
       {
         "id": "p4",
@@ -708,7 +2602,7 @@
         "shortName": "J. Randle",
         "jersey": "#30",
         "position": "F",
-        "gameAssists": 1
+        "gameAssists": 2
       },
       {
         "id": "p5",
@@ -717,14 +2611,14 @@
         "shortName": "R. Gobert",
         "jersey": "#27",
         "position": "C",
-        "gameAssists": 0
+        "gameAssists": 1
       }
     ],
     "edges": [
       {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
+        "from": "p1",
+        "to": "p3",
+        "weight": 2
       },
       {
         "from": "p1",
@@ -732,489 +2626,78 @@
         "weight": 1
       },
       {
-        "from": "p3",
-        "to": "p2",
+        "from": "p1",
+        "to": "p4",
         "weight": 2
       },
       {
         "from": "p4",
-        "to": "p3",
+        "to": "p5",
         "weight": 1
       },
       {
-        "from": "p2",
-        "to": "p1",
+        "from": "p3",
+        "to": "p2",
         "weight": 1
       },
       {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
+        "from": "p3",
+        "to": "p4",
+        "weight": 2
       },
       {
-        "from": "p2",
-        "to": "p3",
+        "from": "p3",
+        "to": "p5",
         "weight": 1
       }
     ],
     "options": [
-      "Minnesota Timberwolves",
       "Denver Nuggets",
-      "Los Angeles Lakers",
-      "Dallas Mavericks"
-    ],
-    "source": "live",
-    "id": "dimer-7"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Boston Celtics",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Philadelphia 76ers at Boston Celtics, Apr 2026",
-    "totalAssists": 25,
-    "topComboText": "#0 ➔ #7 generated 2 assists",
-    "locationClue": "Home Game in April",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Derrick White",
-        "shortName": "D. White",
-        "jersey": "#9",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Sam Hauser",
-        "shortName": "S. Hauser",
-        "jersey": "#30",
-        "position": "F",
-        "gameAssists": 0
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Jaylen Brown",
-        "shortName": "J. Brown",
-        "jersey": "#7",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Jayson Tatum",
-        "shortName": "J. Tatum",
-        "jersey": "#0",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Neemias Queta",
-        "shortName": "N. Queta",
-        "jersey": "#88",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 2
-      }
-    ],
-    "options": [
-      "Cleveland Cavaliers",
-      "Chicago Bulls",
-      "Charlotte Hornets",
-      "Boston Celtics"
-    ],
-    "source": "live",
-    "id": "dimer-8"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Miami Heat",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Miami Heat at Boston Celtics, Feb 2026",
-    "totalAssists": 23,
-    "topComboText": "#45 ➔ #24 generated 3 assists",
-    "locationClue": "Road Game in February",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Davion Mitchell",
-        "shortName": "D. Mitchell",
-        "jersey": "#45",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Pelle Larsson",
-        "shortName": "P. Larsson",
-        "jersey": "#9",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Norman Powell",
-        "shortName": "N. Powell",
-        "jersey": "#24",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Andrew Wiggins",
-        "shortName": "A. Wiggins",
-        "jersey": "#22",
-        "position": "F",
-        "gameAssists": 0
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Bam Adebayo",
-        "shortName": "B. Adebayo",
-        "jersey": "#13",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 3
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 3
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Philadelphia 76ers",
-      "Boston Celtics",
-      "Miami Heat",
-      "Orlando Magic"
-    ],
-    "source": "live",
-    "id": "dimer-9"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Milwaukee Bucks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Milwaukee Bucks at Atlanta Hawks, Jan 2026",
-    "totalAssists": 24,
-    "topComboText": "#13 ➔ #3 generated 2 assists",
-    "locationClue": "Road Game in January",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "AJ Green",
-        "shortName": "A. Green",
-        "jersey": "#20",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Ryan Rollins",
-        "shortName": "R. Rollins",
-        "jersey": "#13",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Giannis Antetokounmpo",
-        "shortName": "G. Antetokounmpo",
-        "jersey": "#34",
-        "position": "F",
-        "gameAssists": 6
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Kyle Kuzma",
-        "shortName": "K. Kuzma",
-        "jersey": "#18",
-        "position": "F",
-        "gameAssists": 1
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Myles Turner",
-        "shortName": "M. Turner",
-        "jersey": "#3",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Philadelphia 76ers",
-      "Milwaukee Bucks",
-      "Detroit Pistons",
-      "Atlanta Hawks"
-    ],
-    "source": "live",
-    "id": "dimer-10"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Portland Trail Blazers",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Dallas Mavericks at Portland Trail Blazers, Dec 2025",
-    "totalAssists": 27,
-    "topComboText": "#8 ➔ #23 generated 3 assists",
-    "locationClue": "Home Game in December",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Sidy Cissoko",
-        "shortName": "S. Cissoko",
-        "jersey": "#91",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Shaedon Sharpe",
-        "shortName": "S. Sharpe",
-        "jersey": "#17",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Toumani Camara",
-        "shortName": "T. Camara",
-        "jersey": "#33",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Deni Avdija",
-        "shortName": "D. Avdija",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 11
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Donovan Clingan",
-        "shortName": "D. Clingan",
-        "jersey": "#23",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Minnesota Timberwolves",
       "Utah Jazz",
-      "Portland Trail Blazers",
-      "Dallas Mavericks"
+      "Dallas Mavericks",
+      "Minnesota Timberwolves"
     ],
     "source": "live",
-    "id": "dimer-11"
+    "id": "dimer-24"
   },
   {
-    "date": "2026-09-11",
+    "date": "2026-09-24",
     "answer": "San Antonio Spurs",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Miami Heat at San Antonio Spurs, Oct 2025",
-    "totalAssists": 26,
-    "topComboText": "#5 ➔ #1 generated 2 assists",
-    "locationClue": "Home Game in October",
+    "fullContext": "San Antonio Spurs at New York Knicks, Jun 2026",
+    "totalAssists": 28,
+    "benchAssists": 6,
+    "topComboText": "#5 ➔ #1 generated 5 assists",
+    "locationClue": "Road Game in June",
+    "opponentTeam": "New York Knicks",
+    "topScorerPoints": 32,
     "nodes": [
       {
         "id": "p1",
         "label": "PG",
-        "playerName": "Stephon Castle",
-        "shortName": "S. Castle",
-        "jersey": "#5",
+        "playerName": "De'Aaron Fox",
+        "shortName": "D. Fox",
+        "jersey": "#4",
         "position": "G",
         "gameAssists": 8
       },
       {
         "id": "p2",
         "label": "SG",
-        "playerName": "Devin Vassell",
-        "shortName": "D. Vassell",
-        "jersey": "#24",
+        "playerName": "Stephon Castle",
+        "shortName": "S. Castle",
+        "jersey": "#5",
         "position": "G",
-        "gameAssists": 1
+        "gameAssists": 5
       },
       {
         "id": "p3",
         "label": "SF",
-        "playerName": "Harrison Barnes",
-        "shortName": "H. Barnes",
-        "jersey": "#40",
-        "position": "F",
-        "gameAssists": 2
+        "playerName": "Devin Vassell",
+        "shortName": "D. Vassell",
+        "jersey": "#24",
+        "position": "G",
+        "gameAssists": 0
       },
       {
         "id": "p4",
@@ -1223,7 +2706,7 @@
         "shortName": "J. Champagnie",
         "jersey": "#30",
         "position": "F",
-        "gameAssists": 2
+        "gameAssists": 3
       },
       {
         "id": "p5",
@@ -1237,39 +2720,34 @@
     ],
     "edges": [
       {
-        "from": "p5",
-        "to": "p2",
-        "weight": 2
+        "from": "p1",
+        "to": "p5",
+        "weight": 4
       },
       {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
+        "from": "p2",
+        "to": "p5",
+        "weight": 5
       },
       {
         "from": "p1",
         "to": "p3",
-        "weight": 2
+        "weight": 1
       },
       {
-        "from": "p1",
+        "from": "p5",
         "to": "p2",
         "weight": 2
       },
       {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p5",
+        "from": "p5",
+        "to": "p4",
         "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
       },
       {
         "from": "p5",
@@ -1277,124 +2755,31 @@
         "weight": 1
       },
       {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
+        "from": "p1",
+        "to": "p4",
         "weight": 1
       }
     ],
     "options": [
-      "Portland Trail Blazers",
-      "Houston Rockets",
-      "Phoenix Suns",
-      "San Antonio Spurs"
+      "San Antonio Spurs",
+      "Oklahoma City Thunder",
+      "Dallas Mavericks",
+      "Minnesota Timberwolves"
     ],
     "source": "live",
-    "id": "dimer-12"
+    "id": "dimer-25"
   },
   {
-    "date": "2026-09-11",
-    "answer": "Milwaukee Bucks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Boston Celtics at Milwaukee Bucks, Dec 2025",
-    "totalAssists": 28,
-    "topComboText": "#7 ➔ #18 generated 7 assists",
-    "locationClue": "Home Game in December",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Ryan Rollins",
-        "shortName": "R. Rollins",
-        "jersey": "#13",
-        "position": "G",
-        "gameAssists": 7
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Gary Trent Jr.",
-        "shortName": "G. Trent Jr.",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Kevin Porter Jr.",
-        "shortName": "K. Porter Jr.",
-        "jersey": "#7",
-        "position": "G",
-        "gameAssists": 13
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Kyle Kuzma",
-        "shortName": "K. Kuzma",
-        "jersey": "#18",
-        "position": "F",
-        "gameAssists": 0
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Myles Turner",
-        "shortName": "M. Turner",
-        "jersey": "#3",
-        "position": "C",
-        "gameAssists": 0
-      }
-    ],
-    "edges": [
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 7
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      }
-    ],
-    "options": [
-      "Indiana Pacers",
-      "Miami Heat",
-      "Brooklyn Nets",
-      "Milwaukee Bucks"
-    ],
-    "source": "live",
-    "id": "dimer-13"
-  },
-  {
-    "date": "2026-09-11",
+    "date": "2026-09-24",
     "answer": "Cleveland Cavaliers",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Cleveland Cavaliers at Charlotte Hornets, Feb 2026",
+    "fullContext": "Toronto Raptors at Cleveland Cavaliers, Apr 2026",
     "totalAssists": 24,
-    "topComboText": "#1 ➔ #5 generated 3 assists",
-    "locationClue": "Road Game in February",
+    "benchAssists": 5,
+    "topComboText": "#1 ➔ #31 generated 4 assists",
+    "locationClue": "Home Game in April",
+    "opponentTeam": "Toronto Raptors",
+    "topScorerPoints": 32,
     "nodes": [
       {
         "id": "p1",
@@ -1403,7 +2788,7 @@
         "shortName": "J. Harden",
         "jersey": "#1",
         "position": "G",
-        "gameAssists": 8
+        "gameAssists": 10
       },
       {
         "id": "p2",
@@ -1417,20 +2802,20 @@
       {
         "id": "p3",
         "label": "SF",
-        "playerName": "Sam Merrill",
-        "shortName": "S. Merrill",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p4",
-        "label": "PF",
         "playerName": "Dean Wade",
         "shortName": "D. Wade",
         "jersey": "#32",
         "position": "F",
-        "gameAssists": 0
+        "gameAssists": 1
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Evan Mobley",
+        "shortName": "E. Mobley",
+        "jersey": "#4",
+        "position": "C",
+        "gameAssists": 4
       },
       {
         "id": "p5",
@@ -1439,625 +2824,93 @@
         "shortName": "J. Allen",
         "jersey": "#31",
         "position": "C",
-        "gameAssists": 2
+        "gameAssists": 0
       }
     ],
     "edges": [
       {
-        "from": "p3",
+        "from": "p1",
         "to": "p5",
-        "weight": 1
+        "weight": 4
       },
       {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p3",
+        "from": "p4",
+        "to": "p2",
         "weight": 1
       },
       {
         "from": "p1",
-        "to": "p5",
+        "to": "p4",
         "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 3
       },
       {
         "from": "p2",
-        "to": "p4",
-        "weight": 2
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
       },
       {
         "from": "p3",
         "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
         "weight": 1
       }
     ],
     "options": [
       "Cleveland Cavaliers",
-      "Charlotte Hornets",
+      "Boston Celtics",
       "Brooklyn Nets",
-      "Toronto Raptors"
+      "Chicago Bulls"
     ],
     "source": "live",
-    "id": "dimer-14"
+    "id": "dimer-26"
   },
   {
-    "date": "2026-09-11",
-    "answer": "New York Knicks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Cleveland Cavaliers at New York Knicks, May 2026",
-    "totalAssists": 20,
-    "topComboText": "#32 ➔ #25 generated 2 assists",
-    "locationClue": "Home Game in May",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jalen Brunson",
-        "shortName": "J. Brunson",
-        "jersey": "#11",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Mikal Bridges",
-        "shortName": "M. Bridges",
-        "jersey": "#25",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Josh Hart",
-        "shortName": "J. Hart",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "OG Anunoby",
-        "shortName": "O. Anunoby",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Karl-Anthony Towns",
-        "shortName": "K. Towns",
-        "jersey": "#32",
-        "position": "C",
-        "gameAssists": 5
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Indiana Pacers",
-      "Toronto Raptors",
-      "New York Knicks",
-      "Atlanta Hawks"
-    ],
-    "source": "live",
-    "id": "dimer-15"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Toronto Raptors",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Toronto Raptors at Los Angeles Lakers, Jan 2026",
-    "totalAssists": 30,
-    "topComboText": "#3 ➔ #12 generated 2 assists",
-    "locationClue": "Road Game in January",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Immanuel Quickley",
-        "shortName": "I. Quickley",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 7
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Ochai Agbaji",
-        "shortName": "O. Agbaji",
-        "jersey": "#30",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Brandon Ingram",
-        "shortName": "B. Ingram",
-        "jersey": "#3",
-        "position": "F",
-        "gameAssists": 7
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Collin Murray-Boyles",
-        "shortName": "C. Murray-Boyles",
-        "jersey": "#12",
-        "position": "F",
-        "gameAssists": 5
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Scottie Barnes",
-        "shortName": "S. Barnes",
-        "jersey": "#4",
-        "position": "F",
-        "gameAssists": 3
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Toronto Raptors",
-      "New York Knicks",
-      "Charlotte Hornets",
-      "Indiana Pacers"
-    ],
-    "source": "live",
-    "id": "dimer-16"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "New Orleans Pelicans",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Memphis Grizzlies at New Orleans Pelicans, Nov 2025",
-    "totalAssists": 34,
-    "topComboText": "#0 ➔ #25 generated 2 assists",
-    "locationClue": "Home Game in November",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jeremiah Fears",
-        "shortName": "J. Fears",
-        "jersey": "#0",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Trey Murphy III",
-        "shortName": "T. Murphy III",
-        "jersey": "#25",
-        "position": "F",
-        "gameAssists": 6
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Saddiq Bey",
-        "shortName": "S. Bey",
-        "jersey": "#41",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Zion Williamson",
-        "shortName": "Z. Williamson",
-        "jersey": "#1",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Derik Queen",
-        "shortName": "D. Queen",
-        "jersey": "#22",
-        "position": "C",
-        "gameAssists": 9
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Denver Nuggets",
-      "New Orleans Pelicans",
-      "Utah Jazz",
-      "Houston Rockets"
-    ],
-    "source": "live",
-    "id": "dimer-17"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Boston Celtics",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Boston Celtics at Philadelphia 76ers, Oct 2025",
-    "totalAssists": 26,
-    "topComboText": "#9 ➔ #7 generated 3 assists",
-    "locationClue": "Road Game in October",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Payton Pritchard",
-        "shortName": "P. Pritchard",
-        "jersey": "#11",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Derrick White",
-        "shortName": "D. White",
-        "jersey": "#9",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Jaylen Brown",
-        "shortName": "J. Brown",
-        "jersey": "#7",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Josh Minott",
-        "shortName": "J. Minott",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 1
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Neemias Queta",
-        "shortName": "N. Queta",
-        "jersey": "#88",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 3
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Orlando Magic",
-      "Toronto Raptors",
-      "Chicago Bulls",
-      "Boston Celtics"
-    ],
-    "source": "live",
-    "id": "dimer-18"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Toronto Raptors",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Cleveland Cavaliers at Toronto Raptors, Apr 2026",
-    "totalAssists": 19,
-    "topComboText": "#14 ➔ #4 generated 2 assists",
-    "locationClue": "Home Game in April",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Ja'Kobe Walter",
-        "shortName": "J. Walter",
-        "jersey": "#14",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Brandon Ingram",
-        "shortName": "B. Ingram",
-        "jersey": "#3",
-        "position": "F",
-        "gameAssists": 0
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "RJ Barrett",
-        "shortName": "R. Barrett",
-        "jersey": "#9",
-        "position": "F",
-        "gameAssists": 1
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Scottie Barnes",
-        "shortName": "S. Barnes",
-        "jersey": "#4",
-        "position": "F",
-        "gameAssists": 6
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Jakob Poeltl",
-        "shortName": "J. Poeltl",
-        "jersey": "#19",
-        "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Atlanta Hawks",
-      "Toronto Raptors",
-      "Indiana Pacers",
-      "Washington Wizards"
-    ],
-    "source": "live",
-    "id": "dimer-19"
-  },
-  {
-    "date": "2026-09-11",
+    "date": "2026-09-24",
     "answer": "Minnesota Timberwolves",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Minnesota Timberwolves at Dallas Mavericks, Mar 2026",
-    "totalAssists": 33,
-    "topComboText": "#13 ➔ #27 generated 2 assists",
-    "locationClue": "Road Game in March",
+    "fullContext": "Minnesota Timberwolves at Cleveland Cavaliers, Jan 2026",
+    "totalAssists": 31,
+    "benchAssists": 15,
+    "topComboText": "#5 ➔ #27 generated 2 assists",
+    "locationClue": "Road Game in January",
+    "opponentTeam": "Cleveland Cavaliers",
+    "topScorerPoints": 25,
     "nodes": [
       {
         "id": "p1",
         "label": "PG",
-        "playerName": "Mike Conley",
-        "shortName": "M. Conley",
-        "jersey": "#10",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Ayo Dosunmu",
-        "shortName": "A. Dosunmu",
-        "jersey": "#13",
-        "position": "G",
-        "gameAssists": 12
-      },
-      {
-        "id": "p3",
-        "label": "SF",
         "playerName": "Donte DiVincenzo",
         "shortName": "D. DiVincenzo",
         "jersey": "#0",
         "position": "G",
-        "gameAssists": 2
+        "gameAssists": 6
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Anthony Edwards",
+        "shortName": "A. Edwards",
+        "jersey": "#5",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Jaden McDaniels",
+        "shortName": "J. McDaniels",
+        "jersey": "#3",
+        "position": "F",
+        "gameAssists": 1
       },
       {
         "id": "p4",
@@ -2075,1165 +2928,228 @@
         "shortName": "R. Gobert",
         "jersey": "#27",
         "position": "C",
-        "gameAssists": 1
-      }
-    ],
-    "edges": [
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Memphis Grizzlies",
-      "Los Angeles Lakers",
-      "Dallas Mavericks",
-      "Minnesota Timberwolves"
-    ],
-    "source": "live",
-    "id": "dimer-20"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Toronto Raptors",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Toronto Raptors at Utah Jazz, Mar 2026",
-    "totalAssists": 49,
-    "topComboText": "#4 ➔ #9 generated 4 assists",
-    "locationClue": "Road Game in March",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jamal Shead",
-        "shortName": "J. Shead",
-        "jersey": "#23",
-        "position": "G",
-        "gameAssists": 15
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Ja'Kobe Walter",
-        "shortName": "J. Walter",
-        "jersey": "#14",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "RJ Barrett",
-        "shortName": "R. Barrett",
-        "jersey": "#9",
-        "position": "F",
-        "gameAssists": 6
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Sandro Mamukelashvili",
-        "shortName": "S. Mamukelashvili",
-        "jersey": "#54",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Scottie Barnes",
-        "shortName": "S. Barnes",
-        "jersey": "#4",
-        "position": "F",
-        "gameAssists": 10
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 4
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 4
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Toronto Raptors",
-      "Boston Celtics",
-      "New York Knicks",
-      "Charlotte Hornets"
-    ],
-    "source": "live",
-    "id": "dimer-21"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Orlando Magic",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Orlando Magic at Cleveland Cavaliers, Mar 2026",
-    "totalAssists": 27,
-    "topComboText": "#5 ➔ #34 generated 2 assists",
-    "locationClue": "Road Game in March",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Desmond Bane",
-        "shortName": "D. Bane",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Jamal Cain",
-        "shortName": "J. Cain",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Tristan da Silva",
-        "shortName": "T. da Silva",
-        "jersey": "#23",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Paolo Banchero",
-        "shortName": "P. Banchero",
-        "jersey": "#5",
-        "position": "F",
-        "gameAssists": 5
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Wendell Carter Jr.",
-        "shortName": "W. Carter Jr.",
-        "jersey": "#34",
-        "position": "C",
         "gameAssists": 2
       }
     ],
     "edges": [
       {
         "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p4",
         "to": "p5",
         "weight": 2
       },
       {
         "from": "p1",
-        "to": "p5",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
         "weight": 1
       },
       {
         "from": "p4",
-        "to": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p2",
         "weight": 2
       }
     ],
     "options": [
-      "Orlando Magic",
-      "Washington Wizards",
-      "Miami Heat",
-      "Cleveland Cavaliers"
-    ],
-    "source": "live",
-    "id": "dimer-22"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Cleveland Cavaliers",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Cleveland Cavaliers at Golden State Warriors, Apr 2026",
-    "totalAssists": 28,
-    "topComboText": "#4 ➔ #2 generated 4 assists",
-    "locationClue": "Road Game in April",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "James Harden",
-        "shortName": "J. Harden",
-        "jersey": "#1",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Donovan Mitchell",
-        "shortName": "D. Mitchell",
-        "jersey": "#45",
-        "position": "G",
-        "gameAssists": 3
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Max Strus",
-        "shortName": "M. Strus",
-        "jersey": "#2",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Evan Mobley",
-        "shortName": "E. Mobley",
-        "jersey": "#4",
-        "position": "C",
-        "gameAssists": 5
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Jarrett Allen",
-        "shortName": "J. Allen",
-        "jersey": "#31",
-        "position": "C",
-        "gameAssists": 0
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 4
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Philadelphia 76ers",
-      "Charlotte Hornets",
-      "Brooklyn Nets",
-      "Cleveland Cavaliers"
-    ],
-    "source": "live",
-    "id": "dimer-23"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Milwaukee Bucks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Milwaukee Bucks at Toronto Raptors, Nov 2025",
-    "totalAssists": 26,
-    "topComboText": "#3 ➔ #34 generated 2 assists",
-    "locationClue": "Road Game in November",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "AJ Green",
-        "shortName": "A. Green",
-        "jersey": "#20",
-        "position": "G",
-        "gameAssists": 1
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Ryan Rollins",
-        "shortName": "R. Rollins",
-        "jersey": "#13",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Gary Trent Jr.",
-        "shortName": "G. Trent Jr.",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Giannis Antetokounmpo",
-        "shortName": "G. Antetokounmpo",
-        "jersey": "#34",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Myles Turner",
-        "shortName": "M. Turner",
-        "jersey": "#3",
-        "position": "C",
-        "gameAssists": 3
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p5",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Miami Heat",
-      "Chicago Bulls",
-      "Cleveland Cavaliers",
-      "Milwaukee Bucks"
-    ],
-    "source": "live",
-    "id": "dimer-24"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Houston Rockets",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Houston Rockets at Washington Wizards, Mar 2026",
-    "totalAssists": 21,
-    "topComboText": "#15 ➔ #1 generated 4 assists",
-    "locationClue": "Road Game in March",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Reed Sheppard",
-        "shortName": "R. Sheppard",
-        "jersey": "#15",
-        "position": "G",
-        "gameAssists": 10
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Amen Thompson",
-        "shortName": "A. Thompson",
-        "jersey": "#1",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Kevin Durant",
-        "shortName": "K. Durant",
-        "jersey": "#7",
-        "position": "F",
-        "gameAssists": 1
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Tari Eason",
-        "shortName": "T. Eason",
-        "jersey": "#17",
-        "position": "F",
-        "gameAssists": 2
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Alperen Sengun",
-        "shortName": "A. Sengun",
-        "jersey": "#28",
-        "position": "C",
-        "gameAssists": 2
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 3
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p5",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 4
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "Sacramento Kings",
-      "Houston Rockets",
       "Minnesota Timberwolves",
-      "Golden State Warriors"
-    ],
-    "source": "live",
-    "id": "dimer-25"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "New York Knicks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Washington Wizards at New York Knicks, Mar 2026",
-    "totalAssists": 32,
-    "topComboText": "#11 ➔ #25 generated 2 assists",
-    "locationClue": "Home Game in March",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jalen Brunson",
-        "shortName": "J. Brunson",
-        "jersey": "#11",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Mikal Bridges",
-        "shortName": "M. Bridges",
-        "jersey": "#25",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Josh Hart",
-        "shortName": "J. Hart",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 4
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "OG Anunoby",
-        "shortName": "O. Anunoby",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 0
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Karl-Anthony Towns",
-        "shortName": "K. Towns",
-        "jersey": "#32",
-        "position": "C",
-        "gameAssists": 3
-      }
-    ],
-    "edges": [
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 2
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 2
-      }
-    ],
-    "options": [
-      "New York Knicks",
-      "Philadelphia 76ers",
-      "Charlotte Hornets",
-      "Detroit Pistons"
-    ],
-    "source": "live",
-    "id": "dimer-26"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "New York Knicks",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "New York Knicks at Cleveland Cavaliers, May 2026",
-    "totalAssists": 33,
-    "topComboText": "#8 ➔ #32 generated 3 assists",
-    "locationClue": "Road Game in May",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Jalen Brunson",
-        "shortName": "J. Brunson",
-        "jersey": "#11",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Mikal Bridges",
-        "shortName": "M. Bridges",
-        "jersey": "#25",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Josh Hart",
-        "shortName": "J. Hart",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "OG Anunoby",
-        "shortName": "O. Anunoby",
-        "jersey": "#8",
-        "position": "F",
-        "gameAssists": 4
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Karl-Anthony Towns",
-        "shortName": "K. Towns",
-        "jersey": "#32",
-        "position": "C",
-        "gameAssists": 3
-      }
-    ],
-    "edges": [
-      {
-        "from": "p1",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 3
-      },
-      {
-        "from": "p5",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 2
-      },
-      {
-        "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p1",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "New York Knicks",
-      "Detroit Pistons",
-      "Atlanta Hawks",
-      "Boston Celtics"
+      "Utah Jazz",
+      "Golden State Warriors",
+      "LA Clippers"
     ],
     "source": "live",
     "id": "dimer-27"
   },
   {
-    "date": "2026-09-11",
-    "answer": "Orlando Magic",
+    "date": "2026-09-24",
+    "answer": "Dallas Mavericks",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Los Angeles Lakers at Orlando Magic, Mar 2026",
-    "totalAssists": 27,
-    "topComboText": "#4 ➔ #34 generated 2 assists",
-    "locationClue": "Home Game in March",
+    "fullContext": "Dallas Mavericks at Utah Jazz, Dec 2025",
+    "totalAssists": 23,
+    "benchAssists": 4,
+    "topComboText": "#9 ➔ #25 generated 4 assists",
+    "locationClue": "Road Game in December",
+    "opponentTeam": "Utah Jazz",
+    "topScorerPoints": 42,
     "nodes": [
       {
         "id": "p1",
         "label": "PG",
-        "playerName": "Jalen Suggs",
-        "shortName": "J. Suggs",
-        "jersey": "#4",
+        "playerName": "Ryan Nembhard",
+        "shortName": "R. Nembhard",
+        "jersey": "#9",
         "position": "G",
-        "gameAssists": 6
+        "gameAssists": 10
       },
       {
         "id": "p2",
         "label": "SG",
-        "playerName": "Desmond Bane",
-        "shortName": "D. Bane",
-        "jersey": "#3",
-        "position": "G",
-        "gameAssists": 5
+        "playerName": "Naji Marshall",
+        "shortName": "N. Marshall",
+        "jersey": "#13",
+        "position": "F",
+        "gameAssists": 1
       },
       {
         "id": "p3",
         "label": "SF",
-        "playerName": "Tristan da Silva",
-        "shortName": "T. da Silva",
-        "jersey": "#23",
+        "playerName": "P.J. Washington",
+        "shortName": "P.J. Washington",
+        "jersey": "#25",
         "position": "F",
         "gameAssists": 0
       },
       {
         "id": "p4",
         "label": "PF",
-        "playerName": "Paolo Banchero",
-        "shortName": "P. Banchero",
-        "jersey": "#5",
+        "playerName": "Cooper Flagg",
+        "shortName": "C. Flagg",
+        "jersey": "#32",
         "position": "F",
         "gameAssists": 6
       },
       {
         "id": "p5",
         "label": "C",
-        "playerName": "Wendell Carter Jr.",
-        "shortName": "W. Carter Jr.",
-        "jersey": "#34",
-        "position": "C",
+        "playerName": "Daniel Gafford",
+        "shortName": "D. Gafford",
+        "jersey": "#21",
+        "position": "F",
         "gameAssists": 2
       }
     ],
     "edges": [
       {
         "from": "p1",
-        "to": "p3",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p5",
         "weight": 1
       },
       {
         "from": "p4",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p3",
-        "weight": 1
-      },
-      {
-        "from": "p5",
         "to": "p1",
         "weight": 1
       },
       {
         "from": "p1",
-        "to": "p4",
-        "weight": 1
+        "to": "p3",
+        "weight": 4
       },
       {
-        "from": "p1",
+        "from": "p4",
         "to": "p2",
-        "weight": 1
+        "weight": 3
       },
       {
         "from": "p2",
-        "to": "p4",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p3",
         "weight": 1
       },
       {
         "from": "p4",
-        "to": "p5",
-        "weight": 2
-      },
-      {
-        "from": "p1",
-        "to": "p5",
-        "weight": 2
+        "to": "p3",
+        "weight": 1
       }
     ],
     "options": [
-      "Washington Wizards",
-      "Atlanta Hawks",
-      "Toronto Raptors",
-      "Orlando Magic"
+      "Dallas Mavericks",
+      "Portland Trail Blazers",
+      "Golden State Warriors",
+      "Los Angeles Lakers"
     ],
     "source": "live",
     "id": "dimer-28"
   },
   {
-    "date": "2026-09-11",
-    "answer": "Golden State Warriors",
+    "date": "2026-09-24",
+    "answer": "New York Knicks",
     "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Golden State Warriors at Miami Heat, Nov 2025",
-    "totalAssists": 24,
-    "topComboText": "Multiple dynamic passing pairs",
-    "locationClue": "Road Game in November",
+    "fullContext": "New York Knicks at Atlanta Hawks, Apr 2026",
+    "totalAssists": 33,
+    "benchAssists": 8,
+    "topComboText": "#11 ➔ #8 generated 4 assists",
+    "locationClue": "Road Game in April",
+    "opponentTeam": "Atlanta Hawks",
+    "topScorerPoints": 29,
     "nodes": [
       {
         "id": "p1",
         "label": "PG",
-        "playerName": "Will Richard",
-        "shortName": "W. Richard",
+        "playerName": "Jalen Brunson",
+        "shortName": "J. Brunson",
+        "jersey": "#11",
+        "position": "G",
+        "gameAssists": 8
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Mikal Bridges",
+        "shortName": "M. Bridges",
+        "jersey": "#25",
+        "position": "G",
+        "gameAssists": 3
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Josh Hart",
+        "shortName": "J. Hart",
         "jersey": "#3",
         "position": "G",
-        "gameAssists": 0
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "Brandin Podziemski",
-        "shortName": "B. Podziemski",
-        "jersey": "#2",
-        "position": "G",
         "gameAssists": 2
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Gui Santos",
-        "shortName": "G. Santos",
-        "jersey": "#15",
-        "position": "F",
-        "gameAssists": 0
       },
       {
         "id": "p4",
         "label": "PF",
-        "playerName": "Moses Moody",
-        "shortName": "M. Moody",
-        "jersey": "#4",
-        "position": "G",
-        "gameAssists": 4
+        "playerName": "OG Anunoby",
+        "shortName": "O. Anunoby",
+        "jersey": "#8",
+        "position": "F",
+        "gameAssists": 2
       },
       {
         "id": "p5",
         "label": "C",
-        "playerName": "Trayce Jackson-Davis",
-        "shortName": "T. Jackson-Davis",
+        "playerName": "Karl-Anthony Towns",
+        "shortName": "K. Towns",
         "jersey": "#32",
-        "position": "F",
-        "gameAssists": 0
-      }
-    ],
-    "edges": [
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p4",
-        "weight": 1
-      }
-    ],
-    "options": [
-      "New Orleans Pelicans",
-      "Golden State Warriors",
-      "Sacramento Kings",
-      "Denver Nuggets"
-    ],
-    "source": "live",
-    "id": "dimer-29"
-  },
-  {
-    "date": "2026-09-11",
-    "answer": "Philadelphia 76ers",
-    "gameContext": "Mystery Game • 2025-26 Season",
-    "fullContext": "Golden State Warriors at Philadelphia 76ers, Dec 2025",
-    "totalAssists": 23,
-    "topComboText": "#25 ➔ #0 generated 2 assists",
-    "locationClue": "Home Game in December",
-    "nodes": [
-      {
-        "id": "p1",
-        "label": "PG",
-        "playerName": "Tyrese Maxey",
-        "shortName": "T. Maxey",
-        "jersey": "#0",
-        "position": "G",
-        "gameAssists": 2
-      },
-      {
-        "id": "p2",
-        "label": "SG",
-        "playerName": "VJ Edgecombe",
-        "shortName": "V. Edgecombe",
-        "jersey": "#77",
-        "position": "G",
-        "gameAssists": 5
-      },
-      {
-        "id": "p3",
-        "label": "SF",
-        "playerName": "Quentin Grimes",
-        "shortName": "Q. Grimes",
-        "jersey": "#5",
-        "position": "G",
-        "gameAssists": 6
-      },
-      {
-        "id": "p4",
-        "label": "PF",
-        "playerName": "Dominick Barlow",
-        "shortName": "D. Barlow",
-        "jersey": "#25",
-        "position": "F",
-        "gameAssists": 3
-      },
-      {
-        "id": "p5",
-        "label": "C",
-        "playerName": "Joel Embiid",
-        "shortName": "J. Embiid",
-        "jersey": "#21",
         "position": "C",
-        "gameAssists": 3
+        "gameAssists": 10
       }
     ],
     "edges": [
-      {
-        "from": "p2",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p5",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p4",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p5",
-        "weight": 1
-      },
-      {
-        "from": "p4",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p2",
-        "weight": 1
-      },
-      {
-        "from": "p3",
-        "to": "p1",
-        "weight": 1
-      },
-      {
-        "from": "p2",
-        "to": "p1",
-        "weight": 2
-      },
-      {
-        "from": "p3",
-        "to": "p5",
-        "weight": 1
-      },
       {
         "from": "p5",
         "to": "p1",
@@ -3241,20 +3157,184 @@
       },
       {
         "from": "p1",
-        "to": "p5",
+        "to": "p4",
+        "weight": 4
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p5",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p2",
+        "weight": 4
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p1",
         "weight": 1
       },
       {
         "from": "p2",
         "to": "p3",
         "weight": 1
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 1
+      },
+      {
+        "from": "p5",
+        "to": "p3",
+        "weight": 3
       }
     ],
     "options": [
-      "Philadelphia 76ers",
       "New York Knicks",
-      "Orlando Magic",
-      "Atlanta Hawks"
+      "Atlanta Hawks",
+      "Washington Wizards",
+      "Miami Heat"
+    ],
+    "source": "live",
+    "id": "dimer-29"
+  },
+  {
+    "date": "2026-09-24",
+    "answer": "Minnesota Timberwolves",
+    "gameContext": "Mystery Game • 2025-26 Season",
+    "fullContext": "Brooklyn Nets at Minnesota Timberwolves, Dec 2025",
+    "totalAssists": 27,
+    "benchAssists": 4,
+    "topComboText": "#30 ➔ #3 generated 3 assists",
+    "locationClue": "Home Game in December",
+    "opponentTeam": "Brooklyn Nets",
+    "topScorerPoints": 28,
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "PG",
+        "playerName": "Donte DiVincenzo",
+        "shortName": "D. DiVincenzo",
+        "jersey": "#0",
+        "position": "G",
+        "gameAssists": 6
+      },
+      {
+        "id": "p2",
+        "label": "SG",
+        "playerName": "Anthony Edwards",
+        "shortName": "A. Edwards",
+        "jersey": "#5",
+        "position": "G",
+        "gameAssists": 2
+      },
+      {
+        "id": "p3",
+        "label": "SF",
+        "playerName": "Jaden McDaniels",
+        "shortName": "J. McDaniels",
+        "jersey": "#3",
+        "position": "F",
+        "gameAssists": 4
+      },
+      {
+        "id": "p4",
+        "label": "PF",
+        "playerName": "Julius Randle",
+        "shortName": "J. Randle",
+        "jersey": "#30",
+        "position": "F",
+        "gameAssists": 11
+      },
+      {
+        "id": "p5",
+        "label": "C",
+        "playerName": "Rudy Gobert",
+        "shortName": "R. Gobert",
+        "jersey": "#27",
+        "position": "C",
+        "gameAssists": 0
+      }
+    ],
+    "edges": [
+      {
+        "from": "p4",
+        "to": "p1",
+        "weight": 2
+      },
+      {
+        "from": "p1",
+        "to": "p3",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p3",
+        "weight": 3
+      },
+      {
+        "from": "p3",
+        "to": "p2",
+        "weight": 1
+      },
+      {
+        "from": "p2",
+        "to": "p4",
+        "weight": 2
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p4",
+        "weight": 3
+      },
+      {
+        "from": "p4",
+        "to": "p2",
+        "weight": 2
+      },
+      {
+        "from": "p3",
+        "to": "p1",
+        "weight": 1
+      },
+      {
+        "from": "p1",
+        "to": "p5",
+        "weight": 1
+      }
+    ],
+    "options": [
+      "Minnesota Timberwolves",
+      "Golden State Warriors",
+      "New Orleans Pelicans",
+      "Houston Rockets"
     ],
     "source": "live",
     "id": "dimer-30"

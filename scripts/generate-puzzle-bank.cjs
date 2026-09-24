@@ -15,17 +15,29 @@ const BANK_PATH = path.join(process.cwd(), 'data', 'puzzles', 'bank.json');
 const TODAY_SCRIPT = path.join(process.cwd(), 'scripts', 'generate-todays-puzzle.cjs');
 const TODAY_PATH = path.join(process.cwd(), 'data', 'puzzles', 'today.json');
 
-// By default we generate 50 puzzles if user doesn't specify otherwise.
-// The user had 100 before, so let's aim for 50 to not take too long, or 30.
-const TARGET = 30;
-const bank = [];
+const TARGET = 30; // Number of NEW puzzles to add
 
+let bank = [];
 const seen = new Set();
 
-console.log(`Generating a bank of ${TARGET} puzzles...`);
+// Load existing bank to prevent duplicates across generations
+if (fs.existsSync(BANK_PATH)) {
+  try {
+    bank = JSON.parse(fs.readFileSync(BANK_PATH, 'utf8'));
+    bank.forEach(puzzle => {
+      seen.add(`${puzzle.answer}-${puzzle.fullContext}`);
+    });
+    console.log(`Loaded ${bank.length} existing puzzles from bank.json.`);
+  } catch (e) {
+    console.warn('Could not read existing bank.json, starting fresh.');
+  }
+}
+
+console.log(`Generating ${TARGET} NEW puzzles...`);
 
 let attempts = 0;
-while (bank.length < TARGET && attempts < TARGET * 3) {
+let added = 0;
+while (added < TARGET && attempts < TARGET * 3) {
   attempts++;
   try {
     execSync(`node "${TODAY_SCRIPT}"`, { stdio: 'pipe' });
@@ -40,10 +52,24 @@ while (bank.length < TARGET && attempts < TARGET * 3) {
     
     seen.add(key);
     puzzle.id = `dimer-${bank.length + 1}`;
+    
+    // Assign a date (1 day after the last puzzle in the bank)
+    const lastPuzzle = bank[bank.length - 1];
+    let nextDate = new Date();
+    if (lastPuzzle && lastPuzzle.date) {
+      nextDate = new Date(lastPuzzle.date);
+      nextDate.setDate(nextDate.getDate() + 1);
+    }
+    const yyyy = nextDate.getFullYear();
+    const mm = String(nextDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(nextDate.getDate()).padStart(2, '0');
+    puzzle.date = `${yyyy}-${mm}-${dd}`;
+    
     bank.push(puzzle);
-    console.log(`[${bank.length}/${TARGET}] Added ${puzzle.answer} - ${puzzle.fullContext}`);
+    added++;
+    console.log(`[${added}/${TARGET}] Added ${puzzle.answer} - ${puzzle.fullContext} for ${puzzle.date}`);
   } catch (err) {
-    console.error(`Attempt ${attempts} failed.`);
+    // console.error(`Attempt ${attempts} failed.`);
   }
 }
 
