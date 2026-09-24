@@ -14,6 +14,8 @@ interface AuthContextType {
   logout: () => Promise<void>;
   userData: UserData | null;
   updateUserData: (newData: Partial<UserData>) => Promise<void>;
+  migrationRatingChange: number | null;
+  clearMigrationRatingChange: () => void;
 }
 
 export interface UserData {
@@ -46,12 +48,17 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
   userData: null,
   updateUserData: async () => {},
+  migrationRatingChange: null,
+  clearMigrationRatingChange: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [migrationRatingChange, setMigrationRatingChange] = useState<number | null>(null);
+
+  const clearMigrationRatingChange = () => setMigrationRatingChange(null);
 
   const updateUserData = async (newData: Partial<UserData>) => {
     if (!user || !userData) return;
@@ -73,7 +80,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUserData(userSnap.data() as UserData);
         } else {
           // Initialize new user, potentially migrating from local storage
-          let existingLocalStats: unknown = null;
+          let existingLocalStats: Partial<UserData> | null = null;
           try {
             if (typeof window !== "undefined") {
               const saved = localStorage.getItem("dimer_user_stats");
@@ -81,9 +88,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
           } catch (e) {}
 
+          const localRating = existingLocalStats?.dimerRating || 1000;
+          const diff = localRating - 1000;
+          if (diff !== 0) {
+            setMigrationRatingChange(diff);
+          }
+
           const newUserData: UserData = {
-            dimerRating: 1000,
+            dimerRating: localRating,
             unlimitedStreak: 0,
+            username: "Anonymous Dimer",
             currentStreak: existingLocalStats?.currentStreak || 0,
             maxStreak: existingLocalStats?.maxStreak || 0,
             gamesPlayed: existingLocalStats?.gamesPlayed || 0,
@@ -143,7 +157,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ 
-      user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, logout, userData, updateUserData 
+      user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, logout, userData, updateUserData, migrationRatingChange, clearMigrationRatingChange 
     }}>
       {children}
     </AuthContext.Provider>

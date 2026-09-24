@@ -1169,7 +1169,7 @@ function LeaderboardModal({ onClose }: { onClose: () => void }) {
 
         {loading ? (
           <div className="flex justify-center items-center py-10">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#EE6C2A]"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
           </div>
         ) : (
           <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
@@ -1395,7 +1395,7 @@ function AuthModal({ onClose }: { onClose: () => void }) {
             placeholder="Email address"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#EE6C2A] text-white"
+            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-neutral-500 text-white transition-colors"
             required
           />
           <input
@@ -1403,7 +1403,7 @@ function AuthModal({ onClose }: { onClose: () => void }) {
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#EE6C2A] text-white"
+            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-neutral-500 text-white transition-colors"
             required
           />
           
@@ -1412,7 +1412,7 @@ function AuthModal({ onClose }: { onClose: () => void }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg py-3 text-sm font-semibold border border-[#EE6C2A]/50 bg-[#EE6C2A] hover:bg-[#EE6C2A]/80 text-white transition-colors cursor-pointer mt-2 disabled:opacity-50"
+            className="w-full rounded-lg py-3 text-sm font-semibold border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-white transition-colors cursor-pointer mt-2 disabled:opacity-50"
           >
             {isLogin ? "Sign In" : "Sign Up"}
           </button>
@@ -1422,7 +1422,7 @@ function AuthModal({ onClose }: { onClose: () => void }) {
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-[#EE6C2A] hover:underline cursor-pointer font-semibold"
+            className="text-white hover:underline cursor-pointer font-semibold"
           >
             {isLogin ? "Sign up" : "Log in"}
           </button>
@@ -1435,10 +1435,16 @@ function AuthModal({ onClose }: { onClose: () => void }) {
 // ─── Main Dimer Game Component ────────────────────────────────────────────────
 
 export default function DimerGame() {
-  const { user, signInWithGoogle, logout, userData, updateUserData } = useAuth();
+  const { 
+    user, 
+    logout, 
+    userData, 
+    updateUserData,
+    migrationRatingChange,
+    clearMigrationRatingChange 
+  } = useAuth();
 
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
-  const [stale, setStale] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -1486,6 +1492,16 @@ export default function DimerGame() {
     } catch {}
   }, []);
 
+  // 2. Handle Migration Rating Animation
+  useEffect(() => {
+    if (migrationRatingChange != null && userData) {
+      // eslint-disable-next-line
+      setRatingChange(migrationRatingChange);
+      setShowStatsModal(true);
+      clearMigrationRatingChange();
+    }
+  }, [migrationRatingChange, userData, clearMigrationRatingChange]);
+
   // 2. Load Today's Puzzle
   useEffect(() => {
     async function loadPuzzle() {
@@ -1496,7 +1512,6 @@ export default function DimerGame() {
           throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
         const p: Puzzle = body.puzzle;
         setPuzzle(p);
-        setStale(!!body.stale);
 
         if (p?.date) {
           try {
