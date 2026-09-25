@@ -1,118 +1,103 @@
 {
-  "date": "2026-09-24",
-  "answer": "Minnesota Timberwolves",
+  "date": "2026-09-25",
+  "answer": "Cleveland Cavaliers",
   "gameContext": "Mystery Game • 2025-26 Season",
-  "fullContext": "Brooklyn Nets at Minnesota Timberwolves, Dec 2025",
-  "totalAssists": 27,
-  "benchAssists": 4,
-  "topComboText": "#30 ➔ #3 generated 3 assists",
-  "locationClue": "Home Game in December",
-  "opponentTeam": "Brooklyn Nets",
-  "topScorerPoints": 28,
+  "fullContext": "Toronto Raptors at Cleveland Cavaliers, Apr 2026",
+  "totalAssists": 24,
+  "benchAssists": 5,
+  "topComboText": "#1 ➔ #31 generated 4 assists",
+  "locationClue": "Home Game in April",
+  "opponentTeam": "Toronto Raptors",
+  "topScorerPoints": 32,
   "nodes": [
     {
       "id": "p1",
       "label": "PG",
-      "playerName": "Donte DiVincenzo",
-      "shortName": "D. DiVincenzo",
-      "jersey": "#0",
+      "playerName": "James Harden",
+      "shortName": "J. Harden",
+      "jersey": "#1",
       "position": "G",
-      "gameAssists": 6
+      "gameAssists": 10
     },
     {
       "id": "p2",
       "label": "SG",
-      "playerName": "Anthony Edwards",
-      "shortName": "A. Edwards",
-      "jersey": "#5",
+      "playerName": "Donovan Mitchell",
+      "shortName": "D. Mitchell",
+      "jersey": "#45",
       "position": "G",
-      "gameAssists": 2
+      "gameAssists": 4
     },
     {
       "id": "p3",
       "label": "SF",
-      "playerName": "Jaden McDaniels",
-      "shortName": "J. McDaniels",
-      "jersey": "#3",
+      "playerName": "Dean Wade",
+      "shortName": "D. Wade",
+      "jersey": "#32",
       "position": "F",
-      "gameAssists": 4
+      "gameAssists": 1
     },
     {
       "id": "p4",
       "label": "PF",
-      "playerName": "Julius Randle",
-      "shortName": "J. Randle",
-      "jersey": "#30",
-      "position": "F",
-      "gameAssists": 11
+      "playerName": "Evan Mobley",
+      "shortName": "E. Mobley",
+      "jersey": "#4",
+      "position": "C",
+      "gameAssists": 4
     },
     {
       "id": "p5",
       "label": "C",
-      "playerName": "Rudy Gobert",
-      "shortName": "R. Gobert",
-      "jersey": "#27",
+      "playerName": "Jarrett Allen",
+      "shortName": "J. Allen",
+      "jersey": "#31",
       "position": "C",
       "gameAssists": 0
     }
   ],
   "edges": [
     {
+      "from": "p1",
+      "to": "p5",
+      "weight": 4
+    },
+    {
       "from": "p4",
-      "to": "p1",
-      "weight": 2
+      "to": "p2",
+      "weight": 1
     },
     {
       "from": "p1",
-      "to": "p3",
+      "to": "p4",
       "weight": 2
-    },
-    {
-      "from": "p4",
-      "to": "p3",
-      "weight": 3
-    },
-    {
-      "from": "p3",
-      "to": "p2",
-      "weight": 1
     },
     {
       "from": "p2",
-      "to": "p4",
-      "weight": 2
-    },
-    {
-      "from": "p4",
-      "to": "p5",
-      "weight": 1
-    },
-    {
-      "from": "p1",
-      "to": "p4",
-      "weight": 3
-    },
-    {
-      "from": "p4",
-      "to": "p2",
-      "weight": 2
-    },
-    {
-      "from": "p3",
       "to": "p1",
       "weight": 1
     },
     {
-      "from": "p1",
+      "from": "p4",
       "to": "p5",
+      "weight": 1
+    },
+    {
+      "from": "p3",
+      "to": "p4",
+      "weight": 1
+    },
+    {
+      "from": "p1",
+      "to": "p2",
       "weight": 1
     }
   ],
   "options": [
-    "Minnesota Timberwolves",
-    "Golden State Warriors",
-    "New Orleans Pelicans",
-    "Houston Rockets"
+    "Boston Celtics",
+    "Cleveland Cavaliers",
+    "Atlanta Hawks",
+    "Milwaukee Bucks"
   ],
   "source": "live"
 }

@@ -15,7 +15,7 @@ const BANK_PATH = path.join(process.cwd(), 'data', 'puzzles', 'bank.json');
 const TODAY_SCRIPT = path.join(process.cwd(), 'scripts', 'generate-todays-puzzle.cjs');
 const TODAY_PATH = path.join(process.cwd(), 'data', 'puzzles', 'today.json');
 
-const TARGET = 30; // Number of NEW puzzles to add
+const TARGET = parseInt(process.argv[2], 10) || 30; // Number of NEW puzzles to add
 
 let bank = [];
 const seen = new Set();
@@ -34,6 +34,11 @@ if (fs.existsSync(BANK_PATH)) {
 }
 
 console.log(`Generating ${TARGET} NEW puzzles...`);
+
+let originalToday = null;
+if (fs.existsSync(TODAY_PATH)) {
+  originalToday = fs.readFileSync(TODAY_PATH, 'utf8');
+}
 
 let attempts = 0;
 let added = 0;
@@ -75,3 +80,9 @@ while (added < TARGET && attempts < TARGET * 3) {
 
 fs.writeFileSync(BANK_PATH, JSON.stringify(bank, null, 2), 'utf8');
 console.log(`\nBank generated successfully with ${bank.length} puzzles.`);
+
+if (originalToday) {
+  fs.writeFileSync(TODAY_PATH, originalToday, 'utf8');
+} else {
+  fs.unlinkSync(TODAY_PATH);
+}
