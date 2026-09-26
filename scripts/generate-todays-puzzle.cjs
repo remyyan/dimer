@@ -256,6 +256,14 @@ async function main() {
 
         for (const tricode of [first, second]) {
           if (!tricode) continue;
+          let teamMeta;
+          try {
+            teamMeta = teamFromTricode(tricode);
+          } catch {
+            continue; // Skip non-NBA teams
+          }
+          if (!teamMeta || !teamMeta.full_name) continue;
+
           const res = parseAssistedFGs(pbpData, tricode);
           if (res.pairs.length >= MIN_ASSISTED_FGS) {
             console.log(`✓ ${game.matchup} — ${res.pairs.length} assisted FGs for ${tricode}`);
@@ -289,10 +297,7 @@ async function main() {
     selectedData.allAthletes
   );
 
-  let answerMeta;
-  try { answerMeta = teamFromTricode(selectedTricode); }
-  catch { answerMeta = { full_name: selectedTricode }; }
-
+  const answerMeta = teamFromTricode(selectedTricode);
   const answerTeam = answerMeta.full_name;
   const distractors = chooseDistractors(answerTeam);
   const options = [answerTeam, ...distractors].sort(() => Math.random() - 0.5);
