@@ -1270,7 +1270,7 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
               value={username}
               onChange={e => setUsername(e.target.value)}
               className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-neutral-500 text-white"
-              placeholder="e.g. DimerGod99"
+              placeholder="e.g. HoopsFan"
               maxLength={20}
               required
             />
@@ -1284,6 +1284,87 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
             className="w-full rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer mt-4 disabled:opacity-50"
           >
             {saving ? "Checking & Saving..." : "Save Profile"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ─── Onboarding Modal ─────────────────────────────────────────────────────────
+
+function OnboardingModal() {
+  const { user, userData, updateUserData } = useAuth();
+  const [username, setUsername] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    const newName = username.trim();
+    const finalName = newName === "" ? "Anonymous Dimer" : newName;
+
+    setSaving(true);
+    setError("");
+
+    try {
+      if (finalName !== "Anonymous Dimer") {
+        const { query, collection, limit, getDocs, where } = await import("firebase/firestore");
+        const { db } = await import("./lib/firebase");
+        const q = query(collection(db, "users"), where("username", "==", finalName), limit(1));
+        const snap = await getDocs(q);
+        let isTaken = false;
+        snap.forEach(doc => {
+          if (doc.id !== user?.uid) {
+            isTaken = true;
+          }
+        });
+
+        if (isTaken) {
+          setError("Username is already taken. Please choose another.");
+          setSaving(false);
+          return;
+        }
+      }
+
+      await updateUserData({ username: finalName, hasOnboarded: true });
+    } catch (err: unknown) {
+      setError((err as Error).message || "Failed to update profile.");
+      setSaving(false);
+    }
+  }
+
+  if (!userData) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div className="w-full max-w-md rounded-xl border border-neutral-800/60 bg-black p-8 shadow-2xl text-neutral-200 animate-in fade-in zoom-in-95 duration-300">
+        <h2 className="text-2xl font-bold text-white mb-2 text-center">Welcome to Dimer</h2>
+        <p className="text-neutral-400 text-sm text-center mb-6">
+          Choose a display name for the leaderboards, or leave it blank to remain anonymous.
+        </p>
+
+        <form onSubmit={handleSave} className="flex flex-col gap-4">
+          <div>
+            <label className="block text-xs text-neutral-500 uppercase tracking-widest mb-2">Display Name</label>
+            <input
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-neutral-500 text-white"
+              placeholder="e.g. HoopsFan"
+              maxLength={20}
+            />
+          </div>
+          
+          {error && <p className="text-red-400 text-xs">{error}</p>}
+          
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full rounded-lg py-3 text-sm font-semibold bg-white hover:bg-neutral-200 text-black transition-colors cursor-pointer mt-4 disabled:opacity-50"
+          >
+            {saving ? "Saving..." : (username.trim() === "" ? "Stay Anonymous" : "Set Display Name")}
           </button>
         </form>
       </div>
@@ -1803,31 +1884,35 @@ export default function DimerGame() {
   return (
     <div className="min-h-screen w-full bg-black text-neutral-200 flex flex-col items-center selection:bg-neutral-800 font-sans">
       {/* ─── Ultra Minimal Header ─── */}
-      <header className="w-full border-b border-neutral-900 h-16 flex items-center px-6 max-w-lg relative">
-        <div className="flex-1 flex justify-start">
+      <header className="w-full border-b border-neutral-900 h-16 flex items-center px-4 max-w-lg relative">
+        <div className="flex-1 flex justify-start gap-3">
           <button
             onClick={() => setShowHelpModal(true)}
             className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
           >
             <HelpCircle size={18} strokeWidth={2} />
           </button>
+          <button
+            onClick={() => setShowStatsModal(true)}
+            className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
+            title="Stats"
+          >
+            <BarChart2 size={18} strokeWidth={2} />
+          </button>
         </div>
 
         {/* Center Brand */}
-        <div className="absolute left-1/2 -translate-x-1/2 text-center select-none flex items-center gap-2">
-          <img
-            src="/logo-white.png"
-            alt="Dimer"
-            className="w-5 h-5 object-contain"
-          />
-          <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white">
-            DIMER
-          </h1>
-          {isUnlimited && (
-            <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold ml-1 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20 absolute -top-2 -right-8 sm:static sm:top-auto sm:right-auto">
-              Unlimited
-            </span>
-          )}
+        <div className="absolute left-1/2 -translate-x-1/2 text-center select-none flex flex-col items-center">
+          <div className="flex items-center gap-2">
+            <img
+              src="/logo-white.png"
+              alt="Dimer"
+              className="w-5 h-5 object-contain"
+            />
+            <h1 className="text-base font-semibold tracking-[0.25em] uppercase leading-none text-white mt-0.5">
+              DIMER
+            </h1>
+          </div>
         </div>
 
         <div className="flex-1 flex items-center justify-end gap-2">
@@ -1863,17 +1948,13 @@ export default function DimerGame() {
               Login
             </button>
           )}
-          <button
-            onClick={() => setShowStatsModal(true)}
-            className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1"
-            title="Stats"
-          >
-            <BarChart2 size={18} strokeWidth={2} />
-          </button>
         </div>
       </header>
 
       {/* Modals */}
+      {user && userData && userData.hasOnboarded === false && (
+        <OnboardingModal />
+      )}
       {showHelpModal && (
         <HowToPlayModal onClose={() => setShowHelpModal(false)} />
       )}
@@ -1901,7 +1982,25 @@ export default function DimerGame() {
       )}
 
       {/* ─── Main Game Container ─── */}
-      <main className="w-full max-w-lg px-6 py-8 flex flex-col gap-6 flex-1">
+      <main className="w-full max-w-lg px-6 py-6 flex flex-col gap-6 flex-1">
+        
+        {/* Mode Switcher */}
+        <div className="flex justify-center mb-[-8px]">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-full p-1 flex w-56 shadow-inner">
+            <button
+              onClick={() => { if (isUnlimited) returnToDaily(); }}
+              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-full transition-colors ${!isUnlimited ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-white'}`}
+            >
+              Daily
+            </button>
+            <button
+              onClick={() => { if (!isUnlimited) loadUnlimitedPuzzle(); }}
+              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-full transition-colors ${isUnlimited ? 'bg-indigo-500 text-white shadow-sm' : 'text-neutral-500 hover:text-indigo-400'}`}
+            >
+              Unlimited
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="h-80 flex items-center justify-center">
             <span className="text-xs font-mono text-neutral-600 uppercase tracking-widest animate-pulse">

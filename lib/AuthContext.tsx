@@ -22,6 +22,7 @@ export interface UserData {
   dimerRating: number;
   unlimitedStreak: number;
   username?: string;
+  hasOnboarded?: boolean;
   country?: string;
   
   // Existing local storage stats
@@ -86,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const chronologicalHistory = [...data.history].reverse();
             for (const game of chronologicalHistory) {
               if (game.won) {
-                const guesses = (game as any).guessesCount || (game as any).guesses;
+                const guesses = (game as Record<string, unknown>).guessesCount as number || (game as Record<string, unknown>).guesses as number;
                 if (guesses === 1) recalc += 30;
                 else if (guesses === 2) recalc += 20;
                 else if (guesses === 3) recalc += 10;
@@ -111,7 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               const saved = localStorage.getItem("dimer_user_stats");
               if (saved) existingLocalStats = JSON.parse(saved);
             }
-          } catch (e) {}
+          } catch {}
 
           let localRating = existingLocalStats?.dimerRating;
           if (localRating === undefined || localRating === null) {
@@ -140,7 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const newUserData: UserData = {
             dimerRating: localRating,
             unlimitedStreak: 0,
-            username: "Anonymous Dimer",
+            username: "Anonymous Dimer", hasOnboarded: false,
             currentStreak: existingLocalStats?.currentStreak || 0,
             maxStreak: existingLocalStats?.maxStreak || 0,
             gamesPlayed: existingLocalStats?.gamesPlayed || 0,
