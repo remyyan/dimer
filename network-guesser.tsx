@@ -2037,16 +2037,16 @@ export default function DimerGame() {
         
         {/* Mode Switcher */}
         <div className="flex justify-center mb-[-8px]">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-full p-1 flex w-56 shadow-inner">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-1 flex w-56 shadow-inner">
             <button
               onClick={() => { if (isUnlimited) returnToDaily(); }}
-              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-full transition-colors ${!isUnlimited ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-white'}`}
+              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-md transition-colors ${!isUnlimited ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-white'}`}
             >
               Daily
             </button>
             <button
               onClick={() => { if (!isUnlimited) loadUnlimitedPuzzle(); }}
-              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-full transition-colors ${isUnlimited ? 'bg-indigo-500 text-white shadow-sm' : 'text-neutral-500 hover:text-indigo-400'}`}
+              className={`flex-1 text-xs font-bold uppercase tracking-wider py-1.5 rounded-md transition-colors ${isUnlimited ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-white'}`}
             >
               Unlimited
             </button>
@@ -2089,7 +2089,7 @@ export default function DimerGame() {
                     {puzzle.gameContext.replace("Mystery Game • ", "")}
                   </span>
                   <span className="text-[10px] font-mono text-neutral-600 tracking-wider block">
-                    {puzzle.date}
+                    {isUnlimited ? "UNLIMITED" : puzzle.date}
                   </span>
                 </div>
               </div>
