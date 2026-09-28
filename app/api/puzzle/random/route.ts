@@ -20,8 +20,12 @@ export async function GET() {
     );
   }
 
-  // Hide the date so it doesn't conflict with today's state saving
-  const randomPuzzle = { ...puzzle, source: "unlimited" };
+  // Strip the real date to prevent collision with daily puzzle state/history.
+  const randomPuzzle = {
+    ...puzzle,
+    date: `unlimited-${Date.now()}`,
+    source: "unlimited",
+  };
 
   return NextResponse.json({ puzzle: randomPuzzle });
 }

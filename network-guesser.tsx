@@ -1535,7 +1535,18 @@ export default function DimerGame() {
 
   // Unlimited mode states
   const [isUnlimited, setIsUnlimited] = useState(false);
-  const [unlimitedLocalStreak, setUnlimitedLocalStreak] = useState(0);
+  const [unlimitedSavedState, setUnlimitedSavedState] = useState<{
+    puzzle: Puzzle | null;
+    guesses: Guess[];
+    gameOver: boolean;
+    won: boolean;
+  } | null>(null);
+  const [unlimitedLocalStreak, setUnlimitedLocalStreak] = useState(() => {
+    try {
+      const saved = typeof window !== "undefined" ? localStorage.getItem("dimer_unlimited_streak") : null;
+      return saved ? parseInt(saved, 10) || 0 : 0;
+    } catch { return 0; }
+  });
 
   // Fallback local stats if not logged in
   const [stats, setStats] = useState<UserStats>(DEFAULT_STATS);
@@ -1614,13 +1625,24 @@ export default function DimerGame() {
     loadPuzzle();
   }, []);
 
-  async function loadUnlimitedPuzzle() {
+  async function loadUnlimitedPuzzle(forceNew: boolean = false) {
+    if (!forceNew && unlimitedSavedState) {
+      // Restore paused unlimited game
+      setPuzzle(unlimitedSavedState.puzzle);
+      setGuesses(unlimitedSavedState.guesses);
+      setGameOver(unlimitedSavedState.gameOver);
+      setWon(unlimitedSavedState.won);
+      setIsUnlimited(true);
+      return;
+    }
+
     setLoading(true);
     setGameOver(false);
     setWon(false);
     setGuesses([]);
     setIsUnlimited(true);
     setRatingChange(null);
+    setUnlimitedSavedState(null);
     
     try {
       const res = await fetch("/api/puzzle/random");
@@ -1634,11 +1656,45 @@ export default function DimerGame() {
     }
   }
 
-  function returnToDaily() {
+  async function returnToDaily() {
+    // Save mid-game unlimited state before switching
+    if (isUnlimited && puzzle) {
+      setUnlimitedSavedState({ puzzle, guesses, gameOver, won });
+    }
+
     setIsUnlimited(false);
     setLoading(true);
-    // Reload page to reset state simply and reliably, or just reset state and load today's puzzle
-    window.location.reload();
+    setGameOver(false);
+    setWon(false);
+    setGuesses([]);
+    setRatingChange(null);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/puzzle/today");
+      const body = await res.json().catch(() => null);
+      if (!res.ok)
+        throw new Error(body?.error ?? `${res.status} ${res.statusText}`);
+      const p: Puzzle = body.puzzle;
+      setPuzzle(p);
+
+      // Restore saved daily state if it exists
+      if (p?.date) {
+        try {
+          const savedState = localStorage.getItem(`dimer_state_${p.date}`);
+          if (savedState) {
+            const state = JSON.parse(savedState);
+            if (Array.isArray(state.guesses)) setGuesses(state.guesses);
+            if (state.gameOver) setGameOver(true);
+            if (state.won) setWon(true);
+          }
+        } catch {}
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 3. Save Game State (Daily Puzzle Only)
@@ -1668,7 +1724,11 @@ export default function DimerGame() {
             unlimitedStreak: (userData.unlimitedStreak || 0) + 1,
           });
         } else {
-          setUnlimitedLocalStreak(prev => prev + 1);
+          setUnlimitedLocalStreak(prev => {
+            const next = prev + 1;
+            try { localStorage.setItem("dimer_unlimited_streak", String(next)); } catch {}
+            return next;
+          });
         }
       } else {
         if (userData) {
@@ -1677,6 +1737,7 @@ export default function DimerGame() {
           });
         } else {
           setUnlimitedLocalStreak(0);
+          try { localStorage.setItem("dimer_unlimited_streak", "0"); } catch {}
         }
       }
       return;
@@ -1713,47 +1774,33 @@ export default function DimerGame() {
       ],
     };
 
-    const statsToSync = newStats;
+    // Calculate Elo change
+    let newRating = (userData?.dimerRating ?? stats.dimerRating) || 1000;
+    let diff = 0;
+    if (isWin) {
+      diff = count === 1 ? 30 : count === 2 ? 20 : count === 3 ? 10 : 5;
+      newRating += diff;
+    } else {
+      diff = -15;
+      newRating = Math.max(0, newRating - 15);
+    }
+    setRatingChange(diff);
 
+    // Always update local state so the UI is immediately correct
+    const mergedStats = { ...newStats, dimerRating: newRating };
+    setStats(mergedStats);
+
+    // Always write to localStorage as a backup
+    try {
+      localStorage.setItem("dimer_user_stats", JSON.stringify(mergedStats));
+    } catch {}
+
+    // If logged in, also sync to Firestore
     if (userData) {
-      // Calculate Dimer Rating change
-      let newRating = userData.dimerRating || 1000;
-      let diff = 0;
-      if (isWin) {
-        // First guess = +30, Second = +20, Third = +10, Fourth = +5
-        diff = count === 1 ? 30 : count === 2 ? 20 : count === 3 ? 10 : 5;
-        newRating += diff;
-      } else {
-        diff = -15;
-        newRating = Math.max(0, newRating - 15);
-      }
-      
-      setRatingChange(diff);
-      
       updateUserData({ 
-        ...(statsToSync as UserStats),
+        ...(newStats as UserStats),
         dimerRating: newRating 
       } as Partial<UserData>);
-    } else {
-      // For local play
-      let newRating = stats.dimerRating || 1000;
-      let diff = 0;
-      if (isWin) {
-        diff = count === 1 ? 30 : count === 2 ? 20 : count === 3 ? 10 : 5;
-        newRating += diff;
-      } else {
-        diff = -15;
-        newRating = Math.max(0, newRating - 15);
-      }
-      setRatingChange(diff);
-      
-      const mergedLocal = { ...(statsToSync as UserStats), dimerRating: newRating };
-      setStats(mergedLocal);
-      try {
-        localStorage.setItem("dimer_user_stats", JSON.stringify(mergedLocal));
-      } catch {}
-      
-      // We don't call updateUserData if userData is null because we are in offline fallback mode
     }
   }
 
@@ -1789,11 +1836,11 @@ export default function DimerGame() {
       setWon(true);
       setGameOver(true);
       recordGameStats(true, newGuesses.length);
-      setTimeout(() => setShowStatsModal(true), 800);
+      if (!isUnlimited) setTimeout(() => setShowStatsModal(true), 800);
     } else if (newGuesses.length >= MAX_GUESSES) {
       setGameOver(true);
       recordGameStats(false, newGuesses.length);
-      setTimeout(() => setShowStatsModal(true), 800);
+      if (!isUnlimited) setTimeout(() => setShowStatsModal(true), 800);
     }
   }
 
@@ -1809,7 +1856,11 @@ export default function DimerGame() {
       })
       .join("\n");
 
-    const shareText = `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.me`;
+    const currentUnlimitedStreak = userData ? (userData.unlimitedStreak ?? 0) : unlimitedLocalStreak;
+
+    const shareText = isUnlimited
+      ? `DIMER 🏀 Unlimited Mode\n${scoreText} 🎯 Streak: ${currentUnlimitedStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.me`
+      : `DIMER 🏀 #${puzzle.date}\n${scoreText} 🎯 Streak: ${stats.currentStreak} 🔥\n\n${emojiGrid}\n\nPlay at: dimer.me`;
 
     function onCopySuccess() {
       setCopied(true);
@@ -2100,7 +2151,7 @@ export default function DimerGame() {
                   </div>
 
                   <button
-                    onClick={loadUnlimitedPuzzle}
+                    onClick={() => loadUnlimitedPuzzle(false)}
                     className="w-full flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-semibold border border-indigo-500/50 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 transition-colors cursor-pointer mb-3"
                   >
                     {isUnlimited ? "Play Another" : "Play Unlimited Mode"}
@@ -2132,7 +2183,7 @@ export default function DimerGame() {
                   
                   {isUnlimited && (
                     <div className="mt-3 text-xs text-neutral-500 font-mono tracking-widest uppercase">
-                      Unlimited Streak: {userData?.unlimitedStreak || stats.unlimitedStreak || unlimitedLocalStreak}
+                      Unlimited Streak: {userData ? (userData.unlimitedStreak ?? 0) : unlimitedLocalStreak}
                     </div>
                   )}
                 </div>
